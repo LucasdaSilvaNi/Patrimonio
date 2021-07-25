@@ -1,0 +1,110 @@
+﻿<div class="col-sm-12" style="margin-top: 25px">
+    <div class="col-sm-4">
+        <h3 class="text-primary">Órgãos Cadastrados</h3>
+        <hr style="margin-top: 0px" />
+    </div>
+</div>
+@{  Html.RenderPartial("_DataTableReferenciaCss");
+    bool perfil = ViewBag.PerfilPermissao;
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formInstitution" }))
+{
+    <div class="col-sm-12" style="margin-top: 5px">
+        @Html.Hidden("searchString")
+        @Html.Hidden("PerfilPermissao", perfil? "1" : "")
+        <button type="submit" id="filtroOculto" style="display: none"> </button>
+
+        <div class="col-sm-12" style="margin-bottom: 30px;">
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input type="text" id="search-tables" name="search-tables" value="@ViewBag.CurrentFilter" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnter(this,event)" />
+                    <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    @Html.DropDownList("cbFiltro", (SelectList)ViewBag.Filtros, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="pull-right">
+                    <a class="btnNovo btn btn-info" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" href="@Url.Action("Create")">
+                        <i class="glyphicon glyphicon-plus fa-lg novoclass"></i> Novo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<table class="table" id="tableInstitutions">
+    <thead>
+        <tr>
+            <th class="text-info" data-sortable="true">Código</th>
+            <th class="text-info" data-sortable="true">Descrição</th>
+            <th class="text-info" data-sortable="true">Descrição Resumida</th>
+            <th class="text-info" data-sortable="true">Código de Gestão</th>
+            <th class="text-info" data-sortable="false">Orgão Implantado</th>
+            <th class="text-info" data-sortable="false">Integração SIAFEM</th>
+            <th class="text-info" data-sortable="false">Ações</th>
+        </tr>
+    </thead>
+</table>
+    @*<table class="table" id="result-tables">
+            <tr>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Code).ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Description).ToString()), "Index", new { sortOrder = ViewBag.DescriptionSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().NameManagerReduced).ToString()), "Index", new { sortOrder = ViewBag.DescriptionSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().ManagerCode).ToString()), "Index", new { sortOrder = ViewBag.DescriptionSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().flagImplantado).ToString()), "Index", new { sortOrder = ViewBag.DescriptionSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Integração SIAFEM").ToString()), "Index", new { sortOrder = ViewBag.DescriptionSortParm })</th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Code)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.NameManagerReduced)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ManagerCode)</td>
+                    <td>@(item.flagImplantado == true ? "Sim" : "Não") </td>
+                    <td>@(item.flagIntegracaoSiafem == true ? "Sim" : "Não") </td>
+                    <td class="acoes">
+
+                        @Html.Partial("_Acoes", @item)
+
+                    </td>
+                </tr>
+            }
+        </table>
+
+            Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchString = ViewBag.CurrentFilter, sortOrder = ViewBag.CurrentSort, cbFiltro = ViewBag.CurrentFilterCbFiltro }))*@
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+    @section Scripts {
+        @{Html.RenderPartial("_DataTableReferenciaJS");}
+        <script src="~/Scripts/datatables/sam-institutions-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+        <script>
+            sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+            $('#cbFiltro').change(function () {
+                $('#spanPesquisa').click()
+            });
+            $(document).ready(function () {
+                let institutionsDataTable = new InstitutionsDataTable();
+                institutionsDataTable.Load('#formInstitution');
+            });
+        </script>
+    }

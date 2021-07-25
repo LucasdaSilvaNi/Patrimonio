@@ -1,0 +1,57 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.ViewModels.GridDocumentoViewModel>
+@using PagedList.Mvc;
+
+<div class="col-sm-12" style="margin-top: 25px">
+    <div class="col-sm-4">
+        <h3 class="text-primary">@ViewBag.Title</h3>
+        <hr style="margin-top: 0px" />
+    </div>
+</div>
+
+@*IMPLEMENTAR*@
+@Html.Hidden("searchString")
+<button type="submit" id="filtroOculto" style="display: none"> </button>
+
+<div class="col-sm-12" style="margin-bottom: 30px;">
+    <div class="col-sm-4">
+        <div class="input-group">
+            <input type="text" id="search-tables-filtro" name="search-tables-filtro" value="@ViewBag.CurrentFilter" placeholder="Busca" class="form-control text-box input-sm single-line" />
+            <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search" onclick="sam.asset.FiltraPesquisaDocumento()"> </i></span>
+        </div>
+    </div>
+</div>
+
+<table class="table" id="result-tables">
+    <tr>
+        <th>@HttpUtility.HtmlDecode("Selecione")</th>
+        <th>@HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().NumeroDocumento).ToString())</th>
+        <th>@HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Chapa).ToString())</th>
+        <th>@HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().CodigoUGE).ToString())</th>
+        <th>@HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().CodigoItemMaterial).ToString())</th>
+        <th>@HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().DescricaoItemMaterial).ToString())</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td><input class="radioSelecionado" type="radio" id=@item.NumeroDocumento name="checkselecionado" /></td>
+            <td>@Html.DisplayFor(modelItem => item.NumeroDocumento)</td>
+            <td class="Chapaclass">@Html.DisplayFor(modelItem => item.Chapa)</td>
+            <td>@Html.DisplayFor(modelItem => item.CodigoUGE)</td>
+            <td>@Html.DisplayFor(modelItem => item.CodigoItemMaterial)</td>
+            <td>@Html.DisplayFor(modelItem => item.DescricaoItemMaterial)</td>
+            <td class="IdAsset" style="display:none">@Html.DisplayFor(modelItem => item.IdDoBP)</td>
+        </tr>
+    }
+</table>
+
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("GridDocumento", "Assets",
+        new { page, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.CurrentFilter }))
+
+    <script>
+        $(document).ready(function () {
+            sam.commun.InicializaICheck();
+        });
+    </script>

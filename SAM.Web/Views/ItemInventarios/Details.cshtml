@@ -1,0 +1,345 @@
+﻿@model SAM.Web.ViewModels.ItemInventarioBPViewModel
+
+<div class="form-group">
+    @{ViewBag.Title = "Detalhes do Bem Patrimonial";}
+
+    <h2>@ViewBag.Title - @Model.Chapa </h2>
+
+    <div class="form-horizontal">
+        <hr />
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados Básicos</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.Sigla, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-sm-2">
+                @Html.DisplayTextFor(model => model.Sigla)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.Chapa, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.Chapa)
+            </div>
+        </div>
+
+            <div class="form-group form-group-details">
+                @Html.LabelFor(model => model.ContaContabil, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="control-label-left col-md-5">
+                    @Html.DisplayTextFor(model => model.ContaContabil)
+                </div>
+            </div>
+
+            <div class="form-group form-group-details">
+                @Html.LabelFor(model => model.Orgao, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="control-label-left col-md-5">
+                    @Html.DisplayTextFor(model => model.Orgao)
+                </div>
+            </div>
+
+
+            <div class="form-group form-group-details">
+                @Html.LabelFor(model => model.UO, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="control-label-left col-md-5">
+                    @Html.DisplayTextFor(model => model.UO)
+                </div>
+            </div>
+
+            <div class="form-group form-group-details">
+                @Html.LabelFor(model => model.UGE, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="control-label-left col-md-5">
+                    @Html.DisplayTextFor(model => model.UGE)
+                </div>
+            </div>
+
+            <div class="form-group form-group-details">
+                @Html.LabelFor(model => model.UA, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="control-label-left col-md-5">
+                    @Html.DisplayTextFor(model => model.UA)
+                </div>
+            </div>
+
+            <div class="form-group form-group-details">
+                @Html.LabelFor(model => model.Divisao, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="control-label-left col-md-5">
+                    @Html.DisplayTextFor(model => model.Divisao)
+                </div>
+            </div>
+
+            <div class="form-group form-group-details">
+                @Html.LabelFor(model => model.Responsavel, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="control-label-left col-md-5">
+                    @Html.DisplayTextFor(model => model.Responsavel)
+                </div>
+            </div>
+
+            <div class="form-group form-group-details">
+                @Html.LabelFor(model => model.GrupoMaterial, htmlAttributes: new { @class = "control-label col-sm-3" })
+                <div class="control-label-left col-sm-9">
+                        @Html.DisplayTextFor(model => model.GrupoMaterial)
+                </div>
+            </div>
+
+            <div class="form-group form-group-details">
+                @Html.LabelFor(model => model.DescricaoMaterial, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="control-label-left col-sm-9">
+                        @Html.DisplayTextFor(model => model.CodigoItemMaterial)
+                        -
+                        @Html.DisplayTextFor(model => model.DescricaoMaterial)
+                </div>
+            </div>
+
+        <hr />
+
+        <div class="form-group">
+            <div class="form-group" style="margin-left:1%">
+                @if (ViewBag.ParametroTela == 1)
+                {
+                <a href="@Url.Action("ListagemRelatorioInventarioManual", "ItemInventarios", new { InventarioId = Model.InventarioId })" data-toggle="tooltip" id="btnvoltar" data-placement="top" data-original-title="Click para cancelar" class="btn btn-default">
+                    <i class="glyphicon glyphicon-share-alt"></i>Voltar
+                </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Index", "ItemInventarios", new { InventarioId = Model.InventarioId })" data-toggle="tooltip" id="btnvoltar" data-placement="top" data-original-title="Click para cancelar" class="btn btn-default">
+                        <i class="glyphicon glyphicon-share-alt"></i>Voltar
+                    </a>
+                }
+            </div>
+        </div>
+
+        @*VERIFICAR O QUE DEVERA SER EXIBIDO EM TELA*@
+
+        @*<div class="form-group cor-azul">
+        <div class="col-md-12">
+            <div class="col-sm-1">
+                <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+            </div>
+            <div class="col-md-11">
+                <h4>Empenho</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+    <div class="form-group form-group-details">
+        @Html.LabelFor(model => model.Empenho, "Empenho", htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="control-label-left col-md-2">
+            @Html.DisplayTextFor(model => model.Empenho)
+        </div>
+    </div>
+    <div class="form-group form-group-details">
+        @Html.LabelFor(model => model.Gerador_Descricao, "Fornecedor", htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="control-label-left col-md-2">
+            @Html.DisplayTextFor(model => model.Gerador_Descricao)
+        </div>
+    </div>
+        <hr />
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados Incorporação</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.OutSourcedId, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.RelatedOutSourced.Name)
+            </div>
+
+            @Html.LabelFor(model => model.IncorporationTypeId, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.RelatedIncorporationType.Description)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.SupplierId, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.RelatedSupplier.Name)
+            </div>
+
+            @Html.LabelFor(model => model.InclusionDate, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @{   var InclusionDate = String.Format("{0:dd/MM/yyyy}", Model.InclusionDate); }
+                @Html.DisplayTextFor(i => InclusionDate)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.ValueAcquisition, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.ValueAcquisition)
+            </div>
+
+            @Html.LabelFor(model => model.AcquisitionDate, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @{   var AcquisitionDate = String.Format("{0:dd/MM/yyyy}", Model.AcquisitionDate); }
+                @Html.DisplayTextFor(i => AcquisitionDate)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+
+
+            @Html.LabelFor(model => model.ValueUpdate, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.ValueUpdate)
+            </div>
+        </div>
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.NumberPurchaseProcess, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.NumberPurchaseProcess)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+
+            @Html.LabelFor(model => model.Invoice, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.Invoice)
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados Complementares</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.SerialNumber, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.SerialNumber)
+            </div>
+
+            @Html.LabelFor(model => model.ManufactureDate, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @{   var ManufactureDate = String.Format("{0:dd/MM/yyyy}", Model.ManufactureDate); }
+                @Html.DisplayTextFor(i => ManufactureDate)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.DateGuarantee, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @{   var DateGuarantee = String.Format("{0:dd/MM/yyyy}", Model.DateGuarantee); }
+                @Html.DisplayTextFor(i => DateGuarantee)
+            </div>
+
+            @Html.LabelFor(model => model.ChassiNumber, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.ChassiNumber)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.Brand)
+            </div>
+
+            @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.Model)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.NumberPlate, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.NumberPlate)
+            </div>
+
+            @Html.LabelFor(model => model.AdditionalDescription, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.AdditionalDescription)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.OldInitial, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.OldInitial)
+            </div>
+
+            @Html.LabelFor(model => model.OldNumberIdentification, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.OldNumberIdentification)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.OldPartNumberIdentification, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.OldPartNumberIdentification)
+            </div>
+
+            @Html.LabelFor(model => model.ReceiptTermDate, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @{   var ReceiptTermDate = String.Format("{0:dd/MM/yyyy}", Model.ReceiptTermDate); }
+                @Html.DisplayTextFor(i => ReceiptTermDate)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.InventoryDate, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @{   var InventoryDate = String.Format("{0:dd/MM/yyyy}", Model.InventoryDate); }
+                @Html.DisplayTextFor(i => InventoryDate)
+            </div>
+
+            @Html.LabelFor(model => model.NoteGranting, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.NoteGranting)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.AssigningAmountDate, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @{   var AssigningAmountDate = String.Format("{0:dd/MM/yyyy}", Model.AssigningAmountDate); }
+                @Html.DisplayTextFor(i => AssigningAmountDate)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-group" style="margin-left:1%">
+                <a href="@Url.Action("Index", "ItemInventarios", new { InventarioId = ViewBag.InventarioId })" data-toggle="tooltip" id="btnvoltar" data-placement="top" data-original-title="Click para cancelar" class="btn btn-default">
+                    <i class="glyphicon glyphicon-remove"></i>
+                    <span class="sr-only">Cancelar</span>
+                </a>
+            </div>
+        </div>*@
+    </div>
+
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

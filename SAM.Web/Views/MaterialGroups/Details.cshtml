@@ -1,0 +1,38 @@
+﻿@model SAM.Web.Models.MaterialGroup
+
+@{ViewBag.Title = "Detalhes do Grupo de Material";}
+
+<h2>@ViewBag.Title - @Model.Description</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Code)</dt>
+        <dd>@Html.DisplayFor(model => model.Code)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd>@Html.DisplayFor(model => model.Description)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.LifeCycle)</dt>
+        <dd>@Html.DisplayFor(model => model.LifeCycle)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RateDepreciationMonthly)</dt>
+        <dd>@Html.DisplayFor(model => model.RateDepreciationMonthly)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.ResidualValue)</dt>
+        <dd>@Html.DisplayFor(model => model.ResidualValue)</dd>
+
+        <dt></dt>
+        <dd>
+            <div class="form-group">
+                @Html.Partial("_EditButtons")
+            </div>
+        </dd>
+    </dl>
+</div>
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

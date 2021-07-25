@@ -1,0 +1,80 @@
+﻿@model SAM.Web.ViewModels.AnaliticoDeBemPatrimonialViewModel
+
+@{
+    Layout = null;
+}
+
+@Styles.Render("~/Layout_5/css")
+
+<style>
+    .panel-heading {
+        padding: 5px 15px;
+    }
+</style>
+
+<h2>@ViewBag.Title</h2>
+<button id="btnFiltrar" class="btn btn-warning pull-right"> <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> </button>
+
+<hr />
+
+<div class="form-horizontal panel-filter" style="margin-bottom: 20px;">
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.InstitutionId, "Orgão", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.InstitutionId, (SelectList)ViewBag.Institutions, new { @id = "InstitutionId", @name = "InstitutionId", @class = "form-control comboinstitution" })
+            <span id="spanInstitution" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.BudgetUnitId, "UO", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @id = "BudgetUnitId", @name = "BudgetUnitId", @class = "form-control comboBudgetUnit" })
+            <span id="spanBudgetUnits" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.ManagerUnitId, "UGE", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @id = "ManagerUnitId", @name = "ManagerUnitId", @class = "form-control comboManagerUnit" })
+            <span id="spanManagerUnits" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.AdministrativeUnitId, "UA:", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.AdministrativeUnitId, (SelectList)ViewBag.AdministrativeUnits, new { @class = "form-control selectpicker comboAdministrativeUnit" })
+            @Html.ValidationMessageFor(model => model.AdministrativeUnitId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SectionId, "Divisão:", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.SectionId, (SelectList)ViewBag.Sections, new { @class = "form-control selectpicker comboSection" })
+            @Html.ValidationMessageFor(model => model.SectionId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.NumberIdentification, "Nº(s) Chapa(s):", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.TextBoxFor(model => model.NumberIdentification, new { @id = "NumberIdentification", @name = "NumberIdentification", @class = "form-control" })
+        </div>
+        @Html.LabelFor(model => model.StatusAsset, "Status:", htmlAttributes: new { @class = "control-label col-md-1" })
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.StatusAsset, (SelectList)ViewBag.StatusAsset, new { @class = "form-control" })
+        </div>
+        <button id="btnFiltrar" data-toggle="tooltip" data-placement="top" data-original-title="Click para Procurar" class="btn btn-warning" style="margin-left: 2%;" onclick="reportAnaliticoDeBemPatrimonial.CarregaDadosGrid();">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        </button>
+    </div>
+
+    
+
+    <div class="clearfix"></div>
+    <hr />
+</div>
+
+<div id="partialDataReportAnaliticoDeBemPatrimonial"></div>

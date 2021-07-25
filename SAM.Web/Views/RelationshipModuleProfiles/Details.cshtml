@@ -1,0 +1,27 @@
+﻿@model SAM.Web.ViewModels.RelationshipModuleProfileViewModel
+
+@{ViewBag.Title = "Detalhes do Módulo - Perfil";}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.NomeModulo)</dt>
+        <dd>@Html.DisplayFor(model => Model.NomeModulo)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.DescricaoPerfil)</dt>
+        <dd>@Html.DisplayFor(model => model.DescricaoPerfil)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Status)</dt>
+        <dd>@Html.DisplayFor(model => model.Status)</dd>
+        
+        <br/>
+        <dt></dt>
+        <dd>
+            <div class="form-group">
+                @Html.Partial("_EditButtons")
+            </div>
+        </dd>
+    </dl>
+</div>

@@ -1,0 +1,36 @@
+﻿@model SAM.Web.ViewModels.ModuloTelaViewModel
+
+@{ViewBag.Title = "Inativação do Módulo";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja inativa-lo?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.NomeMenu)</dt>
+        <dd>@Html.DisplayFor(model => Model.NomeMenu)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.NomeModuloSuperior)</dt>
+        <dd>@Html.DisplayFor(model => model.NomeModuloSuperior)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Nome)</dt>
+        <dd>@Html.DisplayFor(model => model.Nome)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Descricao)</dt>
+        <dd>@Html.DisplayFor(model => model.Descricao)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Caminho)</dt>
+        <dd>@Html.DisplayFor(model => model.Caminho)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Sequencia)</dt>
+        <dd>@Html.DisplayFor(model => model.Sequencia)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Status)</dt>
+        <dd>@Html.DisplayFor(model => model.Status)</dd>
+        <dt></dt>
+        <dd>
+            @Html.Partial("_DeleteButtons")
+        </dd>
+    </dl>
+</div>

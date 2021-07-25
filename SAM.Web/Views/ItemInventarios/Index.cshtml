@@ -1,0 +1,206 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.Models.ItemInventario>
+@using PagedList.Mvc;
+@using Sam.Common.Util;
+@using SAM.Web.Common.Enum;
+
+
+
+
+<hr />
+@{ViewBag.Title = "Detalhamento Inventário"; }
+
+<hr />
+<h3 class="text-primary">@ViewBag.DescricaoInventario (Itens do Inventário)</h3>
+<hr />
+<h4 class="text-primary">@ViewBag.DetalhesResponsavel</h4>
+<hr />
+<div class="form-group" style="margin-left: -1%;">
+   @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "consultaForm" }))
+   {
+    @Html.Hidden("searchString")
+    @Html.Hidden("InventarioId")
+    <input type="submit" id="numeroDoInventario" style="display: none" value="@ViewBag.InventarioId"/>
+
+    <div class="col-sm-4">
+        <div class="input-group">
+            <input type="text" id="search-tables" name="search-tables" value="@ViewBag.CurrentFilter" placeholder="Busca" class="form-control text-box input-sm single-line search-tables" />
+            <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+        </div>
+     </div>
+   }
+</div>
+<br />
+<hr>
+<table class="table" id="result-tables">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().InitialName)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Code)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Item)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().DescricaoDivisao)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Estado)</th>
+        <th>UA (Original)</th>
+        @if (@ViewBag.Status != "1")
+        {
+            <th class="acoes">
+                Atualizar Estado dos Itens do Inventário 
+                <a class="btnAtualizar" onclick="sam.inventario.atualizarItens(@ViewBag.InventarioId)" title="Atualizar Status">
+                    <i class="glyphicon glyphicon-refresh atualizarclass"></i>
+                    <span class="sr-only">Atualizar</span>
+                </a>
+            </th>
+        }
+        else
+        {
+            <th></th>
+        }
+</tr>
+    @{ int[] situacoesFisicasParaTransferencia = new int[] { EnumSituacaoFisicaBP.OutraUA.GetHashCode(), EnumSituacaoFisicaBP.OutroResponsavel.GetHashCode(), EnumSituacaoFisicaBP.OutraUGE.GetHashCode() }; }
+    @{ 
+        string informacaoOrigem = null;
+        foreach (var item in Model)
+        {
+            <tr @((@item.Estado != 1) ? "style=background-color:#F3A77E" : "")>
+
+            <td>@Html.DisplayFor(modelItem => item.InitialName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Code)</td>
+            <td>@Html.DisplayFor(modelItem => item.Item)</td>
+            <td>@Html.DisplayFor(modelItem => item.DescricaoDivisao)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelatedEstadoItemInventario.Descricao)
+                <br />
+                @if (item.Estado.HasValue)
+                {
+
+                    switch (item.Estado)
+                    {
+                        case (int)EnumSituacaoFisicaBP.NaoEncontrado:
+                            <a class="btn btn-success btn-sm" href="@Url.Action("MovimentoItemInventario","ItemInventarios", new { ItemInventarioId = item.Id})"> <span class="glyphicon glyphicon-check"></span>Inventariar Manualmente</a>
+                            break;
+                        case (int)EnumSituacaoFisicaBP.OK:
+                            if (item.RelatedAsset != null)
+                            {
+                                if (item.RelatedAsset.flagVerificado.HasValue && item.RelatedAsset.flagDepreciaAcumulada != 1)
+                                {
+                                    <a class="btn btn-success btn-sm" href="@Url.Action("Edit","AssetPending", new { id = item.AssetId})"> <span class="glyphicon glyphicon-pencil"></span>Corrige Pendências</a>
+                                }
+                            }
+                            break;
+                        case (int)EnumSituacaoFisicaBP.OutraUA:
+                            if (item.RelatedAsset.flagVerificado.HasValue && item.RelatedAsset.flagDepreciaAcumulada != 1)
+                            {
+                                <a class="btn btn-primary btn-sm" href="javascript:sam.inventario.CorrigeHierarquia(@item.Id);"> <span class="glyphicon glyphicon-pencil"></span>Corrige Hierarquia</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-success btn-sm" href="javascript:sam.inventario.MovimentacaoAutomaticaInventario(@item.Id);"> <span class="glyphicon glyphicon-check"></span>Movimentação Interna</a>
+                            }
+                            <br>
+                            <a class="btn btn-success btn-sm" title="Devolução Física" href="javascript:sam.inventario.DevolucaoInventario(@item.Id);"> <span class="glyphicon glyphicon-check"></span>Devolução Física</a>
+                            break;
+                        case (int)EnumSituacaoFisicaBP.OutroResponsavel:
+                             <a class="btn btn-success btn-sm" href="@Url.Action("IncorporarInventario", "Assets", new { id = item.Id })" title="Incorporar"> <span class="glyphicon glyphicon-check"></span>Incorporar</a>
+                            break;
+                        case (int)EnumSituacaoFisicaBP.OutraUGE:
+                            if (item.RelatedAsset.flagVerificado.HasValue && item.RelatedAsset.flagDepreciaAcumulada != 1)
+                            {
+                                <a class="btn btn-primary btn-sm" href="javascript:sam.inventario.CorrigeHierarquia(@item.Id);"> <span class="glyphicon glyphicon-pencil"></span>Corrige Hierarquia</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-success btn-sm" href="javascript:sam.inventario.MovimentacaoAutomaticaInventario(@item.Id);"> <span class="glyphicon glyphicon-check"></span>Transferir</a>
+                            }
+                            <br>
+                            <a class="btn btn-success btn-sm" title="Devolução Física" href="javascript:sam.inventario.DevolucaoInventario(@item.Id);"> <span class="glyphicon glyphicon-check"></span>Devolução Física</a>
+                            break;
+                    }
+
+                }
+            </td>
+            <td>
+                @if (item.Estado.HasValue)
+                {
+                    switch (item.Estado.Value)
+                    {
+                        case (int)EnumSituacaoFisicaBP.Movimentado:
+                        case (int)EnumSituacaoFisicaBP.Transferido:
+                        case (int)EnumSituacaoFisicaBP.Devolvido:
+                            informacaoOrigem = String.Format("{0} ({1})", item.RelatedAssetMovement.RelatedAdministrativeUnit.Code, item.RelatedAssetMovement.RelatedManagerUnit.Code);
+                            @Html.DisplayFor(modelItem => informacaoOrigem)
+                            break;
+                        case (int)EnumSituacaoFisicaBP.Incorporado:
+                            break;
+                        default:
+                            if (item.RelatedAsset.IsNotNull() && item.Estado.IsNotNull() && situacoesFisicasParaTransferencia.Contains(item.Estado.Value))
+                            {
+                                if (item.Estado.Value != (int)EnumSituacaoFisicaBP.OutroResponsavel)
+                                {
+                                    informacaoOrigem = String.Format("{0} ({1})", (item.RelatedAsset.AssetMovements.LastOrDefault(ultimaMovimentacaoBP => ultimaMovimentacaoBP.Status == true).RelatedAdministrativeUnit.Code), item.RelatedAsset.AssetMovements.LastOrDefault(ultimaMovimentacaoBP => ultimaMovimentacaoBP.Status == true).RelatedAdministrativeUnit.RelatedManagerUnit.Code);
+                                    @Html.DisplayFor(modelItem => informacaoOrigem)
+                                }
+                            }
+                            break;
+                    }
+                }
+            </td>
+            @if (@ViewBag.Status == "1")
+                {
+                @*<td class="acoes">
+                    <a class="btnDetalhe" href="@Url.Action("Details", new {id = item.InventarioId, codChapaInventario = item.Code })" title="Detalhes">
+                        <i class="glyphicon glyphicon-search detalheclass"></i>
+                        <span class="sr-only">Detalhes</span>
+                    </a>
+                </td>*@
+            }
+            @*else if (item.Estado == 3)*@
+            else if (item.Estado.HasValue && item.Estado.Value == EnumSituacaoFisicaBP.OutroResponsavel.GetHashCode())
+            {
+                <td class="acoes">
+                    <a class="btnExcluir" href="@Url.Action("Delete", new { id = item.Id })" title="Excluir">
+                        <i class="glyphicon glyphicon-remove deleteclass"></i>
+                        <span class="sr-only">Excluir</span>
+                    </a>
+                </td>
+            }
+            else
+            {
+                <td class="acoes">
+                    @*<a class="btnDetalhe" href="@Url.Action("Details", new {id = item.InventarioId, codChapaInventario = item.Code })" title="Detalhes">
+                        <i class="glyphicon glyphicon-search detalheclass"></i>
+                        <span class="sr-only">Detalhes</span>
+                    </a>*@
+                    <a class="btnExcluir" href="@Url.Action("Delete", new { id = item.Id })" title="Excluir">
+                        <i class="glyphicon glyphicon-remove deleteclass"></i>
+                        <span class="sr-only">Excluir</span>
+                    </a>
+                </td>
+            }
+            </tr>
+       }
+     }
+
+</table>
+
+Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, InventarioId = ViewBag.InventarioId }))
+
+@*<a href="@Url.Action("Index", "Inventarios")" data-toggle="tooltip" id="btnvoltar" data-placement="top" data-original-title="Click para voltar" class="btn btn-default">
+    <i class="glyphicon glyphicon-arrow-left"></i>
+    <span class="sr-only">Cancelar</span>
+</a>*@
+
+<a class="btnvoltar btn btn-default" href="@Url.Action("Index","Inventarios")">
+    <i class="glyphicon glyphicon-share-alt"></i> Voltar
+</a>
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+        Sucesso('@Html.Raw(ViewBag.AlertComSucesso)');
+        function Sucesso(msg) {
+            if (msg != null && msg != undefined && msg != '') {
+                alert(msg);
+            }
+        }
+    </script>
+}
+

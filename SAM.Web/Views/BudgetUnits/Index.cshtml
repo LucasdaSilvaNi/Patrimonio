@@ -1,0 +1,46 @@
+﻿@using PagedList.Mvc;
+
+@{ViewBag.Title = "Unidades Orçamentárias Cadastrados";
+    bool temPermissao = ViewBag.TemPermissao;}
+
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formBudgetUnits" }))
+{
+    @Html.Partial("_GridNewButtons")
+    @Html.Hidden("temPermissao", temPermissao? "1":"")
+
+    <table id="tableBudgetUnits" class="table">
+        <thead>
+            <tr>
+                <th class="text-info" data-sortable="true">Código Orgão</th>
+                <th class="text-info" data-sortable="true">Descrição Orgão</th>
+                <th class="text-info" data-sortable="true">Código UO</th>
+                <th class="text-info" data-sortable="true">Descrição UO</th>
+                <th class="text-info border-table-tr  actionButton col-xs-1" data-sortable="true">Ações</th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+        <div>
+            <div>
+                <img src="~/Content/images/preloader03.gif" class="modal-img" />
+                <span>Carregando...</span>
+            </div>
+        </div>
+    </div>
+
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJs");}
+    <script src="~/Scripts/datatables/sam-budgetUnits-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+        $(document).ready(function () {
+            let budgetUnitDataTable = new BudgetUnitsDataTable();
+            budgetUnitDataTable.Load('#formBudgetUnits');
+        });
+    </script>
+}

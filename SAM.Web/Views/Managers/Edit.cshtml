@@ -1,0 +1,131 @@
+﻿@model SAM.Web.Models.Manager
+
+@{ViewBag.Title = "Editar Gestor ";}
+
+<h2>@ViewBag.Title - @Model.Name</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.RelatedAddress.Id)
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados Gestor</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @maxlength = "10" } })
+                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @maxlength = "120" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShortName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.ShortName, new { htmlAttributes = new { @class = "form-control", @maxlength = "25" } })
+                @Html.ValidationMessageFor(model => model.ShortName, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.Telephone, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control mascara-telefone" } })
+                @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Endereço</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*Postal Code*@
+            @Html.LabelFor(model => model.RelatedAddress.PostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.RelatedAddress.PostalCode, new { htmlAttributes = new { @class = "form-control mascara-cep" } })
+                @Html.ValidationMessageFor(model => model.RelatedAddress.PostalCode, "", new { @class = "text-danger" })
+            </div>
+            @*Street*@
+            @Html.LabelFor(model => model.RelatedAddress.Street, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.RelatedAddress.Street, new { htmlAttributes = new { @class = "form-control", @maxlength = "200" } })
+                @Html.ValidationMessageFor(model => model.RelatedAddress.Street, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*Number*@
+            @Html.LabelFor(model => model.RelatedAddress.Number, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.RelatedAddress.Number, new { htmlAttributes = new { @class = "form-control", @maxlength = "10" } })
+                @Html.ValidationMessageFor(model => model.RelatedAddress.Number, "", new { @class = "text-danger" })
+            </div>
+            @*Complement*@
+            @Html.LabelFor(model => model.RelatedAddress.ComplementAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4    ">
+                @Html.EditorFor(model => model.RelatedAddress.ComplementAddress, new { htmlAttributes = new { @class = "form-control", @maxlength = "30" } })
+                @Html.ValidationMessageFor(model => model.RelatedAddress.ComplementAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*District*@
+            @Html.LabelFor(model => model.RelatedAddress.District, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.RelatedAddress.District, new { htmlAttributes = new { @class = "form-control", @maxlength = "50" } })
+                @Html.ValidationMessageFor(model => model.RelatedAddress.District, "", new { @class = "text-danger" })
+            </div>
+            @*City*@
+            @Html.LabelFor(model => model.RelatedAddress.City, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.RelatedAddress.City, new { htmlAttributes = new { @class = "form-control", @maxlength = "50" } })
+                @Html.ValidationMessageFor(model => model.RelatedAddress.City, "", new { @class = "text-danger" })
+            </div>
+            @*State*@
+            @Html.LabelFor(model => model.RelatedAddress.State, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.RelatedAddress.State, new { htmlAttributes = new { @class = "form-control", @maxlength = "2" } })
+                @Html.ValidationMessageFor(model => model.RelatedAddress.State, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Partial("_SaveButtons")
+        </div>
+    </div>
+}

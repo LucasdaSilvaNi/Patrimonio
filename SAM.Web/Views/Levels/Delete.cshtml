@@ -1,0 +1,23 @@
+﻿@model SAM.Web.ViewModels.LevelViewModel
+
+@{ViewBag.Title = "Exclusão do Nível";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.NomeNivelSuperior)</dt>
+        <dd>@Html.DisplayFor(model => model.NomeNivelSuperior)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Descricao)</dt>
+        <dd>@Html.DisplayFor(model => model.Descricao)</dd>
+
+        <dt></dt>
+        <dd>
+            @Html.Partial("_DeleteButtons")
+        </dd>
+    </dl>
+</div>

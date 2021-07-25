@@ -1,0 +1,7 @@
+﻿.select-large, .textarea-large{
+    max-width:90%;
+}
+
+.textarea-description {
+    height : 200px !important;
+}

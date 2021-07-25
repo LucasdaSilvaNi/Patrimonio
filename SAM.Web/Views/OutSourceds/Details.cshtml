@@ -1,0 +1,100 @@
+﻿@model SAM.Web.Models.OutSourced
+
+@{ViewBag.Title = "Detalhes do Terceiro ";}
+
+<h2>@ViewBag.Title @Model.Name</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <hr />
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Hierarquia</h4>
+                </div>
+            </div>
+        </div>
+
+        <dt>@Html.DisplayNameFor(model => model.InstitutionId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedInstitution.Description)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.BudgetUnitId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedBudgetUnit.Description)</dd>
+
+        <hr />
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados Pessoais</h4>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.CPFCNPJ)</dt>
+        <dd>@Html.DisplayFor(model => model.CPFCNPJ)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Telephone)</dt>
+        <dd>@Html.DisplayFor(model => model.Telephone)</dd>
+
+        <hr />
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Endereço Terceiro</h4>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.PostalCode)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.PostalCode)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.Street)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.Street)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.Number)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.Number)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.ComplementAddress)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.ComplementAddress)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.District)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.District)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.City)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.City)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.State)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.State)</dd>
+
+        <dt></dt>
+        <dd>
+            <div class="form-group">
+                @Html.Partial("_EditButtons")
+            </div>
+        </dd>
+    </dl>
+</div>
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

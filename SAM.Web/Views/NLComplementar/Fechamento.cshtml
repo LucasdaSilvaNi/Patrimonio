@@ -1,0 +1,88 @@
+﻿@model SAM.Web.ViewModels.NLComplementarViewModel
+
+@{
+    ViewBag.Title = "NL complementar do Fechamento";
+}
+
+<h2>Gerar NL complementar do Fechamento</h2>
+
+@using (Html.BeginForm("Fechamento", "NLComplementar", FormMethod.Post, new { id = "formNLComplementarFechamento", @class = "formSubmit" }))
+{
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.InstitutionId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitutionIntegradoSIAFEM" })
+                @Html.ValidationMessageFor(model => model.InstitutionId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    
+        <div class="form-group">
+            @Html.LabelFor(model => model.BudgetUnitId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnitIntegradoSIAFEM" })
+                @Html.ValidationMessageFor(model => model.BudgetUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    
+        <div class="form-group">
+            @Html.LabelFor(model => model.ManagerUnitId, "UGE", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit" })
+                @Html.ValidationMessageFor(model => model.ManagerUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    
+        <div class="form-group">
+            @Html.LabelFor(model => model.DepreciationAccountId, "Conta de Depreciação", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.DepreciationAccountId, (SelectList)ViewBag.DepreciationAccounts, "Selecione a Conta de Depreciação", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DepreciationAccountId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DepreciacaoMensal, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.DepreciacaoMensal, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DepreciacaoMensal, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.DepreciacaoAcumulada, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.DepreciacaoAcumulada, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DepreciacaoAcumulada, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MesRef, "Mês/Ano Referência", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.MesRef, new { htmlAttributes = new { @class = "form-control", @maxlength = "6" } })
+                @Html.ValidationMessageFor(model => model.MesRef, "*Formato (aaaamm)", new { @class = "text-info" })
+                @Html.ValidationMessage("DataInvalida", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">NL Estorno</label>
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.NLEstorno, new { @class = "icheckbox_square-blue" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" id="btnGerarNLFechamento" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info">
+                <i class="glyphicon glyphicon-ok" aria-hidden="true"></i> Gerar
+            </button>
+        </div>
+
+    </div>
+}
+
+@Scripts.Render("~/NLComplementar/Fechamento/js")
+<script>
+    $(document).ready(function () {
+        hierarquiaIntegradaSiafem.bind();
+    });    
+</script>

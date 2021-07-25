@@ -1,0 +1,25 @@
+﻿@model SAM.Web.Models.MaterialClass
+
+@{ViewBag.Title = "Exclusão da Classe Material";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.MaterialGroupId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedMaterialGroup.Description)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Code)</dt>
+        <dd>@Html.DisplayFor(model => model.Code)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd>@Html.DisplayFor(model => model.Description)</dd>
+
+        <dt></dt>
+        <dd>
+            @Html.Partial("_DeleteButtons")
+        </dd>
+    </dl>
+</div>

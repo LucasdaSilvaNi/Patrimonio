@@ -1,0 +1,8 @@
+﻿Menu similiar ao site da amazon
+http://www.javascriptkit.com/script/script2/amazonsidebarmenu.shtml
+
+Para pegar os erros da entidade quando receber os erros "Validation failed for one or more entities. See ‘EntityValidationErrors’ property for more details."
+Ver antes de atrbuir o erro a uma variavel
+((System.Data.Entity.Validation.DbEntityValidationException)$exception).EntityValidationErrors
+
+Quando aparece erro que não reconhece o dbo.tabela é que esqueceu de descomentar no SAMContext os maps

@@ -1,0 +1,41 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.ViewModels.LevelViewModel>
+@using PagedList.Mvc;
+
+@{ViewBag.Title = "Níveis Cadastrados";}
+
+@Html.Partial("_GridNewButtons")
+
+<table class="table" id="result-tables">
+    <tr>
+        <th class="col-md-4">@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Descricao).ToString()), "Index", new { sortOrder = ViewBag.DescriptionSortParm })</th>
+        <th class="col-md-6">@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().NomeNivelSuperior).ToString()), "Index", new { sortOrder = ViewBag.ParentSortParm })</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomeNivelSuperior)
+            </td>
+            <td class="acoes">
+
+                @Html.Partial("_Acoes", @item)
+
+            </td>
+        </tr>
+    }
+</table>
+Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

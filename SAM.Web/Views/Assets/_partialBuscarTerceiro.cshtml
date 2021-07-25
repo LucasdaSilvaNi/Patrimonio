@@ -1,0 +1,52 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.ViewModels.OutSourcedViewModel>
+@using PagedList.Mvc;
+
+<div class="col-sm-12" style="margin-top: 25px">
+    <div class="col-sm-4">
+        <h3 class="text-primary">@ViewBag.Title</h3>
+        <hr style="margin-top: 0px" />
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "consultaForm" }))
+{
+    // IMPLEMENTAR
+    @Html.Hidden("searchString")
+    <button type="submit" id="filtroOculto" style="display: none"> </button>
+
+    <div class="col-sm-12" style="margin-bottom: 30px;">
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" id="search-tables-filtro" name="search-tables-filtro" value="@ViewBag.CurrentFilter" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnter(this,event)" />
+                <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;" onclick="sam.asset.FiltraPesquisaTerceiros()"><i class="glyphicon glyphicon-search"> </i></span>
+            </div>
+        </div>
+    </div>
+}
+<table class="table" id="result-tables">
+    <tr>
+        <th>@HttpUtility.HtmlDecode("Selecione")</th>
+        <th>@HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().CPFCNPJ).ToString())</th>
+        <th>@HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Name).ToString())</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td><input class="radioSelecionado" type="radio" id=@item.Id name="checkselecionado" /></td>
+            <td>@Html.DisplayFor(modelItem => item.CPFCNPJ)</td>
+            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+        </tr>
+    }
+</table>
+
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("GridTerceiro", "Assets",
+        new { page, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.CurrentFilter }))
+
+    <script>
+    $(document).ready(function () {
+        sam.commun.InicializaICheck();
+    });
+    </script>

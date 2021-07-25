@@ -1,0 +1,624 @@
+﻿@model SAM.Web.ViewModels.AssetViewModel
+@using enumTipoInventario = SAM.Web.Common.Enum.EnumTipoInventario
+@using Sam.Common.Util;
+
+
+<h3 style="margin-top:40px" class="cor-azul">Alteração de Dados do Patrimônio</h3>
+<hr />
+
+@Styles.Render("~/Layout_5/css")
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formEdicaoBemPatrimonial" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.InstitutionId)
+        @Html.HiddenFor(model => model.BudgetUnitId)
+        @Html.HiddenFor(model => model.ManagerUnitId)
+        @Html.HiddenFor(model => model.AdministrativeUnitId)
+        @Html.HiddenFor(model => model.SectionId)
+        @Html.HiddenFor(model => model.ResponsibleId)
+
+        @Html.HiddenFor(model => model.MaterialGroupCode)
+        @Html.HiddenFor(model => model.MaterialGroupDescription)
+        @Html.HiddenFor(model => model.Status)
+
+        @Html.HiddenFor(model => model.NumberDoc)
+
+        @Html.HiddenFor(model => model.ValueAcquisitionModel)
+        @Html.HiddenFor(model => model.ValueAcquisition)
+        @Html.HiddenFor(model => model.ValueUpdate)
+        @Html.HiddenFor(model => model.ShortDescriptionItemId)
+        @Html.HiddenFor(model => model.flagAcervo)
+        @Html.HiddenFor(model => model.flagTerceiro)
+        @Html.HiddenFor(model => model.checkFlagAcervo)
+        @Html.HiddenFor(model => model.checkFlagTerceiro)
+        @Html.HiddenFor(model => model.checkFlagDecretoSefaz)
+        @Html.HiddenFor(model => model.ContaContabilApresentacaoEdicao)
+        @Html.HiddenFor(model => model.podeSerExcluido)
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Local</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InstitutionId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownListFor(model => model.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitution", @disabled = "disabled" })
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            @Html.LabelFor(model => model.BudgetUnitId, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit", @disabled = "disabled" })
+            </div>
+
+
+            @Html.LabelFor(model => model.ManagerUnitId, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit", @disabled = "disabled" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AdministrativeUnitId, "UA", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.AdministrativeUnitId, (SelectList)ViewBag.AdministrativeUnits, new { @class = "form-control selectpicker comboAdministrativeUnit", @disabled = "disabled" })
+            </div>
+
+            @Html.LabelFor(model => model.SectionId, "Divisão", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.SectionId, (SelectList)ViewBag.Sections, new { @class = "form-control selectpicker comboSection", @disabled = "disabled" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ResponsibleId, "Responsável", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ResponsibleId, (SelectList)ViewBag.Responsible, "Selecione o Responsavel", new { @class = "form-control comboResponsible", @disabled = "disabled" })
+            </div>
+
+            @Html.LabelFor(model => model.ContaContabilApresentacaoEdicao, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.ContaContabilApresentacaoEdicao, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.InitialId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.InitialId, (SelectList)ViewBag.Initial, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.InitialId, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.NumberIdentification, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.NumberIdentification, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NumberIdentification, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.DiferenciacaoChapa, new { htmlAttributes = new { @class = "form-control", @maxlength = "7" } })
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Item Material</h4>
+                </div>
+            </div>
+        </div>
+        
+        @if (Model.Status && Model.podeEditarItemMaterial)
+        {
+            <div class="form-group pesquisarMaterial" id="div_pesquisaItemMaterial">
+                @*Material Item*@
+                @Html.LabelFor(model => model.materialItemPesquisa, "Pesquisar Item Material", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.EditorFor(model => Model.materialItemPesquisa, new { htmlAttributes = new { @class = "form-control materialItemId", @maxlength = "20" } })
+                    @Html.ValidationMessageFor(model => Model.MaterialItemCode, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-1">
+                    <button type="button" id="btnConsultar" data-toggle="tooltip" data-placement="top" data-original-title="Click para consultar o item de material no SIAFISICO!" class="btn btn-default">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                    <a class="info" data-toggle="tooltip" data-original-title="Somente será permitido a alteração do Item Material pertecente ao mesmo Grupo de Material">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </a>
+                </div>
+            </div>
+        }
+        else {
+            @Html.HiddenFor(model => model.MaterialItemCode)
+            @Html.HiddenFor(model => model.MaterialItemDescription)
+        }
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MaterialItemCode, "Item Material", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => Model.MaterialItemCode, new { htmlAttributes = new { @class = "form-control materialItemCode", @disabled = "disabled" } })
+            </div>
+            <div class="col-md-6">
+                @Html.EditorFor(model => Model.MaterialItemDescription, new { htmlAttributes = new { @class = "form-control materialItemDescription", @disabled = "disabled" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MaterialGroupCode, "Grupo do Material", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.MaterialGroupCode, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+            </div>
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.MaterialGroupDescription, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @*Descrição Resumida de Item*@
+            @Html.LabelFor(model => model.ShortDescriptionItemId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.ShortDescriptionItemId, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @type = "hidden" } })
+                @Html.EditorFor(model => model.ShortDescription, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>        
+        <div class="form-group">
+            @* Estado de Conservação *@
+            @Html.LabelFor(model => model.StateConservationId, "Estado de Conservação", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.StateConservationId, (SelectList)ViewBag.StateConservations, "-- Selecione --", new { @class = "form-control" })
+            </div>
+            <label class="control-label col-md-2">Acervo</label>
+            <div class="col-md-1 width-flags-edicao">
+                @Html.EditorFor(model => model.checkFlagAcervo, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+            </div>
+            <label class="control-label col-md-1 width-flags-edicao">Terceiro</label>
+            <div class="col-md-1 width-flags-edicao">
+                @Html.EditorFor(model => model.checkFlagTerceiro, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+            </div>
+            <label class="control-label col-md-1 width-flags-edicao">Decreto SEFAZ</label>
+            <div class="col-md-1 width-flags-edicao">
+                @Html.EditorFor(model => model.checkFlagDecretoSefaz, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @if (Model.MaterialGroupCode == 88)
+            {
+                if (Model.checkflagAnimalAServico)
+                {
+                    @Html.Label("Animal está a serviço do estado", htmlAttributes: new { @class = "control-label col-md-4" })
+                }
+                else
+                {
+                    @Html.Label("Animal não está a serviço do estado", htmlAttributes: new { @class = "control-label col-md-4" })
+                }
+            }
+        </div>
+
+        @if (Model.OutSourcedId != null)
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.CPFCNPJDoTerceiro, "Terceiro", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.EditorFor(model => Model.CPFCNPJDoTerceiro, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => Model.NomeDoTerceiro, new { htmlAttributes = new { @class = "form-control outSourcedDescription", @readonly = "readonly" } })
+                </div>
+            </div>
+        }
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AcquisitionDate, "Data Aquisição", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.AcquisitionDate, new { htmlAttributes = new { @class = "form-control bloquear", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.AcquisitionDate, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.MovimentDate, "Data Incorporação", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.MovimentDate, new { htmlAttributes = new { @class = "form-control bloquear", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.MovimentDate, "", new { @class = "text-danger" })
+            </div>            
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.ValueAcquisition, "Valor Aquisição", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.ValueAcquisition, new { maxlength = 11, htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.ValueAcquisition, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.ValueUpdate, "Valor Atualizado", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.ValueUpdate, new { maxlength = 10, htmlAttributes = new { @class = "form-control sam-moeda", @disabled = "disabled" } })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-md-5">
+                @if (Model.flagCalculoPendente == true)
+                {
+                    <h5 style="color:red">O Calculo de depreciação deste item foi alterado, é preciso realizar o fechamento para depreciar o valor do bem!</h5>
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.EditorFor(model => model.AssetMovementsId, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @type = "hidden" } })
+            @Html.LabelFor(model => model.LifeCycle, "Vida útil (em meses)", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.LifeCycle, new { maxlength = 4, htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.LifeCycle, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.ValueDevalue, "Valorização ou Desvalorização", htmlAttributes: new { @class = "control-label col-sm-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.ValueDevalue, new { maxlength = 8, htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.ValueDevalue, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Observation, "Justificativa", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @if (Model.checkFlagAcervo == true || Model.checkFlagTerceiro == true || Model.flagDepreciationCompleted == true)
+                {
+                    @Html.TextAreaFor(model => model.Observation, new { htmlAttributes = new { @class = "form-control" }, @style = "width: 75%; height: 100px;", @readonly = "readonly", @disabled = "disabled" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(model => model.Observation, new { htmlAttributes = new { @class = "form-control" }, @style = "width: 75%; height: 100px;" })
+                }
+
+                @Html.ValidationMessageFor(model => model.Observation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados Complementares</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @if (!String.IsNullOrEmpty(Model.NumeroDocumentoAtual) || !String.IsNullOrEmpty(Model.NumeroDocumentoAtual))
+            {
+                @Html.LabelFor(model => model.NumeroDocumentoAtual, "Número de documento", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.NumeroDocumentoAtual, new { htmlAttributes = new { @class = "form-control", @maxlength = 15, @disabled = "disabled" } })
+                </div>
+            }
+            else
+            {
+                @Html.LabelFor(model => model.NumberDoc, "Número de documento", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.NumberDoc, new { htmlAttributes = new { @class = "form-control", @maxlength = 15, @disabled = "disabled" } })
+                </div>
+            }
+            @Html.LabelFor(model => model.Empenho, "Empenho", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @if (string.IsNullOrEmpty(Model.Empenho) || string.IsNullOrWhiteSpace(Model.Empenho))
+                {
+                    @Html.EditorFor(model => model.Empenho, new { htmlAttributes = new { @class = "form-control" } })
+                }
+                else
+                {
+                    @Html.EditorFor(model => model.Empenho, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                }
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.NumberPurchaseProcess, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @if (Model.Status)
+                {
+                    @Html.EditorFor(model => model.NumberPurchaseProcess, new { htmlAttributes = new { @class = "form-control", @maxlength = 25 } })
+                    @Html.ValidationMessageFor(model => model.NumberPurchaseProcess, "", new { @class = "text-danger" })
+                }
+                else
+                {
+                    @Html.EditorFor(model => model.NumberPurchaseProcess, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                }
+            </div>
+            @Html.LabelFor(model => model.SerialNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.SerialNumber, new { htmlAttributes = new { @class = "form-control", @maxlength = 50 } })
+                @Html.ValidationMessageFor(model => model.SerialNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.ManufactureDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.ManufactureDate, new { maxlength = 10, htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ManufactureDate, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.DateGuarantee, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.DateGuarantee, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateGuarantee, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.ChassiNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.ChassiNumber, new { htmlAttributes = new { @class = "form-control", @maxlength = 50 } })
+                @Html.ValidationMessageFor(model => model.ChassiNumber, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Brand, new { htmlAttributes = new { @class = "form-control", @maxlength = 20 } })
+                @Html.ValidationMessageFor(model => model.Brand, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control", @maxlength = 20 } })
+                @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.NumberPlate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.NumberPlate, new { htmlAttributes = new { @class = "form-control", @maxlength = 8 } })
+                @Html.ValidationMessageFor(model => model.NumberPlate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AdditionalDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.AdditionalDescription, new { htmlAttributes = new { @class = "form-control", @maxlength = 20 } })
+                @Html.ValidationMessageFor(model => model.AdditionalDescription, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        
+        <div class="form-group cor-azul">
+            <div class="col-md-5">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-4">
+                    <h4>Histórico de Chapas</h4>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-4">
+                    <h4>Histórico de Depreciação</h4>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group col-sm-1"></div>
+        <div class="form-group col-sm-4">
+            <div class="form-control divGrid" style="height:360px; overflow: auto;">
+                <table class="table" id="result-tables-patrimonio">
+                    <tr>
+                        <th style="text-align:center; color:#337ab7" class="text-info">Chapa</th>
+                        <th style="text-align:center; color:#337ab7" class="text-info">Data de Inclusão</th>
+                    </tr>
+        
+                    @foreach (var item in Model.AssetNumberIdentifications)
+                    {
+                        <tr>
+                            <td style="text-align:center">@Html.DisplayFor(modelItem => item.ChapaCompleta)</td>
+                            <td style="text-align:center">@Html.DisplayFor(modelItem => item.InclusionDate)</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="form-group col-sm-2"></div>
+        <div class="form-group col-sm-5">
+            <div class="form-control divGrid" style="height:360px; overflow: auto;">
+                <table class="table" id="result-tables-patrimonio">
+                    <tr>
+                        <th style="text-align:center; color:#337ab7" class="text-info">Data</th>
+                        <th style="text-align:center; color:#337ab7" class="text-info">Vida útil</th>
+                        <th style="text-align:center; color:#337ab7" class="text-info">Valor da Aquisição</th>
+                        <th style="text-align:center; color:#337ab7" class="text-info">Depreciação Acumulada</th>
+                        <th style="text-align:center; color:#337ab7" class="text-info">Valor Atual</th>
+                        <th style="text-align:center; color:#337ab7" class="text-info">UGE</th>
+                    </tr>
+                    @if (Model.AssetHistoricDepreciations2 != null)
+                    {
+                        foreach (var item in Model.AssetHistoricDepreciations2)
+                        {
+                            <tr>
+                                <td style="text-align:center">@Html.DisplayFor(modelItem => item.DataDepreciacao)</td>
+                                <td style="text-align:center">@Html.DisplayFor(modelItem => item.VidaUtil)</td>
+                                <td style="text-align:center">@Html.DisplayFor(modelItem => item.ValorAquisicao)</td>
+                                <td style="text-align:center">@Html.DisplayFor(modelItem => item.DepreciacaoAcumulada)</td>
+                                <td style="text-align:center">@Html.DisplayFor(modelItem => item.ValorAtual)</td>
+                                <td style="text-align:center">@Html.DisplayFor(modelItem => item.CodigoUGE)</td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+        
+        <div class="clearfix"> </div>
+        
+        <hr />
+        <div class="form-group cor-azul">
+            <div class="col-md-5">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-4">
+                    <h4>Dados de Inventário</h4>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-4">
+                    <h4>Dados SIAFEM</h4>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-sm-1"></div>
+        <div class="form-group col-sm-4">
+            <div class="form-control divGrid" style="height:360px; overflow: auto;">
+                <table class="table" id="result-tables-patrimonio">
+                    <tr>
+                        <th style="text-align:center; color:#337ab7">Sigla/Chapa</th>
+                        <th style="text-align:center; color:#337ab7">Data Inventário</th>
+                        <th style="text-align:center; color:#337ab7">Tipo Inventário</th>
+                    </tr>
+                    @{
+                        string siglaChapa = null;
+                        string dataInventario = null;
+                        string descricaoTipoInventario = null;
+                        Enum tipoInventario = default(enumTipoInventario);
+                        foreach (var item in Model.RelatedItemInventarios)
+                        {
+                            siglaChapa = item.InitialName + "-" + item.Code;
+                            dataInventario = item.RelatedInventario.DataInventario.ToString("dd/MM/yyyy");
+                            if (item.RelatedInventario.TipoInventario.HasValue)
+                            {
+                                tipoInventario = (enumTipoInventario)item.RelatedInventario.TipoInventario.Value;
+                                descricaoTipoInventario = tipoInventario.ObterDescricao();
+                            }
+                            <tr>
+                                <td style="text-align:center"><span id="SiglaChapa">@siglaChapa</span></td>
+                                <td style="text-align:center"><span id="DataInventario">@dataInventario</span></td>
+                                <td style="text-align:center"><span id="TipoInventario">@descricaoTipoInventario</span></td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="form-group col-sm-2"></div>
+        <div class="form-group col-sm-5">
+            <div class="form-control divGrid" style="height:360px; overflow: auto;">
+                <table class="table" id="result-tables-patrimonio">
+                    <tr>
+                        <th style="text-align:center; color:#337ab7" class="text-info">Data/Hora Envio ContabilizaSP</th>
+                        <th style="text-align:center; color:#337ab7" class="text-info">Documento SAM</th>
+                        <th style="text-align:center; color:#337ab7" class="text-info">Tipo NL</th>
+                        <th style="text-align:center; color:#337ab7" class="text-info">Número</th>
+                        <th style="text-align:center; color:#337ab7" class="text-info">Valor</th>
+                    </tr>
+                    @if (Model.DadosSIAFEM.HasElements())
+                    {
+                        foreach (var viewDadosNLSIAFEM in Model.DadosSIAFEM)
+                        {
+                            if (viewDadosNLSIAFEM != null)
+                            {
+                                <tr style="@Html.Raw(viewDadosNLSIAFEM.NumeroNL.ToLowerInvariant().Contains("estorno") ? "font-weight:bold" : "")">
+                                    <td style="text-align:center"><span id="DataHoraEnvioContabilizaSP">@viewDadosNLSIAFEM.DataHoraEnvioContabilizaSP</span></td>
+                                    <td style="text-align:center"><span id="DocumentoSAM">@viewDadosNLSIAFEM.DocumentoSAM</span></td>
+                                    <td style="text-align:center"><span id="NomeTipoNL">@viewDadosNLSIAFEM.NomeTipoNL</span></td>
+                                    <td style="text-align:center"><span id="NumeroNL">@viewDadosNLSIAFEM.NumeroNL</span></td>
+                                    <td style="text-align:center"><span id="ValorNL">@viewDadosNLSIAFEM.ValorNL</span></td>
+                                </tr>
+                            }
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+        @if (Model.checkFlagDecretoSefaz)
+        {
+        <hr />
+        <div class="form-group cor-azul">
+            <div class="col-md-5">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-4">
+                    <h4>Histórico dos Valores desse Decreto</h4>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-sm-1"></div>
+            <div class="form-group col-sm-4">
+                <div class="form-control divGrid" style="height:360px; overflow: auto;">
+                    <table class="table" id="result-tables-patrimonio">
+                        <tr>
+                            <th style="text-align:center; color:#337ab7" class="text-info">Valor de Aquisição</th>
+                            <th style="text-align:center; color:#337ab7" class="text-info">Valor de Revalorização</th>
+                            <th style="text-align:center; color:#337ab7" class="text-info">Data</th>
+                        </tr>
+                        @if (Model.HistoricoDosValoresDoDecreto != null)
+                        {
+                            foreach (var item in Model.HistoricoDosValoresDoDecreto)
+                            {
+                                <tr>
+                                    <td style="text-align:center">@Html.DisplayFor(modelItem => item.textoValorAquisicao)</td>
+                                    <td style="text-align:center">@Html.DisplayFor(modelItem => item.textoValorRevalorizacao)</td>
+                                    <td style="text-align:center">@Html.DisplayFor(modelItem => item.textoDataAlteracao)</td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+
+        <div class="clearfix"> </div>
+        }
+        <hr />
+
+        <div class="form-group">
+            <div class="form-group" style="margin-left:1%">
+                @if (Model.Status)
+                {
+                    <button type="submit" id="btnSalvarSubmit" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info" onkeypress="sam.search.clickEnterSubmit();" value="Create">
+                        <i class="glyphicon glyphicon-ok" aria-hidden="true"></i> Salvar
+                    </button>
+                    if (Model.podeSerExcluido)
+                    {
+                        <a data-placement="top" class="btn btn-danger" href="@Url.Action("Delete", new { id = @Model.Id })">
+                            <i class="glyphicon glyphicon-remove-circle" aria-hidden="true"></i> Excluir BP
+                        </a>
+                    }
+                }
+                <a class="btnvoltar btn btn-default" href="javascript:history.back()">
+                    <i class="glyphicon glyphicon-share-alt"></i> Voltar
+                </a>
+            </div>
+        </div>
+     </div>
+
+}
+
+<script type="text/javascript" id="scriptEdicao">
+    $(document).ready(function () {
+        sam.asset.Edicao.load($("#Id").val());
+    });
+</script>

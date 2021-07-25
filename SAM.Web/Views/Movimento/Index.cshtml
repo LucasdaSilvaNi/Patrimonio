@@ -1,0 +1,187 @@
+﻿@model SAM.Web.ViewModels.MovimentoIndexViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ViewBag.Title = "Visão Geral de Patrimônios"; }
+
+@Styles.Render("~/Movimento/Index_1/css")
+@Scripts.Render("~/Movimento/Index_2/js")
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+
+
+<div class="col-sm-12" style="margin-top: 25px">
+    <div class="col-sm-5">
+        <h3 class="text-primary">@ViewBag.Title</h3>
+        <h6>O SAM-Patrimonio possui vídeos que possam esclarecer suas dúvidas. <a href=@Url.Action("Ajuda", "Principal")>Clique aqui e confira!</a></h6>
+        <hr style="margin-top: 0px" />
+    </div>
+    <div class="col-sm-3"> </div>
+    <div class="col-sm-4" @(Model.perfilOperadorUGE ? "" : "style=display:none" )>
+        <ul class="ttw-notification-menu" style="width: 500px; float: right">
+            <li id="bolsaEstado" style="width: 25%" class="notification-menu-item first-item">@Html.ActionLink("Bolsa Estadual", "BolsaEstadual", "Exchange")</li>
+            <li id="bolsaSecretaria" style="width: 25%" class="notification-menu-item">@Html.ActionLink("Bolsa Secretaria", "BolsaOrgao", "Exchange")</li>
+            <li id="pendentesDeIncorporacao" style="width: 50%" class="notification-menu-item">@Html.ActionLink("Incorporação de Transferência/Doação", "Create", "Assets")</li>
+        </ul>
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "consultaForm" }))
+{
+    @Html.HiddenFor(m => Model.searchString)
+    @Html.Hidden("perfilOperador", Model.perfilOperador ? "1" : "")
+    <button type="submit" id="filtroOculto" style="display: none"> </button>
+
+    <div class="col-sm-12" style="margin-bottom: 30px;">
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" id="search-tables" name="search-tables" value="@Model.searchString" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnter(this,event)" />
+                <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                @Html.DropDownList("cbFiltros", (SelectList)ViewBag.Filtros, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                @Html.DropDownList("cbStatus", (SelectList)ViewBag.Status, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="pull-right">
+                <a class="btnMovimento btn btn-info" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" href="@Url.Action("Create")">
+                    <i class="glyphicon glyphicon-send fa-lg Movimentoclass"></i> Movimentar
+                </a>
+                <a class="btnIncorporar btn btn-info" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" href="@Url.Action("Create", "Assets")">
+                    <i class="glyphicon glyphicon-arrow-down fa-lg Incorporarclass"></i> Incorporar
+                </a>
+                <button type="button" id="btnGerarExcel" class="btnExcel btn btn-info" style="background-color: #597EB7 !important; border-color: #597EB7 !important;">
+                    <i class="glyphicon glyphicon-arrow-down fa-lg Excelclass"></i> Excel
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<table class="table" id="result-tables" style="font-size: 11px;">
+    <thead>
+        <tr>
+            <th class="text-info tamanho-visao-geral-pdrao padding-numeroDocumento no-sort historico text-center" data-sortable="false" style="text-align: center">Estorno/<br />Histórico</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" data-sortable="true">Sigla/Chapa</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" data-sortable="true">Grupo Material/Item</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-numeroDocumento" data-sortable="true">Descrição Resumida</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" data-sortable="true">Órgão</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" data-sortable="true">UO</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" data-sortable="true">UGE</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" data-sortable="true">UA</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-numeroDocumento" data-sortable="true">Descrição <br />da Divisão</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" data-sortable="true">Responsável</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" data-sortable="true">Conta Contábil</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" data-sortable="true">Valor de Aquisição</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" data-sortable="true">Depreciação Acumulada</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" data-sortable="true">Valor Atual</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" data-sortable="true">Depreciação Mensal</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" style="text-align: center" data-sortable="true">Vida Útil (Meses)</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-numeroDocumento" data-sortable="true">Data de Aquisição</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-numeroDocumento" data-sortable="true">Data de Incorporação</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-empenho" data-sortable="true">Empenho</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-numeroDocumento" data-sortable="true">Número de documento</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-numeroDocumento" data-sortable="true">Último Histórico</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-numeroDocumento" data-sortable="true">Tipo</th>
+            <th class="text-info tamanho-visao-geral-pdrao padding-visao-geral-padrao" style="text-align: center" data-sortable="false">Ações</th>
+        </tr>
+    </thead>
+</table>
+
+<div class="modal fade modalView" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="width: 100%">
+    <div class="modal-dialog" style="width: 80%" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="closemodal" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Historico do Bem</h4>
+            </div>
+            <div class="modal-body">
+
+                <div id="historicoDoItem"> </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-success" value="Ok" onclick="movimento.FecharModalHistorico()" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+<div class="modal-loading" id="divProcessing" style="display:none;">
+    <div style="width:50% !important; height:50% !important">
+        <div style="width:50% !important; height:20% !important">
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <br />
+            <br />
+            <label class="label-info" style="font-size:16px !important">Gerando documento do Excel, por favor espere o término!...</label>
+        </div>
+    </div>
+
+</div>
+
+<div class="clearfix"></div>
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-visao-geral-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+        movimento.EventoTrocaStatusRetorno();
+        movimento.InicializaNotificationMenu(@Html.Raw(Model.perfilOperadorUGE == true ? "true" : "false"));
+        sam.transaction.controleTransacaoIndexMovimento('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+        movimento.Sucesso('@Html.Raw(ViewBag.AlertComSucesso)');
+        $(document).ready(function () {
+            let visaoGeralDataTable = new VisaoGeralDataTable();
+            visaoGeralDataTable.Load('#consultaForm');
+            $("#divProcessing").hide();
+            $('#btnGerarExcel').click(function () {
+                event.preventDefault();
+                $("#divProcessing").show();
+                var url = 'Movimento/ExportarExcel';
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: formData,
+                    dataType: "json",
+                    success: function (resp) {
+                        $("#divProcessing").hide();
+                        $('#divProcessing').addClass("processing-ivinsivel");
+                        createRespostaDaImportacao(resp);
+                    }
+                })
+            });
+
+            var createRespostaDaImportacao = function (data) {
+                var jsonData = $.parseJSON(data);
+                console.log(jsonData);
+                $.each(jsonData, function (index, resultado) {
+                    $.each(resultado, function (index, value) {
+                        if (value.caminhoDoArquivoDownload !== undefined) {
+                            window.location = value.caminhoDoArquivoDownload;
+                        }
+                    });
+
+                });
+
+            }
+        });
+    </script>
+}

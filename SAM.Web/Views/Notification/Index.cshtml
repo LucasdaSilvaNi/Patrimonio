@@ -1,0 +1,43 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.ViewModels.NotificationViewModel>
+@using PagedList.Mvc;
+
+@{ViewBag.Title = "Consulta de Notificações";}
+
+@Html.Partial("_GridNewButtons")
+
+<table class="table" id="result-tables">
+    <tr>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Titulo).ToString()), "Titulo", new { sortOrder = ViewBag.CodeSortParm })</th>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().DataCriacao).ToString()), "Data de Criação", new { sortOrder = ViewBag.BudgetUnitSortParm })</th>
+        <th style="text-align: center">@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Status).ToString()), "Status", new { sortOrder = ViewBag.CodeSortParm })</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Titulo)</td>
+            <td>@Html.DisplayFor(modelItem => item.DataCriacao)</td>
+            <td style="text-align: center">@Html.DisplayFor(modelItem => item.Status)</td>
+            <td style="text-align: center">
+                <div class="form-group" style="margin-left: -1%;">
+                    <a class="btnEditar" href="@Url.Action("Edit", "Notification", new { id = @item.Id })" title="Editar">
+                        <i class="glyphicon glyphicon-pencil editarclass"></i>
+                        <span class="sr-only">Editar</span>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    }
+</table>
+
+Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.CurrentFilter }))
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

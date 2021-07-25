@@ -1,0 +1,52 @@
+﻿@model PagedList.IPagedList<SAM.Web.ViewModels.MaterialItemViewModel>
+@using PagedList.Mvc;
+
+<div class="form-control" style="height:50px;">
+    <div class="col-md-10">
+        <input type="text" class="form-control gridConsulta" id="consulta" maxlength="100" />
+    </div>
+    <div class="col-md-2">
+
+        @*<button type="button" id="buttonConsultar" data-toggle="tooltip" data-placement="top" data-original-title="Click para executar a consultar do(s) iten(s) de materiais!" class="btn btn-default btnConsulta">*@
+        <button type="button" id="buttonConsultar" data-toggle="tooltip" data-placement="top" data-original-title="Click para executar a consultar do(s) iten(s) de materiais!" class="btn btn-default btnConsulta">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+        <p>
+
+        </p>
+    </div>
+</div>
+<p>
+
+</p>
+<div class="form-control divGrid" style="width:100%;height:20%">
+    <table class="table" id="result-tables">
+        <tr class="active">
+            <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Code).ToString()), "GridItemMaterial", new { sortOrder = ViewBag.Code })</th>
+
+            <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Description).ToString()), "GridItemMaterial", new { sortOrder = ViewBag.Description })</th>
+        </tr>
+
+        @foreach (var item in @Model)
+        {
+            <tr class="tr-material-consulta">
+                <td><a class="material-consulta-id" href="@Url.Action("#", new { id = item.Id,itemMaterialId = item.Id, LifeCycle = item.LifeCycle, RateDepreciationMonthly = item.RateDepreciationMonthly, ResidualValue = item.ResidualValue }).ToString()" title="Código">@Html.DisplayFor(modelItem => item.Code)</a></td>
+
+                <td><a class="material-consulta-descricao" href="@Url.Action("#", new { id = item.Id, itemMaterialId = item.Id, LifeCycle = item.LifeCycle, RateDepreciationMonthly = item.RateDepreciationMonthly, ResidualValue = item.ResidualValue }).ToString()" title="Descrição">@Html.DisplayFor(modelItem => item.Description)</a></td>
+
+
+            </tr>
+        }
+    </table>
+
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+    <div id="divPaginacao">
+        @Html.PagedListPager(Model, page => Url.Action("",
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+</div>
+
+<script>
+    sam.materialItem.loadModalView();
+
+</script>

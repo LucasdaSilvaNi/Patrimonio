@@ -1,0 +1,21 @@
+﻿@model string
+<div class="row">
+    <div class="col-md-6">
+        <h2>Aviso</h2>
+        <hr />
+        @if (string.IsNullOrEmpty(Model) || string.IsNullOrWhiteSpace(Model))
+        {
+            <p>Ocorreu uma exceção durante o processo, clique no botão [Voltar ao processo] e tente novamente, caso persista a exceção entrar em contato com o administrador responsável!</p>
+        }
+        else
+        {
+            <p>@Model</p>
+        }
+    </div>
+</div>
+
+<br />
+<a href="@Url.Action("Index","Home")" data-toggle="tooltip" data-placement="top" data-original-title="Click para voltar" class="btn btn-default">
+    <i class="glyphicon glyphicon-share-alt"></i> OK
+    <span class="sr-only">Voltar</span>
+</a>

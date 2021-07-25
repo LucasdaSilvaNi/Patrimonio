@@ -1,0 +1,95 @@
+﻿@{ViewBag.Title = "Notas Pendentes de Lançamento no SIAFEM";}
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+
+<div class="col-sm-12" style="margin-top: 25px">
+    <div class="col-sm-6">
+        <h3 class="text-primary">Notas de Lançamentos Pendentes SIAFEM</h3>
+        <h6 class="text-primary">Para mais informações de como está a integração com o Contabiliza-SP, disponibilizamos um vídeo explicativo que pode ser visto <a id="chamadaVideo" style="text-decoration: underline;">clicando aqui</a></h6>
+        <hr style="margin-top: 0px" />
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formNotasPendentes" }))
+{
+    @Html.Hidden("searchString")
+    @Html.Hidden("LoginSiafem", ViewData["LoginSiafem"])
+    @Html.Hidden("SenhaSiafem", ViewData["SenhaSiafem"])
+    @Html.Hidden("perfilOperador", ViewData["perfilOperador"])
+    @Html.Hidden("codigo")
+    <button type="submit" id="filtroOculto" style="display: none"> </button>
+
+    <div class="col-sm-12" style="margin-bottom: 30px;">
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" id="search-tables" name="search-tables" value="@ViewBag.CurrentFilter" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnter(this,event)" />
+                <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+            </div>
+        </div>
+    </div>
+    <table id="tableNotasLancamentosPendentesSIAFEM" class="table">
+        <thead>
+            <tr>
+                <th class="text-info text-datatable-label-size" data-sortable="false" />
+                <th class="text-info text-datatable-label-size" data-sortable="true">Orgao</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">UO</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">UGE</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Documento</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Tipo Movimento</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Nome Movimentação</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Conta Contábil</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Data Movimentação</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Valor Movimentação</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Tipo Nota</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Erro SIAFEM</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Data Envio SIAFEM</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false" />
+                <th class="text-info text-datatable-label-size" data-sortable="false">Ação</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div class="modal fade modalView" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="width: 100%">
+        <div class="modal-dialog" style="width: 80%" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="closemodal" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">Detalhes da Pendência de Nota de Lançamento SIAFEM</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="detalheNotaLancamentoPendente"> </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("Modais/_Video")
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-pendenciaNotaLancamentoSIAFEM-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+        $(document).ready(function () {
+            let notaLancamentoPendenteSIAFEMDataTable = new NotaLancamentoPendenteSIAFEMDataTable();
+            notaLancamentoPendenteSIAFEMDataTable.Load('#formNotasPendentes', '@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+
+            $("#chamadaVideo").click(function () {
+                $.post(sam.path.webroot + "Principal/Video", { video: 2 }, function () { })
+                .done(function (data) {
+                    $("#corpo").html(data);
+                    $("#modalVideoSobreChamado").modal({ keyboard: false, backdrop: 'static', show: true });
+                });
+            });
+        });
+    </script>
+}

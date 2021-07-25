@@ -1,0 +1,45 @@
+﻿@{ViewBag.Title = "Gerenciamento de Transações por Perfil";}
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+@Styles.Render("~/RelationshipUserProfile/index_1/css")
+
+<div class="form-horizontal">
+    <div class="col-md-12" style="margin-top: 10px;">
+        @Html.Label("Perfil", htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-4">
+            @Html.DropDownList("ProfileId", (SelectList)ViewBag.Profiles, "-- Selecione --", new { @class = "form-control" })
+            @Html.ValidationMessage("ProfileId", "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-2">
+            <button type="button" onclick="relationshipTransactionsProfiles.gravaTransacoesPorPerfil()" class="btn btn-info center-block"> Gravar <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"> </span> </button>
+        </div>
+    </div>
+
+    <div id="sideBySide" class="col-md-12" style="margin-top: 25px;">
+        <div class="col-md-6">
+            <div class="left" style="height:650px; overflow-y: auto;overflow-x:hidden;">
+                <ul class="source connected"></ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="right" style="height:650px; overflow-y: auto;overflow-x:hidden;">
+                <ul class="target connected"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/RelationshipUserProfile/index_2/js")
+
+<script type="text/javascript">
+    $(function () {
+        relationshipTransactionsProfiles.init();
+    });
+</script>

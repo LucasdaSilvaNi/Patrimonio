@@ -1,0 +1,17 @@
+﻿@model SAM.Web.ViewModels.AnaliticoDeBemPatrimonialViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Scripts.Render("~/Assets/ReportAnaliticoDeBemPatrimonial/js")
+
+<h3 style="margin-top:40px" class="cor-azul">Analítico</h3>
+@Html.Partial("~/Views/Assets/ReportAnalitico/_filterReportAnaliticoDeBemPatrimonial.cshtml", Model)
+
+<script>
+    reportAnaliticoDeBemPatrimonial.Load();
+</script>
+
+
+

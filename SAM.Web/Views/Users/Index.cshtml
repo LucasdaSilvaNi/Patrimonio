@@ -1,0 +1,47 @@
+﻿@{ViewBag.Title = "Usuários Cadastrados";
+    string cpf = ViewBag.CPF;}
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formUsuario" }))
+{
+    @Html.Partial("_GridNewButtons")
+    @Html.Hidden("cpf", cpf)
+
+    <table id="tableUsuarios" class="table">
+        <thead>
+            <tr>
+                <th class="text-info text-datatable-label-size" data-sortable="false">CPF</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Nome</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Orgão</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">UO</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">UGE</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">E-mail</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Data do Cadastro</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Status</th>
+                <th class="text-info text-datatable-label-size border-table-tr actionButton" data-sortable="false">Ações</th>
+            </tr>
+        </thead>
+        <tbody class="body-usuarios" data-toggle="table"></tbody>
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-usuarios-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+                sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+                $(document).ready(function () {
+                    let usuarioDataTable = new UsuarioDataTable();
+                    usuarioDataTable.Load('#formUsuario');
+                });
+    </script>
+}

@@ -1,0 +1,28 @@
+﻿@model SAM.Web.ViewModels.SiafemCalendarViewModel
+
+@{ViewBag.Title = "Exclusão do Calendário SIAFEM";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja excluí-lo estas informações?</h3>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>@Html.DisplayNameFor(model => model.FiscalYear)</dt>
+        <dd>@Html.DisplayFor(model => model.FiscalYear)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.ReferenceMonth)</dt>
+        <dd>@Html.DisplayFor(model => model.ReferenceMonth)</dd>
+
+
+        <dt>@Html.DisplayNameFor(model => model.DateClosing)</dt>
+        <dd>@Html.DisplayFor(model => model.DateClosing)</dd>
+
+        <dt></dt>
+        <dd>
+            @Html.Partial("_DeleteButtons")
+        </dd>
+    </dl>
+</div>

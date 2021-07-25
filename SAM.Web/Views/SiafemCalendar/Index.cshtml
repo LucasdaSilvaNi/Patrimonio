@@ -1,0 +1,45 @@
+﻿@{ViewBag.Title = "Calendário SIAFEM";
+    bool temPermissao = ViewBag.TemPermissao; }
+
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formCalendar" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Partial("_GridNewButtons")
+    @Html.Hidden("temPermissao", temPermissao ? "1": "")
+    
+    <table id="tableCalendar" class="table">
+        <thead>
+            <tr>
+                <th class="text-info" data-sortable="true">Ano-Exercício</th>
+                <th class="text-info" data-sortable="true">Mês-Referência</th>
+                <th class="text-info" data-sortable="true">Data de Fechamento</th>
+                <th class="text-info border-table-tr actionButton col-xs-1" data-sortable="true">Ações</th>
+            </tr>
+        </thead>
+    </table>
+
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+@{Html.RenderPartial("_DataTableReferenciaJS"); }
+<script src="~/Scripts/datatables/sam-siafemCalendar-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+        $(document).ready(function (){
+            let calendarDataTable = new CalendarDataTable();
+            calendarDataTable.Load('#formCalendar');
+        });
+    </script>
+}

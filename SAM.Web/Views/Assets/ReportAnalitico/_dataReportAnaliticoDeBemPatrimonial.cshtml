@@ -1,0 +1,59 @@
+﻿@model SAM.Web.ViewModels.AnaliticoDeBemPatrimonialViewModel
+
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("ReportAnaliticoDeBemPatrimonial", "Assets", FormMethod.Post, new { id = "formGenerateReportAnaliticoDeBemPatrimonial" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <div class="form-control divGrid" style="height:350px; overflow: auto;">
+
+            @Html.HiddenFor(model => model.InstitutionId)
+            @Html.HiddenFor(model => model.BudgetUnitId)
+            @Html.HiddenFor(model => model.ManagerUnitId)
+            @Html.HiddenFor(model => model.AdministrativeUnitId)
+            @Html.HiddenFor(model => model.SectionId)
+            @Html.HiddenFor(model => model.ListAssetsSelected)
+
+            <table class="table" id="result-tables-patrimonio">
+                <tr>
+                    <td colspan="8">
+                        <h3 style="margin-top:10px" class="cor-azul">Lista de Patrimônios</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <th><input type="checkbox" class="checkTodosPatrimonio" /> &nbsp; Selecione todos</th>
+                    <th style="text-align: center">@Html.DisplayNameFor(model => model.ListAssets.FirstOrDefault().Sigla)</th>
+                    <th>@Html.DisplayNameFor(model => model.ListAssets.FirstOrDefault().Chapa)</th>
+                    <th>@Html.DisplayNameFor(model => model.ListAssets.FirstOrDefault().MaterialItemDescription)</th>
+                </tr>
+
+                @foreach (var item in Model.ListAssets)
+                {
+                    <tr>
+                        <td><input type="checkbox" class="checkPatrimonio" data-id="@item.Id" /></td>
+                        <td style="text-align: center">@Html.DisplayFor(modelItem => item.Sigla)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ChapaCompleta)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MaterialItemDescription)</td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+    <div class="form-group" style="margin-bottom: 80px;">
+        <div class="clearfix"></div>
+        <button type="submit" class="btn btn-info pull-right btnGerar"> Gerar <span class="glyphicon glyphicon-share-alt" aria-hidden="true"> </span> </button>
+    </div>
+}
+
+<script>
+    $(function () {
+        reportAnaliticoDeBemPatrimonial.EventoSelecionaRegistro();
+        reportAnaliticoDeBemPatrimonial.EventoSelecionaTodosRegistros();
+        reportAnaliticoDeBemPatrimonial.SubmitForm();
+    });
+</script>

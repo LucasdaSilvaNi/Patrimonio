@@ -1,0 +1,32 @@
+﻿@model SAM.Web.Models.MetaDataTypeServiceContabilizaSP
+
+@{ViewBag.Title = "Exclusão Metadado Parametro ContabilizaSP";}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.LigadoAEventServices == null || ViewBag.LigadoAEventServices == 0)
+{
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+}
+<div>
+    @Html.HiddenFor(model => model.Id)
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>
+        <dt></dt>
+        <dd>
+            @if (ViewBag.LigadoAEventServices != null && ViewBag.LigadoAEventServices > 0) {
+                <br />
+                <label class="text-danger">Metadado não pode ser deletado pois está atrelado a @ViewBag.LigadoAEventServices serviços do ContabilizaSP</label>
+                <br />
+                <a class="btnvoltar btn btn-default" href="javascript:history.back()">
+                    <i class="glyphicon glyphicon-share-alt"></i> Voltar
+                </a>
+            }
+            else
+            {
+            @Html.Partial("_DeleteButtons")}
+        </dd>
+    </dl>
+</div>

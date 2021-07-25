@@ -1,0 +1,91 @@
+﻿@model SAM.Web.ViewModels.NotificationViewModel
+@using PagedList.Mvc;
+
+
+@{ViewBag.Title = "Bem Vindo";}
+
+@Styles.Render("~/Scripts/summernote-develop/dist/summernote.css") @*Não foi possível a utilização do bundle nesse css*@
+
+
+<style>
+    .note-toolbar.panel-heading {
+        display: none;
+    }
+
+    .note-editor.note-frame .note-editing-area .note-editable[contenteditable="false"] {
+        background-color: #FFF;
+    }
+
+    .summernote {
+        border: solid 1px gray;
+    }
+
+    .body-content {
+        overflow-y: scroll;
+        padding-bottom: 20px;
+    }
+</style>
+
+
+<h3 style="margin-top:40px;margin-bottom: 20px;text-align: center" class="cor-azul">Avisos Gerais</h3>
+
+<hr />
+
+<div style="background-color: #E4E4E4; margin: 0 15px 0 15px; padding: 15px; border: 1px solid gray">
+    <span> O Sistema de Administração de Materiais da PRODESP foi desenvolvido especialmente para os diversos órgãos da administração pública do Estado de São Paulo e é integrado aos sistemas da administração financeira, utilizando a estrutura organizacional do SIAFEM, a codificação de materiais do SIAFISICO e BEC, informações de empenhos e planos de trabalho. </span>
+    <br>
+    <span> SAM - Patrimônio faz a gestão de bens patrimoniais, proporcionando apoio as rotinas operacionais, automatização de tarefas e o fornecimento de informações operacionais e gerenciais.</span>
+    <br>
+    <span> Utilize sempre nosso canal de suporte: suportesam@sp.gov.br, não se esquecer de colocar no campo assunto do e-mail: Sistema SAM - Ambiente Produção - Módulo Patrimônio - UGE XXXXXX.</span>
+</div>
+
+<div style="text-align: center" class="form-group">
+        <a href=@Url.Action("Manual", "Principal")>
+            <span>Baixar Manual</span> &nbsp;
+            <i class="glyphicon glyphicon-download-alt" style="font-size: 22px;"></i>
+        </a>
+        &nbsp;&nbsp;
+        <a href=@Url.Action("Ajuda", "Principal")>
+            <span>Ajuda</span> &nbsp;
+            <i class="glyphicon glyphicon-share-alt" style="font-size: 22px;"></i>
+        </a>
+</div>
+
+@*<div style="text-align: center">
+    <a href=@Url.Action("DecretoRevalorizacaoBPs_63616", "Principal")>
+        <span>Baixar Decreto Estadual 63.616</span> &nbsp;
+        <i class="glyphicon glyphicon-download-alt" style="font-size: 22px;"></i>
+    </a>
+</div>*@
+
+<hr />
+
+<div id="avisosGerais" class="col-sm-12" style="display: none">
+    @Html.TextAreaFor(model => model.CorpoMensagem, new { @class = "form-control summernote" })
+</div>
+
+@Scripts.Render("~/Principal/Index/js")
+
+<script>
+    $(document).ready(function () {
+
+        //var altura = $(window).height();
+
+        $('.summernote').summernote({
+            height: 900,
+            disableDragAndDrop: true,
+            focus: true,
+            tabsize: 2,
+            codemirror: {
+                mode: 'text/html',
+                htmlMode: true,
+                lineNumbers: true,
+                theme: 'monokai'
+            }
+        });
+
+        $('.summernote').summernote('disable');
+        $('#avisosGerais').css('display', 'block');
+        sam.perfilLogin.importarIntegracao();
+    });
+</script>

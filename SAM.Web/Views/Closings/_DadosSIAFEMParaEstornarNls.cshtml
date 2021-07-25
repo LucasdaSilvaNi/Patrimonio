@@ -1,0 +1,46 @@
+﻿@model SAM.Web.ViewModels.DadosSIAFEMValidacaoFechamentoViewModel
+
+<style>
+    .cabecalho-azul-escuro {
+        background-color: #75b4d9;
+    }
+
+    .cabecalho-azul-claro {
+        background-color: #ebf9fa;
+    }
+</style>
+
+<div class="text-center">Esses são os valores que o SAM-Patrimonio mandará para o ContabilizaSP gerar <b>o estorno</b> das NLs de Depreciação dessa UGE. Por favor, verifique as tabelas com atenção.</div>
+<br />
+
+<table class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr class="cabecalho-azul-escuro text-center">
+            <td colspan="3"><strong>NLs geradas para o mês anterior</strong></td>
+        </tr>
+        <tr class="cabecalho-azul-claro text-center">
+            <td>Conta de Depreciação</td>
+            <td>Depreciação Mensal</td>
+            <td>Nota de Lançamento</td>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.dadosPorContaDepreciacao != null)
+        {
+            foreach (var valores in Model.dadosPorContaDepreciacao)
+            {
+                <tr>
+                    <td class="text-center">@Html.DisplayFor(val => valores.NumeroConta)</td>
+                    <td>@Html.DisplayFor(val => valores.ValorFormatado)</td>
+                    <td>@Html.DisplayFor(val => valores.NL)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div class="form-group text-center botoes">
+    <div class="text-center"> O sistema pode prosseguir com o processo de geração de NLs do ContabilizaSP?</div>
+    <button type="button" class="btn btn-primary" id="prosseguir" data-dismiss="modal">Pode prosseguir</button>
+    <button type="button" class="btn btn-danger" id="abortar" data-dismiss="modal">Não, aborta</button>
+</div>

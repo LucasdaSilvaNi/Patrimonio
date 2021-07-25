@@ -1,0 +1,29 @@
+﻿<div class="modal fade" id="modalAnimalAServico" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Este animal está a serviço do estado?</h4>
+            </div>
+            <div class="modal-body">
+                    <b>Lembre-se:</b><br /><br />
+                    <b>Animais a Serviço do Estado</b> são representados por cães, equinos, bovinos, muares, asininos destinados a trabalhos agrícolas, sela, transporte, segurança e revenda.
+                    <br/><br />
+                    <b>Não estão a Serviço do Estado</b>: Animais que se destinam à exposição, preservação e abate.
+            </div>
+            <div class="modal-footer">
+                    <button type="button" id="btnAnimalAServico" class="btn btn-success" data-dismiss="modal">Sim, ele está a serviço do estado</button>
+                    <button type="button" id="btnAnimalNaoServico" class="btn btn-danger" data-dismiss="modal">Não, ele não está a serviço do estado</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#btnAnimalAServico").click(function () {
+        $("#msgAnimalAServico").html("Animal está a serviço do estado");
+        $("#checkflagAnimalAServico").val(true);
+    });
+    $("#btnAnimalNaoServico").click(function () {
+        $("#msgAnimalAServico").html("Animal <b>não</b> está a serviço do estado");
+        $("#checkflagAnimalAServico").val(false);
+    });
+</script>

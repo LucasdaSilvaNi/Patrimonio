@@ -1,0 +1,66 @@
+﻿@model SAM.Web.Models.EventServiceContabilizaSP
+
+@{ViewBag.Title = "Detalhes do Tipo de Movimentação ContabilizaSP ";}
+
+<h2>@ViewBag.Title @Model.DescricaoTipoMovimento_SamPatrimonio</h2>
+
+<style type="text/css">
+    dt{
+        width: 25% !important;
+        padding-right: 10px
+    }
+
+</style>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.DescricaoTipoMovimento_SamPatrimonio):</dt>
+        <dd>@Html.DisplayFor(model => model.DescricaoTipoMovimento_SamPatrimonio)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.AccountEntryType):</dt>
+        <dd>@Html.DisplayFor(model => model.AccountEntryType)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.InputOutputReclassificationDepreciationType):</dt>
+        <dd>@Html.DisplayFor(model => model.InputOutputReclassificationDepreciationType)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.DescricaoTipoMovimentacao_ContabilizaSP):</dt>
+        <dd>@Html.DisplayFor(model => model.DescricaoTipoMovimentacao_ContabilizaSP)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.MetaDataType_StockSourceDescription):</dt>
+        <dd>@Html.DisplayFor(model => model.MetaDataType_StockSourceDescription)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.MetaDataType_StockDestinationDescription):</dt>
+        <dd>@Html.DisplayFor(model => model.MetaDataType_StockDestinationDescription)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.MetaDataType_DateFieldDescription):</dt>
+        <dd>@Html.DisplayFor(model => model.MetaDataType_DateFieldDescription)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.MetaDataType_AccountingValueFieldDescription):</dt>
+        <dd>@Html.DisplayFor(model => model.MetaDataType_AccountingValueFieldDescription)</dd>
+
+        <dt>@Html.DisplayName("Reclassificação Contábil"):</dt>
+        <dd>@Html.DisplayFor(model => model.MovimentacaoPatrimonialDepreciaOuReclassifica)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.ExecutionOrder):</dt>
+        <dd>@Html.DisplayFor(model => model.ExecutionOrder)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.DataAtivacaoTipoMovimentacao):</dt>
+        <dd>@Html.DisplayFor(model => model.DataAtivacaoTipoMovimentacao)</dd>
+
+        <dt></dt>
+        <dd>
+            <br />
+            <div class="form-group">
+                @Html.Partial("_EditButtons")
+            </div>
+        </dd>
+
+    </dl>
+</div>
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

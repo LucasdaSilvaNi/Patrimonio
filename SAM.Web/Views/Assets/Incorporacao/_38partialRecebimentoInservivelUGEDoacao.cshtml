@@ -1,0 +1,170 @@
+﻿
+@model SAM.Web.ViewModels.AssetViewModel
+
+<style>
+    .painelPesquisaOuManual {
+        border: 1px solid #baaeae;
+        padding: 25px;
+        border-radius: 5px;
+        margin: 0 !important;
+        margin-bottom: 30px !important;
+    }
+</style>
+
+<div class="col-sm-12" style="border-bottom: 1px solid #ddd; margin-bottom: 25px;">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a id="pesquisaNotaFiscalTransferencia" onclick="movimento.IncorporacaoAutomatizada();" data-toggle="tab" href="#menu1">Pesquisar Número de Documento</a>
+        </li>
+        <li>
+            <a id="notafiscalManual" onclick="movimento.IncorporacaoManual();" data-toggle="tab" href="#menu2">Manual</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="menu1" class="tab-pane fade in active">
+            </br>
+            <div class="form-group">
+                <label id="TipoFlag" class="control-label col-md-4" style="color:#0a920a" />
+            </div>
+
+            <div class="col-sm-12" style="margin-top: 30px; margin-bottom: 20px">
+                @Html.LabelFor(model => model.NumberDoc, "Pesquisar Nº de Documento", htmlAttributes: new { @class = "control-label col-md-2", @maxlength = 14 })
+                <div class="col-md-2">
+                    @Html.EditorFor(model => Model.NumberDoc, new { htmlAttributes = new { @class = "form-control ", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => Model.NumberDoc, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-1">
+                    <button type="button" id="btnConsultarDocumento" data-toggle="tooltip" data-placement="top" data-original-title="Click para consulta o Documento!" class="btn btn-default">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-sm-12" style="margin-bottom: 30px">
+                @Html.LabelFor(model => model.OrigemManagerUnit, "UGE de origem", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.OrigemManagerUnit, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+            </div>
+
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            <div class="col-sm-12" style="padding: 30px">
+                <div class="col-sm-12" style="margin-bottom: 20px">
+                    <label for="Institutions" class="control-label col-md-2">Orgão</label>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.InstituationIdDestino, (SelectList)ViewBag.InstitutionsDestino, new { @class = "form-control comboinstitution2 doacaoIntraNoEstado" })
+                        @Html.ValidationMessageFor(model => model.InstituationIdDestino, "", new { @class = "text-danger" })
+                        <span id="spanInstitution" class="text-danger field-validation-error"></span>
+                    </div>
+
+                    <label for="BudgetUnits" class="control-label col-md-1">UO</label>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.BudgetUnitIdDestino, (SelectList)ViewBag.BudgetUnitsDestino, new { @class = "form-control comboBudgetUnit2 doacaoIntraNoEstado" })
+                        @Html.ValidationMessageFor(model => model.BudgetUnitIdDestino, "", new { @class = "text-danger" })
+                        <span id="spanBudgetUnits" class="text-danger field-validation-error"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-12" style="margin-bottom: 20px">
+                    <label for="ManagerUnits" class="control-label col-md-2">UGE</label>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.ManagerUnitIdDestino, (SelectList)ViewBag.ManagerUnitsDestino, new { @class = "form-control comboManagerUnit2 doacaoIntraNoEstado" })
+                        @Html.ValidationMessageFor(model => model.ManagerUnitIdDestino, "", new { @class = "text-danger" })
+                        <span id="spanManagerUnits" class="text-danger field-validation-error"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-12" style="margin-bottom: 20px">
+                    @Html.LabelFor(model => model.NumberDocModel, "Número de Documento", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => Model.NumberDocModel, new { htmlAttributes = new { @class = "form-control ", @onkeyup = "movimento.ClonaInfNumberDocModelParaNumberDoc()", @maxlength = 14 } })
+                        @Html.ValidationMessageFor(model => Model.NumberDoc, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="col-sm-12">
+                    @Html.LabelFor(model => model.materialItemPesquisa, "Pesquisar Item Material", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => Model.materialItemPesquisa, new { htmlAttributes = new { @class = "form-control materialItemId", @maxlength = "20" } })
+                        @Html.ValidationMessageFor(model => Model.MaterialItemCode, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" id="btnConsultar" data-toggle="tooltip" data-placement="top" data-original-title="Click para consultar o item de material no SIAFISICO!" class="btn btn-default">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </div>
+                </div>
+
+                @Html.HiddenFor(model => model.AceiteManual)
+                <input type="hidden" id="EnumMovimentoAPesquisar" />
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*<div class="form-group">
+        @Html.LabelFor(model => model.MaterialItemCode, "Item Material", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.EditorFor(model => Model.MaterialItemCode, new { htmlAttributes = new { @class = "form-control materialItemCode", @readonly = "readonly" } })
+        </div>
+        <div class="col-md-5">
+            @Html.EditorFor(model => Model.MaterialItemDescription, new { htmlAttributes = new { @class = "form-control materialItemDescription", @readonly = "readonly" } })
+        </div>
+    </div>*@
+
+<div id="div_Material">
+    <div class="form-group">
+        @Html.LabelFor(model => model.MaterialItemCode, "Item Material", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.EditorFor(model => Model.MaterialItemCode, new { htmlAttributes = new { @class = "form-control materialItemCode", @readonly = "readonly" } })
+        </div>
+        <div class="col-md-6">
+            @Html.EditorFor(model => Model.MaterialItemDescription, new { htmlAttributes = new { @class = "form-control materialItemDescription", @readonly = "readonly" } })
+        </div>
+    </div>
+</div>
+
+
+<div class="form-group">
+    @*Descrição Resumida de Item*@
+    @Html.LabelFor(model => model.ShortDescriptionItemId, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-8">
+        @Html.EditorFor(model => model.ShortDescription, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @*chapa Antiga*@
+    @Html.LabelFor(model => model.OldNumberIdentification, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-2">
+        @Html.EditorFor(model => model.OldNumberIdentification, new { htmlAttributes = new { @class = "form-control somenteNumerosInicial", @min = "1", @max = "2147483647", @maxlength = "10" } })
+    </div>
+    <div class="col-md-1">
+        @Html.EditorFor(model => model.DiferenciacaoChapaAntiga, new { htmlAttributes = new { @class = "form-control somenteNumerosInicial", @maxlength = "7" } })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Observation, "Observação", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-5">
+        @Html.TextAreaFor(model => model.Observation, new { htmlAttributes = new { @class = "form-control" }, @style = "width: 100%; height: 150px;" })
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#EnumMovimentoAPesquisar").val(movimento.EnumMovementType.MovSaidaInservivelDaUGEDoacao);
+        sam.materialItem.Load();
+        sam.asset.ConsultarDocumento();
+        @(Model != null ? "movimento.SelecioneVisualizacaoAceite(" + Model.AceiteManual.ToString().ToLower() + ");" : "")
+    });
+
+    sam.transferencia.bind();
+</script>

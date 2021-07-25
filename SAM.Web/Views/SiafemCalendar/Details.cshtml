@@ -1,0 +1,34 @@
+﻿@model SAM.Web.ViewModels.SiafemCalendarViewModel
+
+@{ViewBag.Title = "Detalhes do Calendário SIAFEM";}
+
+<h2>@ViewBag.Title</h2>
+@*- @Model.FiscalYear*@
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>@Html.DisplayNameFor(model => model.FiscalYear)</dt>
+        <dd>@Html.DisplayFor(model => model.FiscalYear)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.ReferenceMonth)</dt>
+        <dd>@Html.DisplayFor(model => model.ReferenceMonth)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.DateClosing)</dt>
+        <dd>@Html.DisplayFor(model => model.DateClosing)</dd>
+
+        <dt></dt>
+        <dd>
+            <div class="form-group">
+                @Html.Partial("_EditButtons")
+            </div>
+        </dd>
+    </dl>
+</div>
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

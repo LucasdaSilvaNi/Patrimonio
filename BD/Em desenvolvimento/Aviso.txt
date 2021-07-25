@@ -1,0 +1,22 @@
+Essa pasta é para salvar todo e qualquer scripts de banco de dados que 
+
+- estejam atrelados a alguma atualização/alteração no código
+- foram rodados no banco de dados do ambiente de DEV com a finalidade de desenvolvimento/teste
+- ainda não foram para o ambiente de Produção
+
+Caso forem atualiza o ambiente de DEV com esses scripts, por gentileza só avise aos outros da existência dos mesmos.
+
+Caso haja um conjunto de 2 ou mais scripts, e eles possuem uma ordem para serem executados, por gentileza atente-se a colocar 
+a numeração da ordem como prefixo do nome do arquivo. Exemplo:
+
+	1-Scrips1.sql
+	2-Scrips2.sql
+...e assim por diante
+
+Uma vez o script foi mandado e se encontra no ambiente de PRD, por gentileza, retire os scripts dessa pasta e salve as alterações
+adequadas* na pasta "Scripts".
+
+Grato.
+
+
+(*adição ou remoção de coluna de tabelas, alteração de PROC, etc.)

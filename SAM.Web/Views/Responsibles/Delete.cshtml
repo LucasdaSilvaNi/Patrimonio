@@ -1,0 +1,30 @@
+﻿@model SAM.Web.Models.Responsible
+
+@{ViewBag.Title = "Exclusão do Responsável";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.AdministrativeUnitId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAdministrativeUnits.Description)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.CPF)</dt>
+        <dd>@Html.DisplayFor(model => model.CPF)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Email)</dt>
+        <dd>@Html.DisplayFor(model => model.Email)</dd>
+        
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>        
+
+        <dt>@Html.DisplayNameFor(model => model.Position)</dt>
+        <dd>@Html.DisplayFor(model => model.Position)</dd>
+        <dt></dt>
+        <dd>
+            @Html.Partial("_DeleteButtons")
+        </dd>
+    </dl>
+</div>

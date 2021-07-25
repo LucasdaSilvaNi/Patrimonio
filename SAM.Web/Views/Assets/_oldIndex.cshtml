@@ -1,0 +1,53 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.Models.Asset>
+@using PagedList.Mvc;
+
+@{ViewBag.Title = "Bens Patrimoniais Cadastrados";}
+
+
+@Html.Partial("_GridNewButtons")
+
+<table class="table" id="result-tables">
+    <tr>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().InitialId).ToString()), "Index", new { sortOrder = ViewBag.InitialIdSortParm })</th>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().NumberIdentification).ToString()), "Index", new { sortOrder = ViewBag.NumberIdentificationSortParm })</th>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().MaterialItemDescription).ToString()), "Index", new { sortOrder = ViewBag.AdditionalDescriptionSortParm })</th>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().LifeCycle).ToString()), "Index", new { sortOrder = ViewBag.AdditionalDescriptionSortParm })</th>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().RateDepreciationMonthly).ToString()), "Index", new { sortOrder = ViewBag.AdditionalDescriptionSortParm })</th>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().ResidualValue).ToString()), "Index", new { sortOrder = ViewBag.AdditionalDescriptionSortParm })</th>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().AceleratedDepreciation).ToString()), "Index", new { sortOrder = ViewBag.AdditionalDescriptionSortParm })</th>
+        <th></th>
+    </tr>
+
+    @foreach(var item in Model.Where(m => m.Status))
+    {
+        <tr>
+            <td> @Html.DisplayFor(modelItem => item.RelatedInitial.Name) </td>
+
+            @*@{var NumberIdentification = item.NumberIdentification;}*@
+
+            @*<td>@NumberIdentification</td>*@
+            <td>@Html.DisplayFor(modelItem => item.NumberIdentification)</td>
+            <td>@Html.DisplayFor(modelItem => item.MaterialItemDescription)</td>
+            <td class="text-center">@Html.DisplayFor(modelItem => item.LifeCycle)</td>
+            <td class="text-center">@Html.DisplayFor(modelItem => item.RateDepreciationMonthly)</td>
+            <td class="text-center">@Html.DisplayFor(modelItem => item.ResidualValue)</td>
+            <td class="text-center">@Html.DisplayFor(modelItem => item.AceleratedDepreciation)</td>
+            <td class="acoes">
+
+                @Html.Partial("_Acoes", @item)
+            </td>
+        </tr>
+
+    }
+</table>
+
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.CurrentFilter }))
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

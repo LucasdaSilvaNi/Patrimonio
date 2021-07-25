@@ -1,0 +1,121 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.Models.Inventario>
+@using PagedList.Mvc;
+@using SAM.Web.Controllers;
+@using enumStatusInventario = SAM.Web.Common.Enum.EnumStatusInventario;
+@using enumTipoInventario = SAM.Web.Common.Enum.EnumTipoInventario;
+
+
+@{ViewBag.Title = "Inventários";}
+@Html.AntiForgeryToken()
+
+<h3 class="text-primary">@ViewBag.Title</h3>
+<hr />
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "consultaForm" }))
+{
+    @Html.Hidden("searchString")
+    <button type="submit" id="filtroOculto" style="display: none"> </button>
+    <div class="col-sm-12" style="margin-bottom: 30px;">
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" id="search-tables" name="search-tables" value="@ViewBag.CurrentFilter" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnter(this,event)" />
+                <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+            </div>
+        </div>
+    </div>
+}
+<table class="table" id="result-tables">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Descricao)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().DataInventario)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().UgeId)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().UaId)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().DivisaoId)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().ResponsavelId)</th>
+        @*<th>@Html.DisplayNameFor(model => model.FirstOrDefault().Usuario)</th>*@
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Status)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().QtdeBPs)</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
+            <td>@Html.DisplayFor(modelItem => item.DataInventario)</td>
+            <td>@Html.DisplayFor(modelItem => item.RelatedAdministrativeUnit.RelatedManagerUnit.Code)</td>
+            <td>@Html.DisplayFor(modelItem => item.DadosUA)</td>
+            <td>@Html.DisplayFor(modelItem => item.RelatedSection.Description)</td>
+            @*<td>@Html.DisplayFor(modelItem => item.ResponsavelId)</td>*@
+            <td>@Html.DisplayFor(modelItem => item.RelatedResponsible.Name)</td>
+            @*<td>@Html.DisplayFor(modelItem => item.Usuario)</td>*@
+
+            
+            @if (item.Status == "0")
+            {
+                <td>Pendente</td>
+                <td>@Html.DisplayFor(modelItem => item.QtdeBPs)</td>
+                <td class="acoes">
+                    @if (item.TipoInventario.HasValue)
+                    {
+                        string nomeController = "ItemInventarios";
+                        string nomeActionMethod = "Index";
+
+                        bool existeItensInventarioPendentesDePreenchimento = (new InventariosController().ExisteItensInventarioPendentesDePreenchimento(item.Id.Value));
+
+
+                        if (item.TipoInventario == enumTipoInventario.InventarioManual.GetHashCode())
+                        {
+                            nomeActionMethod = "ListagemRelatorioInventarioManual";
+                            <a class="btnDetalhe" href="@Url.Action(nomeActionMethod, nomeController, new { InventarioId = item.Id })" title="Alimentação Inventário Manual">
+                                <i class="glyphicon glyphicon-list detalheclass" @((existeItensInventarioPendentesDePreenchimento) ? "style=color:red" : "style=color:green")></i>
+                                <span class="sr-only">Preenchimento</span>
+                            </a>
+                        }
+						else if (item.TipoInventario == enumTipoInventario.ColetorDados.GetHashCode())
+                        {
+                            nomeController = "ItemInventarios";
+                            nomeActionMethod = "Index";
+                        }
+
+                        <a class="btnDetalhe" href="@Url.Action(nomeActionMethod, nomeController, new { InventarioId = item.Id })" title="Validação Dados Inventário">
+                            <i class="glyphicon glyphicon-pencil detalheclass" @((existeItensInventarioPendentesDePreenchimento) ? "style=color:red" : "style=color:green")></i>
+                            <span class="sr-only">Detalhes</span>
+                        </a>
+                    }
+                    <a class="btnAtualizar" onclick="sam.inventario.atualizar(@item.Id, 1)" title="Finalizar Inventário">
+                        <i class="glyphicon glyphicon-check atualizarclass"></i>
+                        <span class="sr-only">Atualizar</span>
+                    </a>
+                    <a class="btnExcluir" href="@Url.Action("Delete", "Inventarios", new { id = item.Id })" title="Excluir">
+                        <i class="glyphicon glyphicon-remove excluirclass"></i>
+                        <span class="sr-only">Detalhes</span>
+                    </a>
+                </td>
+            }
+            else
+            {
+                <td>Finalizado</td>
+                <td>@Html.DisplayFor(modelItem => item.QtdeBPs)</td>
+                <td class="acoes">
+                    <a class="btnDetalhe" href="@Url.Action("Index", "ItemInventarios", new { InventarioId = item.Id })" title="Detalhes">
+                        <i class="glyphicon glyphicon-search detalheclass"></i>
+                        <span class="sr-only">Detalhes</span>
+                    </a>
+                </td>
+            }
+        </tr>
+    }
+
+</table>
+
+Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.CurrentFilter }))
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+        sam.inventario.Load();
+    </script>
+}

@@ -1,0 +1,46 @@
+﻿@model SAM.Web.ViewModels.DadosSIAFEMValidacaoMovimentacoes
+<div class="modal fade" id="modalRetornoSIAFEM" tabindex="-1" role="dialog" aria-labelledby="botões">
+    <div class="modal-dialog" role="document" style="width: 30%; max-height: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title tituloModalSiafem">Dados do SIAFEM</h4>
+            </div>
+            <div class="modal-body">
+                <div class="bodyModalDadosSiafem">
+                    @Model.mensagem
+                </div>
+                <div class="form-group text-center botoes">
+                    @if (Model.mensagemDeSuccesso)
+                    {
+                        if (Model.NaoEstornouBP)
+                        {
+                            <hr />
+                            <div>Ocorreu algo inesperado ao realizar o estorno do BP. Por gentileza, aguarde alguns instantes e clique no botão abaixo para completar a operação</div>
+                            <button type="button" class="btn btn-primary" id="continua" data-dismiss="modal">Estornar BP</button>
+                        }
+                        else
+                        {
+                            <hr />
+                            <div>O BP foi estornado com sucesso!</div>
+                            <button type="button" id="ok" class="btn btn-primary" data-dismiss="modal">OK</button>
+                        }
+                    }
+                    else
+                    {
+                        if (Model.podeGerarPendenciaEstorno)
+                        {
+                            <button type="button" class="btn btn-primary" id="gerar_pendencias" data-dismiss="modal">Gerar Pendências</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-danger" id="abortarApos" data-dismiss="modal">Abortar processo</button>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+

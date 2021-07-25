@@ -1,0 +1,27 @@
+﻿@model  IEnumerable<SAM.Web.ViewModels.AttachmentSupportViewModel>
+
+<div class="form-group">
+    <div class="form-control divGrid" style="height:360px; overflow: auto;">
+        <table class="table table-striped" id="result-tables-patrimonio">
+            <tr>
+                <th style="text-align: left">@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Nome").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th style="text-align: center">@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Data de Inclusão").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th style="text-align: right"> </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="text-align: left">@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td style="text-align: center">@Html.DisplayFor(modelItem => item.InclusionDate)</td>
+                    <td style="text-align: right">
+                        <a class="btnDownload btn btn-default" href="@Url.Action("DownloadFile", "Support", new { id = @item.Id, jaGravadoNoBanco = @item.JaGravadoNoBanco.ToString().ToUpper() })">
+                            <i class="glyphicon glyphicon-download-alt"></i> Baixar Arquivo
+                        </a> 
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

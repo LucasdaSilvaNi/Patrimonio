@@ -1,0 +1,42 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.Models.Configuration>
+@using PagedList.Mvc;
+
+@{ViewBag.Title = "Configurações Cadastradas";}
+
+@Html.Partial("_GridNewButtons")
+<table class="table" id="result-tables">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().InitialYearMonthAsset)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().ReferenceYearMonthAsset)</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>@Html.DisplayFor(modelItem => item.InitialYearMonthAsset)</td>
+        <td>@Html.DisplayFor(modelItem => item.ReferenceYearMonthAsset)</td>
+        <td class="acoes">
+
+            <a href="@Url.Action("Edit", new { id = item.Id })" title="Editar">
+                <i class="glyphicon glyphicon-pencil"></i>
+                <span class="sr-only">Editar</span>
+            </a>
+
+            <a href="@Url.Action("Details", new { id = item.Id })" title="Detalhes">
+                <i class="glyphicon glyphicon-search"></i>
+                <span class="sr-only">detalhes</span>
+            </a>
+
+            <a href="@Url.Action("Delete", new { id = item.Id })" title="Excluir">
+                <i class="glyphicon glyphicon-remove"></i>
+                <span class="sr-only">Excluir</span>
+            </a>
+        </td>
+    </tr>
+}
+</table>
+
+Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

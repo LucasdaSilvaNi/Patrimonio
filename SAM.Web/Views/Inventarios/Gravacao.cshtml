@@ -1,0 +1,171 @@
+﻿@model SAM.Web.ViewModels.OperacoesComColetorViewModel
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/tipo-dispositivo-inventariante.js")" type="text/javascript"></script> }
+
+@{ViewBag.Title = "Operações Com Coletor de Dados";}
+@Styles.Render("~/Layout_5/css")
+
+<h3 style="margin-top:40px;margin-bottom: 20px;" class="cor-azul">Operações Com Coletor de Dados (Geração Arquivos Coletor)</h3>
+
+<hr />
+@using (Html.BeginForm("RetornaArquivo_CargaColetorDownload", "OperacoesComColetor", FormMethod.Post, new { id = "formOperacoesColetor", @class = "formSubmit" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group cor-azul">
+        <div class="col-md-12">
+            <div class="col-sm-1">
+                <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+            </div>
+            <div class="col-md-11">
+                <h4>Tipo de Dispositivo Inventariante</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.Label("Tipo de Dispositivo", new { @class = "control-label col-md-1" })
+            <div class="col-md-4">
+                <select id="TipoDispositivoInventarianteID" name="TiposDispositivoInventariante" class="form-control" , disabled="disabled">
+                    <option value="2">COMPEX CPX-8000</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="form-group cor-azul">
+        <div class="col-md-12">
+            <div class="col-sm-1">
+                <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+            </div>
+            <div class="col-md-11">
+                <h4>Tipo Operação</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="ListaTiposOperacaoDispositivoInventario" class="control-label col-md-1"> Tipo de Operação</label>
+            <div class="col-md-4">
+                <select id="TipoDispositivoInventarianteID" name="TiposDispositivoInventariante" class="form-control" , disabled="disabled">
+                    <option value="2">Geração Arquivos</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <div class="form-group cor-azul">
+        <div class="col-md-12">
+            <div class="col-sm-1">
+                <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+            </div>
+            <div class="col-md-11">
+                <h4>Hierarquia Organizacional (Estrutura SIAFEM)</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-filter">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="Institutions" class="control-label col-md-1">Orgão</label>
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitution" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="BudgetUnits" class="control-label col-md-1">UO</label>
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ManagerUnits" class="control-label col-md-1">UGE</label>
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit" })
+                    <span id="spanManagerUnitFiltro" class="text-danger field-validation-error"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="AdministrativeUnits" class="control-label col-md-1">UA</label>
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.AdministrativeUnitId, (SelectList)ViewBag.AdministrativeUnits, new { @class = "form-control selectpicker comboAdministrativeUnit" })
+                    @Html.ValidationMessageFor(model => model.AdministrativeUnitId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="form-horizontal">
+        <div class="form-group">
+            @*Item Material*@
+            <label class="control-label col-md-3">Catálogo Materiais (Descrição Resumida)</label>
+            <div class="col-md-1">
+                @Html.CheckBoxFor(model => model.GeraTabela_ItemMaterial, new { @class = "icheckbox_square-blue", @disabled = "disabled" })
+            </div>
+            @*Responsavel*@
+            <label class="control-label col-md-1">Responsáveis</label>
+            <div class="col-md-1">
+                @Html.CheckBoxFor(model => model.GeraTabela_Responsavel, new { @class = "icheckbox_square-blue", @disabled = "disabled" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Terceiros*@
+            <label class="control-label col-md-1">Terceiros</label>
+            <div class="col-md-1">
+                @Html.CheckBoxFor(model => model.GeraTabela_Terceiros, new { @class = "icheckbox_square-blue", @disabled = "disabled" })
+            </div>
+            @*Sigla*@
+            <label class="control-label col-md-1">Siglas</label>
+            <div class="col-md-1">
+                @Html.CheckBoxFor(model => model.GeraTabela_Sigla, new { @class = "icheckbox_square-blue", @disabled = "disabled" })
+            </div>
+            @*BPs UA*@
+            <label class="control-label col-md-1">Bem Patrimonais (da UA)*</label>
+            <div class="col-md-1">
+                @Html.CheckBoxFor(model => model.GeraTabela_BemPatrimonial, new { @class = "icheckbox_square-blue", @disabled = "disabled" })
+            </div>
+        </div>
+    </div>
+
+    <hr />
+        <div class="form-group" style="margin-left:1%">
+            <button type="submit" data-toggle="tooltip" id="botaoGeraArquivosCargaColetor" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info" value="Index">
+                <i class="glyphicon glyphicon-log-in" aria-hidden="true"></i> Gerar
+            </button>
+        </div>
+
+    <hr />
+}
+
+<script>
+    $(document).ready(function () {
+        $('#formOperacoesColetor').submit(function () {
+            $('#GeraTabela_ItemMaterial').prop("disabled", false);
+            $('#GeraTabela_Responsavel').prop("disabled", false);
+            $('#GeraTabela_Terceiros').prop("disabled", false);
+            $('#GeraTabela_Sigla').prop("disabled", false);
+            $('#GeraTabela_BemPatrimonial').prop("disabled", false);
+        });
+        tipoDispositivoInventariante.Load();
+        $('#AdministrativeUnitId').change(function () {
+            if ($('#AdministrativeUnitId').val() !== undefined && parseInt($('#AdministrativeUnitId').val()) > 0) {
+                const administrativeUnitId = parseInt($('#AdministrativeUnitId').val());
+                const _url = sam.path.webroot + "/Inventarios/ConsultarBemPatrimoniaisPorAdministrativeUnit";
+                $.get(_url, { administrativeUnitId: administrativeUnitId }, function (data) {
+                    if (data !== undefined || data !== null) {
+                        $('#botaoGeraArquivosCargaColetor').css('display', data.classeCss);
+                        if (data.Mensagem !== undefined) {
+                            alert(data.Mensagem);
+                        }                                    
+                    }
+                });
+            }
+        });
+    });
+</script>

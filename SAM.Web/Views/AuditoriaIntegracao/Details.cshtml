@@ -1,0 +1,439 @@
+﻿@model SAM.Web.ViewModels.AuditoriaIntegracaoViewModel
+@using Sam.Integracao.SIAF.Mensagem.Enum
+
+@{ViewBag.Title = "Detalhes Registro";}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @*@Html.HiddenFor(model => model.CodigoTipoMovimento_SamPatrimonio)*@
+        @*@Html.HiddenFor(model => model.AccountEntryTypeId)*@
+        @*@Html.HiddenFor(model => model.InputOutputReclassificationDepreciationTypeCode)*@
+
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados Sistema</h4>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        @*Id*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*DataEnvio*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.DataHoraEnvioSIAFEM, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.DataHoraEnvioSIAFEM, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.DataHoraEnvioSIAFEM, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*NomeSistema*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.NomeSistema, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.NomeSistema, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.NomeSistema, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*UsuarioSAM*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.UsuarioSAM, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.UsuarioSAM, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.UsuarioSAM, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*UsuarioSistemaExterno*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.UsuarioSistemaExterno, "Usuário SIAFEM",  htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.UsuarioSistemaExterno, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.UsuarioSistemaExterno, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*ManagerUnitId*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.ManagerUnitId, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.ManagerUnitId, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.ManagerUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*TokenAuditoriaIntegracao*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.TokenAuditoriaIntegracao, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.TokenAuditoriaIntegracao, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.TokenAuditoriaIntegracao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*DataRetorno*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.DataHoraRetornoSIAFEM, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.DataHoraRetornoSIAFEM, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.DataHoraRetornoSIAFEM, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*DocumentoId*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.DocumentoId, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.DocumentoId, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.DocumentoId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+        <br />
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados XML</h4>
+                </div>
+            </div>
+        </div>
+
+
+        @*Tipo Movimento (ContabilizaSP)*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.TipoMovimento, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.TipoMovimento, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.TipoMovimento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*Data (ContabilizaSP)*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.DataMovimento, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.DataMovimento, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.Data, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*UgeOrigem*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.UgeOrigem, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.UgeOrigem, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.UgeOrigem, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Gestão*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Gestao, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.Gestao, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.Gestao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Tipo Entrada / Saída / Reclassificação / Depreciação (ContabilizaSP)*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Tipo_Entrada_Saida_Reclassificacao_Depreciacao, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Tipo_Entrada_Saida_Reclassificacao_Depreciacao, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.Tipo_Entrada_Saida_Reclassificacao_Depreciacao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*CPF / CNPJ / UGE Favorecida*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.CpfCnpjUgeFavorecida, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.CpfCnpjUgeFavorecida, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.CpfCnpjUgeFavorecida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Gestão Favorecida*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.GestaoFavorecida, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.GestaoFavorecida, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.GestaoFavorecida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Item*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Item, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Item, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.Item, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Tipo Estoque*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.TipoEstoque, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.TipoEstoque, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.TipoEstoque, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Estoque*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Estoque, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Estoque, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.Estoque, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*EstoqueOrigem*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.EstoqueOrigem, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.EstoqueOrigem, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.EstoqueOrigem, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*EstoqueDestino*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.EstoqueDestino, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.EstoqueDestino, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.EstoqueDestino, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Tipo Movimentação (ContabilizaSP)*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.TipoMovimentacao, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.TipoMovimentacao, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.TipoMovimentacao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Valor Total*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.ValorTotal, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.ValorTotal, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.ValorTotal, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Controle Específico*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.ControleEspecifico, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.ControleEspecifico, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.ControleEspecifico, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Controle Específico ENTRADA*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.ControleEspecificoEntrada, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.ControleEspecificoEntrada, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.ControleEspecificoEntrada, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Controle Específico SAIDA*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.ControleEspecificoSaida, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.ControleEspecificoSaida, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.ControleEspecificoSaida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*FonteRecurso*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.FonteRecurso, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.FonteRecurso, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.FonteRecurso, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*NL Estorno*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.NLEstorno, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.NLEstorno, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.NLEstorno, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Empenho*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Empenho, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.Empenho, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.Empenho, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Observação*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Observacao, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Observacao, new { htmlAttributes = new { @class = "form-control", @rows = "20", @disabled = "disabled", @style = "width: 100%; height: 150px;" } })
+                @Html.ValidationMessageFor(model => model.Observacao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*NotaFiscal*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.NotaFiscal, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.NotaFiscal, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.NotaFiscal, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*ItemMaterial*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.ItemMaterial, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.ItemMaterial, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.ItemMaterial, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <hr />
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Complemento Dados Sistema</h4>
+                </div>
+            </div>
+        </div>
+
+        @*NotaLancamento*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.NotaLancamento, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.NotaLancamento, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.NotaLancamento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*MsgErro*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.MsgErro, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.MsgErro, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.MsgErro, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*NLManual*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.NLManual, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.NLManual, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.NLManual, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*PossuiPendencia*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.PossuiPendenciaNL, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.PossuiPendenciaNL, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.PossuiPendenciaNL, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <hr />
+
+       <div class="form-group">
+            <div class="form-group" style="margin-left:1%">
+                <a class="btnvoltar btn btn-default" href="javascript:history.back()">
+                    <i class="glyphicon glyphicon-share-alt"></i> Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts{
+<script src="~/Scripts/datatables/sam-auditoriaIntegracao.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        sam.tipoMovimentacaoIntegracao.create();
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    });
+</script>
+}

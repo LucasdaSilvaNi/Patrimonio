@@ -1,0 +1,29 @@
+﻿@model SAM.Web.ViewModels.LevelViewModel
+
+@{ViewBag.Title = "Detalhes do Nível ";}
+
+<h2>@ViewBag.Title @Model.Descricao</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.NomeNivelSuperior)</dt>
+        <dd>@Html.DisplayFor(model => model.NomeNivelSuperior)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Descricao)</dt>
+        <dd>@Html.DisplayFor(model => model.Descricao)</dd>
+
+        <dt></dt>
+        <dd>
+            <div class="form-group">
+                @Html.Partial("_EditButtons")
+            </div>
+        </dd>
+    </dl>
+</div>
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

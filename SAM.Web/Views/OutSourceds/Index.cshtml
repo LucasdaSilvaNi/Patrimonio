@@ -1,0 +1,46 @@
+﻿@{ViewBag.Title = "Terceiros Cadastrados";
+    bool perfilOperador = ViewBag.Operador;}
+
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formOutSourceds" }))
+{
+    @Html.Partial("_GridNewButtons")
+    @Html.Hidden("perfilOperador", perfilOperador? "1":"")
+
+    <table id="tableOutSourceds" class="table">
+        <thead>
+            <tr>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Código Orgão</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Descrição Orgão</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Código UO</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Descrição UO</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">CPF/CNPJ</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Nome</th>
+                <th class="text-info text-datatable-label-size border-table-tr actionButton col-xs-1" data-sortable="true">Ações</th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS"); }
+    <script src="~/Scripts/datatables/sam-outSourceds-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+            sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+            $(document).ready(function () {
+                let outSourcedDataTable = new OutSourcedsDataTable();
+                outSourcedDataTable.Load('#formOutSourceds');
+            });
+    </script>
+}

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<SAM.Web.Models.MaterialItem>
+
+@{ViewBag.Title = "Itens de Materiais Cadastrados";}
+
+@Html.Partial("_GridNewButtons")
+
+<table class="table" id="result-tables">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Code)</th>
+        <th>@Html.DisplayNameFor(model => model.Description)</th>
+        <th>@Html.DisplayNameFor(model => model.MaterialId)</th>
+        <th>
+            <a href="@Url.Action("GetMaterialItemFromSIAFISICO", new { materialItemCode = "004152603" })" title="Consulta SIAFISICO">
+                <i class="glyphicon glyphicon-remove"></i>
+                <span class="sr-only">Consulta SIAFISICO</span>
+            </a>
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Code)</td>
+            <td>@Html.DisplayFor(modelItem => item.Description)</td>
+            <td>@Html.DisplayFor(modelItem => item.RelatedMaterial.Description)</td>
+            <td class="acoes">
+
+                @Html.Partial("_Acoes", @item)
+
+            </td>
+        </tr>
+    }
+</table>
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

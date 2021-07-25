@@ -1,0 +1,49 @@
+﻿@*@model PagedList.StaticPagedList<SAM.Web.Models.Initial>*@
+@using PagedList.Mvc;
+
+@{ViewBag.Title = "Siglas Cadastradas";}
+
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formInitials" }))
+{
+    @Html.Partial("_GridNewButtons")
+
+    <table id="tableInitials" class="table">
+        <thead>
+            <tr>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Código Orgão</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Descrição Orgão</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Código UO</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Descrição UO</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Código UGE</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Descrição UGE</th>
+                <th class="text-info text-datatable-label-size" data-sortable="true">Sigla</th>
+                <th class="text-info text-datatable-label-size border-table-tr actionButton col-xs-1" data-sortable="true">Ações</th>
+            </tr>
+        </thead>
+
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-initials-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+            sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+            $(document).ready(function () {
+                let initialsDataTable = new InitialsDataTable();
+                initialsDataTable.Load('#formInitials');
+            });
+    </script>
+}

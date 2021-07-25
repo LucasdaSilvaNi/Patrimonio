@@ -1,0 +1,162 @@
+﻿@model SAM.Web.ViewModels.ClosingViewModel
+@using PagedList.Mvc;
+
+@Scripts.Render("~/Assets/Closing/js")
+
+<h3 style="margin-top:40px;margin-bottom: 20px;" class="cor-azul">Fechamento / Reabertura do Mês</h3>
+<hr />
+
+<div class="form-horizontal panel-filter">
+    <div class="form-group">
+        <label for="Institutions" class="control-label col-md-2">Orgão</label>
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitution" })
+            <span id="spanInstitution" class="text-danger field-validation-error error-spanInstitution"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="BudgetUnits" class="control-label col-md-2">UO</label>
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit" })
+            <span id="spanBudgetUnits" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Id" class="control-label col-md-2">UGE</label>
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit" })
+            <span id="spanManagerUnits" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Id" class="control-label col-md-2">Mês/Ano Referência</label>
+        <div class="col-md-1">
+            @Html.TextBox("MesAnoRefUGE", "", new { @class = "form-control", @readonly = "readonly" })
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="form-group">
+        <div class="form-control divGrid" style="height:150px; width: 50%; margin-left: auto; margin-right: auto; overflow: hidden;">
+
+            <table class="table" id="result-tables-patrimonio">
+                <thead>
+                    <tr>
+                        <th style="text-align: center">@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Reabertura").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                        <th style="text-align: center">@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Fechamento").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>                        
+                    </tr>
+                </thead>
+                <tbody style="background-color:#e1effa">
+                    <tr>
+                        <td style="text-align: center;padding: 25px;">
+                            <a id="btnReabertura" class="btn btn-default btn-lg">
+                                <i class="glyphicon glyphicon-folder-open"></i> Reabertura
+                            </a>
+                        </td>
+                        <td style="text-align: center;padding: 25px;">
+                            <a id="btnFechamento" class="btn btn-default btn-lg">
+                                <i class="glyphicon glyphicon-folder-close"></i> Fechamento
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if (Model != null) {
+    if (Model.IntegradoSIAFEM) {
+        <div class="btn btn-info btn-integracao" style="display: none;"></div>
+    }
+}
+
+<div class="modal fade modalViewGridFechamento" id="modalViewGridFechamento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+
+    <div class="modal-dialog" role="document" style="width: 30%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"> Alerta </h4>
+            </div>
+            <div class="modal-body">
+                <div id="mensagemFechamento"> Pressione OK para confirmar fechamento do mês MM/AAA </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closing.EfetuaFechamento()" class="btn btn-success" data-dismiss="modal">Ok</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modalViewGridReabertura" id="modalViewGridReabertura" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+
+    <div class="modal-dialog" role="document" style="width: 30%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"> Alerta </h4>
+            </div>
+            <div class="modal-body">
+                <div id="mensagemReabertura"> Pressione OK para estornar fechamento do Mes MM/AAAA. </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closing.EfetuaReabertura()" class="btn btn-success">Ok</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* Douglas ---- Modal dos botões *@
+<div class="modal fade modalViewModalDouglas" id="modalViewModalDouglas" tabindex="-1" role="dialog" aria-labelledby="botões">
+
+    <div class="modal-dialog" role="document" style="width: 30%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"> Alerta </h4>
+            </div>
+            <div class="modal-body">
+                <div id="mensagemReabertura"> Mensagem </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success">Botão1</button>
+                <button type="button" class="btn btn-success">Botão2</button>
+                <button type="button" class="btn btn-success">Botão3</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-loading" id="modal-loading-Fechamento" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Aguarde...</span>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade modalDepreciacao" id="modalDepreciacao" tabindex="-1" role="dialog" aria-labelledby="Modal de depreciação">
+
+</div>
+
+@Html.Partial("Modais/_BaseModaisMsgContabilizaSP")
+@Html.Partial("Modais/_LoginSIAFEM")
+@Html.Hidden("LoginSiafem")
+@Html.Hidden("SenhaSiafem")
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            closing.Load();
+        });
+
+
+    </script>
+}

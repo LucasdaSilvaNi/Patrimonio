@@ -1,0 +1,46 @@
+﻿@model SAM.Web.Models.MaterialSubItem
+
+@{ViewBag.Title = "Exclusão do Sub Item do Material";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.MaterialItemId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedMaterialItem.Description)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Code)</dt>
+        <dd>@Html.DisplayFor(model => model.Code)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd>@Html.DisplayFor(model => model.Description)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.BarCode)</dt>
+        <dd>@Html.DisplayFor(model => model.BarCode)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Lot)</dt>
+        <dd>@Html.DisplayFor(model => model.Lot)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.ActivityIndicator)</dt>
+        <dd>@Html.DisplayFor(model => model.ActivityIndicator)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.ManagerId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedManager.Name)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.SpendingOriginId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedSpendingOrigin.Description)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.AuxiliaryAccountId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAuxiliaryAccount.Description)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.SupplyUnitId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedSupplyUnit.Description)</dd>
+
+        <dt></dt>
+        <dd>
+            @Html.Partial("_DeleteButtons")
+        </dd>
+    </dl>
+</div>

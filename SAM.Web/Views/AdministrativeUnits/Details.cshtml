@@ -1,0 +1,36 @@
+﻿@model SAM.Web.Models.AdministrativeUnit
+
+@{ViewBag.Title = "Detalhes da Unidade Administrativa ";}
+
+<h2>@ViewBag.Title @Model.Description</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayName("Código UGE")</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedManagerUnit.Code)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.ManagerUnitId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedManagerUnit.Description)</dd>
+
+        <dt>@Html.DisplayName("Código UA")</dt>
+        <dd>@Html.DisplayFor(model => model.Code)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd>@Html.DisplayFor(model => model.Description)</dd>
+
+        <dt></dt>
+        <dd>
+            <div class="form-group">
+                @Html.Partial("_EditButtons")
+            </div>
+        </dd>
+
+    </dl>
+</div>
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

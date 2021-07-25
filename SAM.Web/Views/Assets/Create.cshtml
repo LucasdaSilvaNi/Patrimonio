@@ -1,0 +1,506 @@
+﻿@model SAM.Web.ViewModels.AssetViewModel
+
+@Styles.Render("~/Layout_5/css")
+
+@{ViewBag.Title = "Novo Bem Patrimonial";}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formBemPatrimonial", @class = "formSubmit" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="flagIntegracaoSiafem" value="@(ViewData["flagIntegracaoSiafem"])" />
+    <input type="hidden" id="MaterialGroupNaoCadastrado" value="" />
+    <input type="hidden" id="hiddenEmpenho" value="@{if (Model != null) {@Model.EmpenhoResultado}}" />
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.EditorFor(model => model.LoginSiafem, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+        @Html.EditorFor(model => model.SenhaSiafem, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+
+        @Html.EditorFor(model => model.AssetsIdTransferencia, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+        @Html.HiddenFor(model => model.checkflagAnimalAServico)
+
+
+        <div class="form-group">
+            @* Tipo Incorporação *@
+            @Html.LabelFor(model => model.MovementTypeId, "Tipo de Incorporação *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-7">
+                @Html.DropDownListFor(model => model.MovementTypeId, (SelectList)ViewBag.MovementTypes, "-- Selecione --", new { @class = "form-control desabilitar-movimentacao" })
+                @Html.ValidationMessageFor(model => model.MovementTypeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="modal" id="modal">
+
+        </div>
+
+        <div class="jumbotron" id="omite_div_incorporacao" style="display:none">
+            @if (Model != null)
+            {
+                switch (Model.MovementTypeId)
+                {
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorporacaoPorEmpenho:
+                        @Html.Partial("Incorporacao/_1partialEmpenho", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorporacaoDeInventarioInicial:
+                        @Html.Partial("Incorporacao/_5partialInventarioInicial", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorporacaoDeMateriaisTransformadoPorTerceiro:
+                        @Html.Partial("Incorporacao/_8partialMaterialTransforTerceiro", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorporacaoPorEmpenhoRestosAPagar:
+                        @Html.Partial("Incorporacao/_25partialEmpenhoRestosAPagar", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpAnimaisPesquisaSememPeixe:
+                        @Html.Partial("Incorporacao/_26partialAnimaisPesquisaSememPeixe", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpComodatoDeTerceirosRecebidos:
+                        @Html.Partial("Incorporacao/_27partialComodatoTerceiroRecebido", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpComodatoConcedidoBensMoveis:
+                        @Html.Partial("Incorporacao/_28partialComodatoConcedidoBensMoveis", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpConfiscoBensMoveis:
+                        @Html.Partial("Incorporacao/_29partialConfiscoBensMoveis", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpDoacaoConsolidacao:
+                        @Html.Partial("Incorporacao/_30partialDoacaoConsolidacao", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpDoacaoIntraNoEstado:
+                        @Html.Partial("Incorporacao/_31partialDoacaoIntraNoEstado", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpDoacaoMunicipio:
+                        @Html.Partial("Incorporacao/_32partialDoacaoMunicipio", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpDoacaoOutrosEstados:
+                        @Html.Partial("Incorporacao/_33partialDoacaoOutrosEstados", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpDoacaoUniao:
+                        @Html.Partial("Incorporacao/_34partialDoacaoUniao", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpVegetal:
+                        @Html.Partial("Incorporacao/_35partialVegetal", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpMudancaDeCategoriaRevalorizacao:
+                        @Html.Partial("Incorporacao/_36partialMudancaCategoriaRevalorizacao", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpNascimentoDeAnimais:
+                        @Html.Partial("Incorporacao/_37partialNascimentoAnimais", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpRecebimentoDeInservivelUGEDoacao:
+                        @Html.Partial("Incorporacao/_38partialRecebimentoInservivelUGEDoacao", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpRecebimentoDeInservivelUGETranferencia:
+                        @Html.Partial("Incorporacao/_39partialRecebimentoInservivelUGETransfer", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpTransferenciaMesmoOrgaoPatrimoniado:
+                        @Html.Partial("Incorporacao/_40partialTransferMesmoOrgaoPatrimoniado", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpTransferenciaOutroOrgaoPatrimoniado:
+                        @Html.Partial("Incorporacao/_41partialTransferOutroOrgaoPatrimoniado", Model);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        </div>
+        <div id="div_Depreciacao">
+            <hr />
+            <div class="form-group cor-azul">
+                <div class="col-md-12">
+                    <div class="col-sm-1">
+                        <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                    </div>
+                    <div class="col-md-11">
+                        <h4>Dados de Depreciação</h4>
+                        <p class="text-info" id="textoDepreciacao">O Item será depreciado automaticamente de acordo com o Grupo do Material, <b>a alteração desses campos será impossibilitada após a criação do Bem Patrimonial</b></p>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Depreciação Manual?</label>
+                <div class="col-md-1">
+                    @Html.EditorFor(model => model.checkDepreciacao, new { @class = "icheckbox_square-blue" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.MaterialGroupCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-1">
+                    @Html.EditorFor(model => Model.MaterialGroupCode, new { htmlAttributes = new { @class = "form-control materialGroupCode", @readonly = "readonly" } })
+                </div>
+                @Html.LabelFor(model => model.MaterialGroupDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.MaterialGroupDescription, new { htmlAttributes = new { @class = "form-control materialGroupDescription", @readonly = "readonly" } })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.LifeCycle, "Vida útil (em meses) *", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-1">
+                    @Html.EditorFor(model => model.LifeCycle, new { htmlAttributes = new { @class = "form-control lifeCycle" } })
+                    @Html.ValidationMessageFor(model => model.LifeCycle, "", new { @class = "text-danger" })
+                </div>
+                @*@Html.LabelFor(model => model.RateDepreciationMonthly, "Tax. Depreciação Mensal (%) *", htmlAttributes: new { @class = "control-label col-md-2"})*@
+                <div class="col-md-0">
+                    @Html.EditorFor(model => model.RateDepreciationMonthly, new { htmlAttributes = new { @class = "form-control rateDepreciationMonthly", @readonly = "readonly", @type = "hidden" } })
+                    @*@Html.ValidationMessageFor(model => model.RateDepreciationMonthly, "", new { @class = "text-danger" })*@
+                </div>
+                @Html.LabelFor(model => model.ResidualValue, "Valor Residual*", htmlAttributes: new { @class = "control-label col-sm-2 " })
+                <div class="col-md-1">
+                    @Html.EditorFor(model => model.ResidualValue, new { htmlAttributes = new { @class = "form-control residualValue" } })
+                    @Html.ValidationMessageFor(model => model.ResidualValue, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados Básicos</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @* Estado de Conservação *@
+            @Html.LabelFor(model => model.StateConservationId, "Estado de Conservação *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.StateConservationId, (SelectList)ViewBag.StateConservations, "-- Selecione --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StateConservationId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*Sigla*@
+            @Html.LabelFor(model => model.InitialId, "Sigla *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.InitialId, (SelectList)ViewBag.Initial, " Selecione a Sigla ", new { @class = "form-control comboInitial" })
+                @Html.ValidationMessageFor(model => model.InitialId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group esconder">
+            <label class="control-label col-md-7">Informar Sequencia de Chapas?</label>
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.checkLoteChapa, new { @class = "icheckbox_square-blue" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*Chapa*@
+            @Html.LabelFor(model => model.NumberIdentification, "Chapa *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.NumberIdentification, new { htmlAttributes = new { @class = "form-control somenteNumerosInicial", @min = "1", @max = "2147483647", @maxlength = "10" } })
+                @Html.ValidationMessageFor(model => model.NumberIdentification, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.DiferenciacaoChapa,  new { htmlAttributes = new { @class = "form-control", @maxlength = "7" } })
+            </div>
+            <div class="form-group">
+                @*Chapa Final*@
+                @Html.LabelFor(model => model.EndNumberIdentification, htmlAttributes: new { @class = "control-label col-md-2 esconder" })
+                <div class="col-md-3 esconder">
+                    @Html.EditorFor(model => model.EndNumberIdentification, new { htmlAttributes = new { @class = "form-control somenteNumerosInicial", @max = "2147483647", @maxlength = "10" } })
+                    @Html.ValidationMessageFor(model => model.EndNumberIdentification, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Local</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InstitutionId, "Órgão *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownListFor(model => model.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control ddl-asset-orgao comboinstitution" })
+                @Html.ValidationMessageFor(model => model.InstitutionId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*UO*@
+            @Html.LabelFor(model => model.BudgetUnitId, "UO *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit" })
+                @Html.ValidationMessageFor(model => model.BudgetUnitId, "", new { @class = "text-danger" })
+            </div>
+            @*UGE*@
+            @Html.LabelFor(model => model.ManagerUnitId, "UGE *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit" })
+                @Html.ValidationMessageFor(model => model.ManagerUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*UA*@
+            @Html.LabelFor(model => model.AdministrativeUnitId, "UA *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.AdministrativeUnitId, (SelectList)ViewBag.AdministrativeUnits, new { @class = "form-control selectpicker comboAdministrativeUnit" })
+                @Html.ValidationMessageFor(model => model.AdministrativeUnitId, "", new { @class = "text-danger" })
+            </div>
+            @*Divisão*@
+            @Html.LabelFor(model => model.SectionId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.SectionId, (SelectList)ViewBag.Sections, new { @class = "form-control selectpicker comboSection" })
+                @Html.ValidationMessageFor(model => model.SectionId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*Responsável*@
+            @Html.LabelFor(model => model.ResponsibleId, "Responsável *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ResponsibleId, (SelectList)ViewBag.User, "Selecione o Responsavel", new { @class = "form-control comboResponsible" })
+                @Html.ValidationMessageFor(model => model.ResponsibleId, "", new { @class = "text-danger" })
+            </div>
+            @*Conta Contábil*@
+            @Html.LabelFor(model => model.AuxiliaryAccountId, "Conta Contábil *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.AuxiliaryAccountId, ViewBag.AuxiliaryAccounts == null ? Enumerable.Empty<SelectListItem>() : (SelectList)ViewBag.AuxiliaryAccounts, " -- Selecione -- ", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AuxiliaryAccountId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados Incorporação</h4>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.NumberPurchaseProcess, "Processo ", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.NumberPurchaseProcess, new { htmlAttributes = new { @class = "form-control", @maxlength = 25 } })
+                @Html.ValidationMessageFor(model => model.NumberPurchaseProcess, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2" id="msgAnimalAServico" style="display:@(Model != null ? (Model.MaterialGroupCode == 88 ? "block" : "none") : "none" );">
+                @if (Model != null) {
+                    if (Model.checkflagAnimalAServico)
+                    {
+                        @:Animal está a serviço do estado
+                    }
+                    else
+                    {
+                        @:Animal <b>não</b> está a serviço do estado
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ValueAcquisitionModel, "Valor de Aquisição *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+
+
+
+                @if (Model != null)
+                {
+                    switch (Model.MovementTypeId)
+                    {
+                        case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpTransferenciaMesmoOrgaoPatrimoniado:
+                            @Html.EditorFor(model => model.ValueAcquisitionModel, new { maxlength = 11, htmlAttributes = new { @class = "form-control sam-moeda bloquear", @disabled = "disabled" } })
+                            break;
+                        case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpDoacaoIntraNoEstado:
+                        case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpTransferenciaOutroOrgaoPatrimoniado:
+                        case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpRecebimentoDeInservivelUGEDoacao:
+                        case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpRecebimentoDeInservivelUGETranferencia:
+                            if (Model.AceiteManual != true)
+                            {
+                                @Html.EditorFor(model => model.ValueAcquisitionModel, new { maxlength = 11, htmlAttributes = new { @class = "form-control sam-moeda bloquear", @disabled = "disabled" } })
+                            }
+                            else
+                            {
+                                @Html.EditorFor(model => model.ValueAcquisitionModel, new { maxlength = 11, htmlAttributes = new { @class = "form-control sam-moeda bloquear" } })
+                            }
+                            break;
+                        default:
+                            @Html.EditorFor(model => model.ValueAcquisitionModel, new { maxlength = 11, htmlAttributes = new { @class = "form-control sam-moeda bloquear"  } })
+                            break;
+                    }
+                }
+                else
+                {
+                    @Html.EditorFor(model => model.ValueAcquisitionModel, new { maxlength = 11, htmlAttributes = new { @class = "form-control sam-moeda bloquear" } })
+                }
+
+
+
+
+                @Html.ValidationMessageFor(model => model.ValueAcquisitionModel, "", new { @class = "text-danger" })
+            </div>
+            @*@Html.LabelFor(model => model.ValueUpdateModel, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.ValueUpdateModel, new { maxlength = 11, htmlAttributes = new { @class = "form-control sam-moeda" } })
+                    @Html.ValidationMessageFor(model => model.ValueUpdateModel, "", new { @class = "text-danger" })
+                </div>*@
+            @Html.EditorFor(model => model.ValueUpdateModel, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+        </div>
+
+        <div class="form-group">
+            @* Data de aquisição *@
+            @Html.LabelFor(model => model.AcquisitionDate, "Data Aquisição *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+
+
+                @if (Model != null)
+                {
+                    switch (Model.MovementTypeId)
+                    {
+                        case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpDoacaoIntraNoEstado:
+                        case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpRecebimentoDeInservivelUGEDoacao:
+                        case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpRecebimentoDeInservivelUGETranferencia:
+                        case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpTransferenciaOutroOrgaoPatrimoniado:
+                            if (Model.AceiteManual == true)
+                            {
+                                @Html.EditorFor(model => model.AcquisitionDate, new { htmlAttributes = new { @class = "form-control bloquear" } })
+                            }
+                            else
+                            {
+                                @Html.EditorFor(model => model.AcquisitionDate, new { htmlAttributes = new { @class = "form-control bloquear", @disabled = "disabled" } })
+                            }
+                            break;
+                        case (int)SAM.Web.Common.Enum.EnumMovimentType.IncorpTransferenciaMesmoOrgaoPatrimoniado:
+                            @Html.EditorFor(model => model.AcquisitionDate, new { htmlAttributes = new { @class = "form-control bloquear", @disabled = "disabled" } })
+                            break;
+                        default:
+                            @Html.EditorFor(model => model.AcquisitionDate, new { htmlAttributes = new { @class = "form-control bloquear" } })
+                            break;
+                    }
+                }
+                else
+                {
+                    @Html.EditorFor(model => model.AcquisitionDate, new { htmlAttributes = new { @class = "form-control bloquear" } })
+                }
+
+                @Html.ValidationMessageFor(model => model.AcquisitionDate, "", new { @class = "text-danger" })
+            </div>
+            @* Data de movimento *@
+            @Html.LabelFor(model => model.MovimentDate, "Data Incorporação *", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.MovimentDate, new { maxlength = 10, htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MovimentDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-4">
+                    <h4><label class="control-group col-md-5">Dados Complementares</label></h4>
+                    @Html.EditorFor(model => model.checkComplemento, new { @class = "icheckbox_square-blue" })
+                </div>
+            </div>
+        </div>
+
+        <div class="jumbotron" id="omite_div_veiculo" style="display:none">
+            <div class="form-group">
+                @Html.LabelFor(model => model.SerialNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.SerialNumber, new { htmlAttributes = new { @class = "form-control", @maxlength = 50 } })
+                    @Html.ValidationMessageFor(model => model.SerialNumber, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.ManufactureDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.ManufactureDate, new { maxlength = 10, htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ManufactureDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DateGuarantee, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.DateGuarantee, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DateGuarantee, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.ChassiNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.ChassiNumber, new { htmlAttributes = new { @class = "form-control", @maxlength = 50 } })
+                    @Html.ValidationMessageFor(model => model.ChassiNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.Brand, new { htmlAttributes = new { @class = "form-control", @maxlength = 20 } })
+                    @Html.ValidationMessageFor(model => model.Brand, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control", @maxlength = 20 } })
+                    @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NumberPlate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.NumberPlate, new { htmlAttributes = new { @class = "form-control", @maxlength = 8 } })
+                    @Html.ValidationMessageFor(model => model.NumberPlate, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.AdditionalDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.AdditionalDescription, new { htmlAttributes = new { @class = "form-control", @maxlength = 20 } })
+                    @Html.ValidationMessageFor(model => model.AdditionalDescription, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Empenho, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.Empenho, new { htmlAttributes = new { @class = "form-control", @maxlength = 15 } })
+                    @Html.ValidationMessageFor(model => model.Empenho, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        @Html.Partial("Modais/_AnimaisAServico")
+        <hr />
+        <div class="form-group">
+            <div class="form-group">
+                <div class="form-group" style="margin-left:1%">
+                    <button type="submit" id="btnSalvarSubmit" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info" onkeypress="sam.search.clickEnterSubmit();"  name="action:Create" value="Create">
+                        <i class="glyphicon glyphicon-ok" aria-hidden="true"></i> Salvar
+                    </button>
+                    
+                    @*@if (ViewBag.PerfilAdmGeral) {
+                    <button type="submit" id="btnXML" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info" name="action:XML" value="XML">
+                        <i class="glyphicon glyphicon-ok" aria-hidden="true"></i> XML
+                    </button>
+                    }*@
+
+                    <a class="btnvoltar btn btn-default" href="@Url.Action("Index","Movimento")">
+                        <i class="glyphicon glyphicon-share-alt"></i> Voltar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/Assets/movimento/js")
+<script>
+    var Alert;
+ $(document).ready(function () {
+     document.getElementById("formBemPatrimonial").onsubmit = function () { $.blockUI({ message: $('#modal-loading') }); };
+     sam.asset.load();
+ });
+</script> 

@@ -1,0 +1,339 @@
+﻿@model SAM.Web.ViewModels.MovimentoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Styles.Render("~/Layout_5/css")
+
+<h3 style="margin-top:40px;margin-bottom: 20px;" class="cor-azul">Movimento de Bens</h3>
+
+<hr />
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formMovimentacao" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(x => x.AssetId);
+    @Html.HiddenFor(x => x.ListAssets);
+
+    @Html.EditorFor(model => model.UGESiafem, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+
+
+    <div class="form-group cor-azul">
+        <div class="col-md-12">
+            <div class="col-sm-1">
+                <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+            </div>
+            <div class="col-md-11">
+                <h4>Dados da Movimentação</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="MovimentType" class="control-label col-md-1">Tipo de Movimento</label>
+            <div class="col-md-7">
+                @Html.DropDownListFor(model => model.MovementTypeId, (SelectList)ViewBag.MovimentType, "Selecione o Tipo de Movimento", new { @class = "form-control desabilitar-movimentacao-interna" })
+                @Html.ValidationMessageFor(model => model.MovementTypeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div id="partialViewTipoMovimento" style="display:none">
+
+            @if (Model != null)
+            {
+                switch (Model.MovementTypeId)
+                {
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovimentacaoInterna:
+                        @Html.Partial("Movimentacao/_10partialMovimentacaoInterna", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.VoltaConserto:
+                        @Html.Partial("Movimentacao/_13partialVoltaConserto", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.SaidaConserto:
+                        @Html.Partial("Movimentacao/_14partialSaidaConserto", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovInservivelNaUGE:
+                        @Html.Partial("Movimentacao/_19partialArrolamento", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.DisponibilizadoParaBolsaSecretaria:
+                        @Html.Partial("Movimentacao/_20partialDisponibilizadoParaBolsaSecretaria", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.DisponibilizadoParaBolsaEstadual:
+                        @Html.Partial("Movimentacao/_21partialDisponibilizadoParaBolsaEstadual", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.RetiradaDaBolsa:
+                        @Html.Partial("Movimentacao/_22partialRetiradaDaBolsa", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovSaidaInservivelUGEDoacao:
+                        @Html.Partial("Movimentacao/_42partialSaidaUGEDoacao", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovSaidaInservivelUGETransferencia:
+                        @Html.Partial("Movimentacao/_43partialSaidaUGETransferencia", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovComodatoConcedidoBensMoveis:
+                        @Html.Partial("Movimentacao/_44partialComodatoConcedidoBensMoveis", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovComodatoTerceirosRecebidos:
+                        @Html.Partial("Movimentacao/_45partialComodatoTerceirosRecebidos", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovDoacaoConsolidacao:
+                        @Html.Partial("Movimentacao/_46partialDoacaoConsolidacao", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovDoacaoIntraNoEstado:
+                        @Html.Partial("Movimentacao/_47partialDoacaoIntraNoEstado", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovDoacaoMunicipio:
+                        @Html.Partial("Movimentacao/_48partialDoacaoMunicipio", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovDoacaoOutrosEstados:
+                        @Html.Partial("Movimentacao/_49partialDoacaoOutrosEstados", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovDoacaoUniao:
+                        @Html.Partial("Movimentacao/_50partialDoacaoUniao", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovExtravioFurtoRouboBensMoveis:
+                        @Html.Partial("Movimentacao/_51partialExtravioFurtoRouboBensMoveis", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovMorteAnimalPatrimoniado:
+                        @Html.Partial("Movimentacao/_52partialMorteAnimalPatrimoniado", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovMudancaCategoriaDesvalorizacao:
+                        @Html.Partial("Movimentacao/_54partialMudancaCategoriaDesvalorizacao", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovSementesPlantasInsumosArvores:
+                        @Html.Partial("Movimentacao/_55partialSementesPlantasInsumosArvores", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovTransferenciaOutroOrgaoPatrimoniado:
+                        @Html.Partial("Movimentacao/_56partialTransferenciaOutroOrgaoPatrimoniado", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovTransferenciaMesmoOrgaoPatrimoniado:
+                        @Html.Partial("Movimentacao/_57partialTransferenciaMesmoOrgaoPatrimoniado", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovPerdaInvoluntariaBensMoveis:
+                        @Html.Partial("Movimentacao/_58partialPerdaInvoluntariaBensMoveis", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovPerdaInvoluntariaInservivelBensMoveis:
+                        @Html.Partial("Movimentacao/_59partialPerdaInvoluntariaInservivelBensMoveis", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovVendaLeilaoSemoventes:
+                        @Html.Partial("Movimentacao/_95partialVendaLeilaoSemovente", Model);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MovimentoDate, "Data Movimento", htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.MovimentoDate, new { htmlAttributes = new { @class = "form-control datepicker", @onkeydown = "return false", @autocomplete = "off" } })
+                @Html.ValidationMessageFor(model => model.MovimentoDate, "", new { id = "spanMovimentoDate", @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.Observation, "Observação", htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-4">
+                @Html.TextAreaFor(model => model.Observation, new { htmlAttributes = new { @class = "form-control desabilitar-movimentacao-interna" }, @style = "width: 100%; height: 150px;" })
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    @Html.HiddenFor(x => x.ListAssetsParaMovimento);
+
+    <div class="form-group cor-azul">
+        <div class="col-md-12">
+            <div class="col-sm-1">
+                <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+            </div>
+            <div class="col-md-11">
+                <h4>Localizar Bens por Setor</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-filter">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="Institutions" class="control-label col-md-1">Orgão</label>
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.InstituationId, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitution desabilitar-movimentacao-interna" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="BudgetUnits" class="control-label col-md-1">UO</label>
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit desabilitar-movimentacao-interna" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ManagerUnits" class="control-label col-md-1">UGE</label>
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnitFiltro desabilitar-movimentacao-interna" })
+                    <span id="spanManagerUnitFiltro" class="text-danger field-validation-error"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="AdministrativeUnits" class="control-label col-md-1">UA</label>
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.AdministrativeUnitId, (SelectList)ViewBag.AdministrativeUnits, new { @class = "form-control selectpicker comboAdministrativeUnit desabilitar-movimentacao-interna" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="Sections" class="control-label col-md-1">Divisão</label>
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.SectionId, (SelectList)ViewBag.Sections, new { @class = "form-control selectpicker comboSection desabilitar-movimentacao-interna" })
+                </div>
+            </div>            
+            <div class="form-group">
+                <label for="ManagerUnits" class="control-label col-md-1">Conta Contabil</label> 
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.ContaContabilId, (SelectList)ViewBag.ContaContabil, "Selecione a Conta Contabil", new { @class = "form-control comboManagerUnitFiltro desabilitar-movimentacao-interna" })
+
+                    <span id="spanManagerUnitFiltro" class="text-danger field-validation-error"></span>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="Sections" class="control-label col-md-1">Contenha</label>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control desabilitar-movimentacao-interna" })
+            </div>
+            <div class="col-sm-1">
+                <button type="button" id="btnFiltrar" data-toggle="tooltip" data-placement="top" data-original-title="Click para Procurar" class="btn btn-warning desabilitar-movimentacao-interna" onclick="movimento.CarregaDadosPatrimoniosDisponiveisGrid(1,false,true);">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div id="partialPatrimoniosDisponiveis" class="desabilitar-movimentacao-interna"></div>
+    @Html.ValidationMessage("QtdBensSelecionados", new { @class = "text-danger", @id = "MsgQtdBensSelecionados" })
+    <hr />
+
+    <div id="partialPatrimoniosParaMovimento"></div>
+    @Html.ValidationMessage("MsgMovimentacaoEmLote", new { @class = "text-danger" })
+
+    <hr />
+    if (Model != null)
+    {
+        if (Model.MsgSIAFEM != null && Model.MsgSIAFEM.Count > 0)
+        {
+            <div class="modal fade" id="modalExtratoSIAFEM" tabindex="-1" role="dialog" aria-labelledby="botões">
+                <div class="modal-dialog" role="document" style="width: 30%; max-height: 60%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title tituloModalSiafem">Dados do SIAFEM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="bodyModalDadosSiafem">
+                                <div class="form-group"><strong>Será (serão) gerada(s) a(s) Nota(s) de Lançamento abaixo:</strong></div>
+                                @foreach (var valores in Model.MsgSIAFEM)
+                                {
+                                    <div class="text-center" style="border: 1px solid #000">@valores</div>
+                                    <br/>
+                                }
+                            </div>
+                            <div class="form-group text-center botoes">
+                                <div class="text-center"> O sistema pode prosseguir com o processo de geração de NL(s) pelo ContabilizaSP?</div>
+                                <button type="button" class="btn btn-primary" id="prosseguir" data-dismiss="modal">Pode prosseguir</button>
+                                <button type="button" class="btn btn-danger" id="abortar" data-dismiss="modal">Não, aborta</button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="Ids" value="@Model.ListaIdAuditoria"/>
+
+            <div id="retornoSIAFEM"></div>
+        }
+    }
+
+    <div class="form-group" style="margin-bottom: 50px;">
+        @*@Html.Partial("_SaveButtons")*@
+        <div class="form-group" style="margin-left:1%">
+            <button type="submit" id="btnSalvarSubmit" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info" onkeypress="sam.search.clickEnterSubmit();" name="action:Create" value="Create">
+                <i class="glyphicon glyphicon-ok" aria-hidden="true"></i> Salvar
+            </button>
+
+            <a class="btnvoltar btn btn-default" href="javascript:history.back()">
+                <i class="glyphicon glyphicon-share-alt"></i> Voltar
+            </a>
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/Movimento/Create/js")
+<script>
+    $(document).ready(function () {
+        movimento.Load();
+        movimento.LimpaListaDeBensSelecionados(@Model.ListAssetsParaMovimento);
+        var movimentacaoInterna = '@ViewBag.MovimentacaoInterna';
+            if (movimentacaoInterna == 'True') {
+                    $('.desabilitar-movimentacao-interna').prop('disabled', true);
+                    $('#Observation').attr('disabled', 'disabled');
+            }
+            var movimentacaoTranferir = '@ViewBag.TransferirInventario';
+            if (movimentacaoTranferir == 'True') {
+                $('.desabilitar-movimentacao-interna').prop('disabled', true);
+                $('#Observation').attr('disabled', 'disabled');
+            }
+        });
+
+
+
+        window.onload = function () {
+            var movimentacaoInterna = '@ViewBag.MovimentacaoInterna';
+            var contador = parseInt(1);
+            var handle = setInterval(function () {
+                if (movimentacaoInterna == 'True') {
+                    if ($('.divGrid').find('#result-tables-patrimonio')) {
+                        $('.disabilitado').prop('disabled', true);
+                        $('.disabilitado').attr('disabled', 'disabled');
+                        $('th > a').attr('disabled', 'disabled');
+                        $('td > a').attr('disabled', 'disabled');
+                        $('#result-tables-patrimonio').attr('disabled', 'disabled');
+                        $('.divGrid').attr('disabled', 'disabled');
+                        $("#result-tables-patrimonio a").removeAttr("href");
+                        $('th > a').removeAttr("href");
+                        $('td > a').removeAttr("href");
+                        if (contador === 2)
+                            clearInterval(handle);
+                    }
+                    contador += 1;
+                }
+            }, 1000);
+            var movimentacaoTranferir = '@ViewBag.TransferirInventario';
+            contador = 1;
+            var handleTranferir = setInterval(function () {
+                if (movimentacaoTranferir == 'True') {
+                    if ($('.divGrid').find('#result-tables-patrimonio')) {
+                        $('.disabilitado').prop('disabled', true);
+                        $('.disabilitado').attr('disabled', 'disabled');
+                        $('th > a').attr('disabled', 'disabled');
+                        $('td > a').attr('disabled', 'disabled');
+                        $('#result-tables-patrimonio').attr('disabled', 'disabled');
+                        $('.divGrid').attr('disabled', 'disabled');
+                        //$("#result-tables-patrimonio a").removeAttr("href");
+                        $('th > a').removeAttr("href");
+                        $('td > a').removeAttr("href");
+                        if (contador === 2)
+                            clearInterval(handleTranferir);
+                    }
+                    contador += 1;
+                }
+            }, 1000);
+        }
+    </script>

@@ -1,0 +1,26 @@
+﻿@model IEnumerable<SAM.Web.ViewModels.AssetViewModel>
+@using PagedList.Mvc;
+
+<table class="table" id="result-tables">
+    <tr>
+        <th>Selecione</th>
+        <th>@Html.DisplayNameFor(model => model.NumberIdentification)</th>
+        <th>@Html.DisplayNameFor(model => model.AssetsList.FirstOrDefault().RelatedMaterialItem.Description)</th>
+        <th>@Html.DisplayNameFor(model => model.AssetsList.FirstOrDefault().AdministrativeUnitId)</th>
+        <th>@Html.DisplayNameFor(model => model.AssetsList.FirstOrDefault().ValueUpdate)</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in @Model)
+    {
+        <tr>
+            <td>
+                <input type="checkbox" id="checkAsset" data-id="@item.Id" />
+            </td>
+            <td>@Html.DisplayFor(modelItem => item.NumberIdentification)</td>
+            <td>@Html.DisplayFor(modelItem => item.RelatedMaterialItem.Description)</td>
+            <td>@Html.DisplayFor(modelItem => item.AdministrativeUnitId)</td>
+            <td>@Html.DisplayFor(modelItem => item.ValueUpdate)</td>
+        </tr>
+    }
+</table>

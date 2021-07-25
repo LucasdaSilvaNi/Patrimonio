@@ -1,0 +1,91 @@
+﻿@model SAM.Web.ViewModels.MovimentoViewModel
+@using PagedList.Mvc;
+
+<div class="form-group cor-azul">
+    <div class="col-md-12">
+        <div class="col-sm-1">
+            <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+        </div>
+        <div class="col-md-11">
+            <h4>Lista de Patrimônios para o Movimento</h4>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="form-control divGrid" style="height:410px; overflow: auto;">
+
+
+        <table class="table" id="result-tables-patrimonio">
+            <thead>
+                <tr>
+                    <th>
+                        @if (ViewBag.Count > 0)
+                        {
+                            <a class="btn btn-danger removerTodos">
+                                <span class="glyphicon glyphicon-remove"></span> Remover Todos
+                            </a>
+                        }
+                    </th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Sigla").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Chapa").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Item").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Descrição de Item Material").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("UGE").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("UA").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Divisão").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Conta Contábil").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Valor Atual").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Data Aquisição").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                </tr>
+            </thead>
+            <tbody>
+                    @if (Model.listaAssetEAssetViewModel != null)
+                    {
+                         foreach (var item in Model.listaAssetEAssetViewModel)
+                         {
+                             <tr>
+                                 <td id="@item.Id">
+                                     <a class="btn btn-danger removerBem">
+                                         <span class="glyphicon glyphicon-remove"></span> Remover
+                                     </a>
+                                 </td>
+                                 <td class="Asset_RelatedInitial_Name">@Html.DisplayFor(modelItem => item.Sigla)</td>
+                                 <td class="Asset_NumberIdentification">@Html.DisplayFor(modelItem => item.ChapaCompleta)</td>
+                                 <td class="Asset_MaterialItemCode">@Html.DisplayFor(modelItem => item.CodigoMaterial)</td>
+                                 <td class="Asset_MaterialItemDescription">@Html.DisplayFor(modelItem => item.DescricaoMaterial)</td>
+                                 <td class="AssetMoviment_RelatedManagerUnit_Code">@Html.DisplayFor(modelItem => item.CodigoUGE)</td>
+                                 <td class="AssetMoviment_RelatedAdministrativeUnit_Code">@Html.DisplayFor(modelItem => item.CodigoUA)</td>
+                                 <td class="AssetMoviment_RelatedSection_Description">@Html.DisplayFor(modelItem => item.DescricaoDivisao)</td>
+                                 <td class="AssetMoviment_ContaContabil">@Html.DisplayFor(modelItem => item.ContaContabil)</td>
+                                 <td class="Asset_ValueUpdate">R$ @Html.DisplayFor(modelItem => item.ValorAtual)</td>
+                                 <td class="Asset_AcquisitionDate">@Html.DisplayFor(modelItem => item.DataAquisicaoFormatada)</td>
+                             </tr>
+                         }
+                    }
+            </tbody>
+        </table>
+        <div class="paginacaoListaParaMovimento">
+            @if (Model.listaAssetEAssetViewModel != null)
+            {
+
+                @:Página @(Model.listaAssetEAssetViewModel.PageCount < Model.listaAssetEAssetViewModel.PageNumber ? 0 : Model.listaAssetEAssetViewModel.PageNumber) de @Model.listaAssetEAssetViewModel.PageCount
+                @Html.PagedListPager(Model.listaAssetEAssetViewModel, page => Url.Action("CarregaPatrimoniosParaMovimento", "Movimento", new { page }))
+
+            }
+            else
+            {
+                @: Página 0 de 0
+            }
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        sam.commun.InicializaICheck();
+        movimento.EventoSelecionaTodosRegistros();
+        movimento.EventoRemoveBem();
+        movimento.EventoRemoveTodos();
+    });
+</script>

@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Ajuda";
+}
+<style>
+    #listaDosVideos li {
+        margin-bottom: 20px;
+    }
+    #listaDosVideos li .chamadaVideo {
+        text-decoration: none;
+    }
+</style>
+
+<div class="col-sm-12" style="margin-top: 25px">
+    <div class="col-sm-4">
+        <h3 class="text-primary">@ViewBag.Title</h3>
+        <hr style="margin-top: 0px" />
+    </div>
+</div>
+
+<div class="col-sm-12">
+    <span>Aqui você encontrará vídeos para auxiliar no uso do sistema SAM-Patrimonio!</span>
+    <br />
+    <span>Veja o vídeo do assunto que você queira mais clareza clicando nos links abaixos:</span>
+</div>
+
+<div class="col-sm-12" style="margin-top: 15px;">
+    <ul style="list-style: none;" id="listaDosVideos">
+        <li>
+            <a class="chamadaVideo" valor="1">
+                <i class="glyphicon glyphicon-facetime-video" style="font-size: 22px;"></i> &nbsp;
+                <span>SAC-SAM (O suporte do sistema)</span>
+            </a>
+        </li>
+        <li>
+            <a class="chamadaVideo" valor="2">
+                <i class="glyphicon glyphicon-facetime-video" style="font-size: 22px;"></i> &nbsp;
+                <span>Integração com ContabilizaSP</span>
+            </a>
+        </li>
+        <li>
+            <a class="chamadaVideo" valor="3">
+                <i class="glyphicon glyphicon-facetime-video" style="font-size: 22px;"></i> &nbsp;
+                <span>Integração com SAM-Estoque</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+@Html.Partial("Modais/_Video")
+
+<script>
+       $(".chamadaVideo").click(function () {
+            $.post(sam.path.webroot + "Principal/Video", { video: $(this).attr("valor") }, function () { })
+            .done(function (data) {
+                $("#corpo").html(data);
+                $("#modalVideoSobreChamado").modal({ keyboard: false, backdrop: 'static', show: true });
+            });
+        });
+</script>

@@ -1,0 +1,211 @@
+﻿@model SAM.Web.ViewModels.SupportCRUDViewModel
+@using SAM.Web.Common.Enum;
+@using SAM.Web.Models
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Scripts.Render("~/Support/js")
+@Styles.Render("~/Support/Edit_2/css")
+
+<link href="~/lib/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+<h3 style="margin-top:40px;margin-bottom: 20px;" class="cor-azul">Novo Suporte</h3>
+
+<hr />
+
+@{ 
+    SAM.Web.Common.ComumLayout comumLayout = new SAM.Web.Common.ComumLayout();
+    User u = comumLayout.CurrentUser();
+    RelationshipUserProfile rup = comumLayout.CurrentRelationshipUsersProfile(u.Id);
+}
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formSuporte" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="panel-filter">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="Id" class="control-label col-md-1">Nº Chamado</label>
+                <div class="col-md-1">
+                    @Html.TextBoxFor(model => model.Id, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.InstitutionId)
+            @Html.HiddenFor(model => model.BudgetUnitId)
+            @Html.HiddenFor(model => model.ManagerUnitId)
+
+            <hr>
+
+            <div class="form-group">
+                <label for="Institutions" class="control-label col-md-1 margim-esquerda">Orgão</label>
+                <div class="col-md-7">
+                    @Html.DropDownListFor(model => model.InstitutionId, (SelectList)ViewBag.Institutions, new { @id = "instituationFake", @name= "instituationFake", @class = "form-control comboinstitution", @disabled = "disabled" })
+                    <span id="spanInstitution" class="text-danger field-validation-error"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="BudgetUnits" class="control-label col-md-1 margim-esquerda">UO</label>
+                <div class="col-md-7">
+                    @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @id = "budgetUnitsFake", @name = "budgetUnitsFake", @class = "form-control comboBudgetUnit", @disabled = "disabled" })
+                    <span id="spanBudgetUnits" class="text-danger field-validation-error"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ManagerUnits" class="control-label col-md-1 margim-esquerda">UGE</label>
+                <div class="col-md-7">
+                    @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @id = "managerUnitsFake", @name = "managerUnitsFake", @class = "form-control comboManagerUnit", @disabled = "disabled" })
+                    <span id="spanManagerUnits" class="text-danger field-validation-error"></span>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <div class="col-md-6">
+                    <div class="form-group cor-azul">
+                        <div class="col-md-12">
+                            <div class="col-sm-1">
+                                <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                            </div>
+                            <div class="col-md-11">
+                                <h4>Dados do Chamado</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="SupportStatusProdespId" class="control-label col-md-2">Status(Prodesp)</label>
+                        <div class="col-md-3">
+                            @if (rup.RelatedProfile.Id == (int)EnumProfile.AdministradorGeral)
+                            {
+                                @Html.DropDownListFor(model => model.SupportStatusProdespId, (SelectList)ViewBag.SupportStatusProdesps, new { @class = "form-control" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.SupportStatusProdespId, (SelectList)ViewBag.SupportStatusProdesps, new { @id = "SupportStatusProdespIdFake", @name = "SupportStatusProdespIdFake", @class = "form-control", @disabled = "disabled" })
+                                @Html.HiddenFor(model => model.SupportStatusProdespId)
+                            }
+                        </div>
+                        <div class="col-sm-1"> </div>
+                        <label for="SupportStatusUserId" class="control-label col-md-2">Status(Usuário)</label>
+                        <div class="col-md-3">
+                            @Html.DropDownListFor(model => model.SupportStatusUserId, (SelectList)ViewBag.SupportStatusUsers, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="UserDescription" class="control-label col-md-2">Usuário</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.UserDescription, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="UserCPF" class="control-label col-md-2">CPF</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.UserCPF, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="UserPerfil" class="control-label col-md-2">Perfil do Usuário</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.UserPerfil, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Email" class="control-label col-md-2">E-Mail</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control Email", @maxlength = "100" })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Responsavel" class="control-label col-md-2">Responsável</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.Responsavel, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Responsavel, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ModuleId, "Funcionalidade", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(model => model.ModuleId, (SelectList)ViewBag.Modules, "Selecione...", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ModuleId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="SupportTypeId" class="control-label col-md-2">Tipo de Chamado</label>
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(model => model.SupportTypeId, (SelectList)ViewBag.SupportTypes, "Selecione...", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.SupportTypeId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="InclusionDate" class="control-label col-md-2">Abertura</label>
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.InclusionDate, new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                        <div class="col-sm-1"> </div>
+                        <label for="CloseDate" class="control-label col-md-2">Fechamento</label>
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.CloseDate, new { @class = "form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Observation, "Observação", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-9">
+                            @Html.TextAreaFor(model => model.Observation, new { htmlAttributes = new { @class = "form-control" }, @style = "width: 100%; height: 150px;" })
+                            @Html.ValidationMessageFor(model => model.Observation, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Anexos", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-9">
+                            <input id="evidenceFile" type="file" class="btn btn-info pull-left" accept=".xls,.xlsx,.doc,.docx,.jpg,.gif,.png,.ppt,.pptx" />
+                            <a id="btnUpload" href="#" class="btn btn-info pull-right"> <i class="glyphicon glyphicon-arrow-up fa-lg novoclass"></i> Anexar Arquivo </a>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-2"> </div>
+                        <div class="col-md-9">
+                            <div id="partialViewAttachment"> </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="form-group cor-azul">
+                        <div class="col-md-12">
+                            <div class="col-sm-1">
+                                <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                            </div>
+                            <div class="col-md-11">
+                                <h4>Histórico do Suporte</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="partialViewHistoric"> </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <hr />
+
+    <div class="form-group" style="margin-bottom: 50px;">
+        @Html.Partial("_SaveButtons")
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        support.Load();
+    });
+</script>

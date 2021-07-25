@@ -1,0 +1,29 @@
+﻿<div class="modal fade modalView in" id="modalLoginSiafem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+    <div class="modal-dialog" style="width: 30%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabelLoginSiafem">Usuario SIAFEM</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="CPF">Login</label>
+                    <div class="col-md-6">
+                        <input autocomplete="off" class="form-control" data-val="true" data-val-required="O campo Login é obrigatório." id="CPFSIAFEMModal" maxlength="11" name="CPF" type="text" value="">
+                        <span class="field-validation-valid text-danger" data-valmsg-for="CPF" data-valmsg-replace="true" />
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="Senha">Senha</label>
+                    <div class="col-md-6">
+                        <input class="form-control" data-val="true" data-val-required="O campo Senha é obrigatório." id="SenhaSIAFEMModal" name="SenhaSIAFEMModal" onfocus="$(this).removeAttr('readonly')" readonly="readonly" type="password">
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Senha" data-valmsg-replace="true" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top:0px !important">
+                <button type="button" id="SaveLoginSiafem" class="btn submit-comentario btn-success btn-salvar " data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>

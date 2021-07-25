@@ -1,0 +1,318 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.ViewModels.AssetEAssetMovimentViewModel>
+@using PagedList.Mvc;
+
+@{ViewBag.Title = "Bens Patrimoniais Pendentes(Integração)";}
+
+<div class="col-sm-12" style="margin-top: 25px">
+    <div class="col-sm-8">
+        <h3 class="text-primary">@ViewBag.Title</h3>
+        <h6 class="text-primary">Para mais informações de como funciona a integração com o SAM-Estoque, disponibilizamos um vídeo explicativo que pode ser visualizado <a id="chamadaVideo" style="text-decoration: underline;">clicando aqui</a></h6>
+        <hr style="margin-top: 0px" />
+    </div>
+</div>
+
+@using (Html.BeginForm("Integrating", "AssetPending", FormMethod.Post, new { @id = "consultaForm" }))
+{
+    @Html.Hidden("searchString")
+    <button type="submit" id="filtroOculto" style="display: none"> </button>
+
+    <div class="col-sm-12" style="margin-bottom: 30px;">
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" id="search-tables" name="search-tables" value="@ViewBag.CurrentFilter" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnter(this,event)" />
+                <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                @Html.DropDownList("cbFiltros", (SelectList)ViewBag.Filtros, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+}
+    <div class="col-md-12" style="margin-bottom: 30px;">
+        <div class="form-group">
+            <div class="col-md-2">
+                <div class="form-check">
+                    <label class="form-check-label" for="chkTodos">Selecionar todos</label>
+                    <input type="checkbox" id="chkTodos" class="icheckbox_square-blue integracao-incorporar-todos" />
+
+                </div>
+
+            </div>
+            <div class="col-md-1">
+                <button type="button" id="btnIncorporar" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info" value="Create" data-toggle="modal">
+                    <i class="glyphicon glyphicon-ok" aria-hidden="true"></i> Incorporar
+                </button>
+            </div>
+            <div class="col-md-1">
+                <button type="button" id="btnEstornar" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info" value="Estornar" data-toggle="modal">
+                    <i class="glyphicon glyphicon-remove" aria-hidden="true"></i> Estornar
+                </button>
+            </div>
+        </div>
+    </div>
+    <table class="table" id="result-tables">
+        <tr>
+            <th>Incorporar</th>
+            <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Asset.InitialId).ToString()), "Index", new { sortOrder = ViewBag.InitialIdSortParm })</th>
+            <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Asset.NumberIdentification).ToString()), "Index", new { sortOrder = ViewBag.NumberIdentificationSortParm })</th>
+            <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Asset.MaterialItemCode).ToString()), "Index", new { sortOrder = ViewBag.NumberIdentificationSortParm })</th>
+            <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Asset.MaterialItemDescription).ToString()), "Index", new { sortOrder = ViewBag.AdditionalDescriptionSortParm })</th>
+            <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Asset.ManagerUnitId).ToString()), "Index", new { sortOrder = ViewBag.AdditionalDescriptionSortParm })</th>
+            <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().AssetMoviment.AdministrativeUnitId).ToString()), "Index", new { sortOrder = ViewBag.AdditionalDescriptionSortParm })</th>
+            <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Asset.ValueAcquisition).ToString()), "Index", new { sortOrder = ViewBag.AdditionalDescriptionSortParm })</th>
+            <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Asset.NumberDoc).ToString()), "Index", new { sortOrder = ViewBag.AdditionalDescriptionSortParm })</th>
+            <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().codigo_uge_almox_emissor_transferencia).ToString()), "Index", new { sortOrder = ViewBag.AdditionalDescriptionSortParm })</th>
+
+        </tr>
+
+        @foreach (var item in Model.Where(m => m.Asset.Status))
+        {
+            <tr>
+                <td>@Html.CheckBoxFor(model => item.Asset.Incorporar, new { @class = "icheckbox_square-blue integracao-incorporar check-nao-selecionado",@id = item.Asset.Id, @data_value= item.Asset.Id }) </td>
+                <td> @Html.DisplayFor(modelItem => item.Asset.RelatedInitial.Name) </td>
+
+                <!--A chapa de um BP vindo da integração com o Estoque traz apenas a parte numérica nas telas pois, na importação dos dados do Estoque, não há preenchimento da parte alfabética da chapa-->
+                <td>@Html.DisplayFor(modelItem => item.Asset.NumberIdentification)</td>
+                <td>@Html.DisplayFor(modelItem => item.Asset.MaterialItemCode)</td>
+                <td>@Html.DisplayFor(modelItem => item.Asset.MaterialItemDescription)</td>
+                <td>@Html.DisplayFor(modelItem => item.codigo_descricao_uge_emissor_transferencia)</td>
+                <td>@Html.DisplayFor(modelItem => item.codigo_descricao_ua_emissor_transferencia)</td>
+                <td class="text-right">@Html.DisplayFor(modelItem => item.Asset.ValueAcquisition)</td>
+                <td class="text-right">@Html.DisplayFor(modelItem => item.Asset.NumberDoc)</td>
+                <td class="text-right">@Html.DisplayFor(modelItem => item.codigo_uge_almox_emissor_transferencia)</td>
+
+                
+            </tr>
+
+        }
+    </table>
+    <div class="modal-loading" id="divProcessing" style="display:none;">
+        <div style="width:50% !important; height:50% !important">
+            <div style="width:50% !important; height:20% !important">
+                <img src="~/Content/images/preloader03.gif" class="modal-img" />
+                
+            </div>
+        </div>
+
+    </div>
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Integrating",
+        new { page, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.CurrentFilter, cbFiltros = ViewBag.CurrentFilterCbFiltros }))
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalAlerta" tabindex="-1" role="dialog" aria-labelledby="Alerta" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tituloAviso">Incorporar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label class="control-label text-center">Selecione um bem para ser incorporado!</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalEstornar" tabindex="-10" role="dialog" aria-labelledby="Estornar" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tituloAviso">Estornar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label class="control-label" for="numeroDocumento">Digite número de documento</label>
+                    <input type="text" id="numeroDocumento" class="form-control" maxlength="20" />
+                    <span class = "text-danger" id="erroNumeroDocumento"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" id="btnConfirmarEstorno" class="btn btn-primary" data-dismiss="modal">
+                        <i class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></i> Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("Modais/_Video")
+    @section Scripts {
+        <script>
+            //sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+            $(window).ready(function () {
+                $("#divProcessing").hide();
+                $("#btnIncorporar").click(function () {
+                    if (sessionStorage === null || sessionStorage.length < 1) {
+                        $('#modalAlerta').modal('show');
+                        return false;
+                    }
+                        
+
+                    let assetId = selecionarIdsBemPatrimoniais().join("");
+
+                    window.location = 'EditIntegracao?Id=' + encodeURIComponent(assetId);
+                });
+                $("#btnEstornar").click(function () {
+
+                    if (sessionStorage === null || sessionStorage.length < 1) {
+                        
+                        $('#modalAlerta').modal('show');
+                        return false;
+                    }
+                    $('#modalEstornar').modal('show');
+
+                    
+                });
+                $('#numeroDocumento').keydown(function () {
+                    $('#erroNumeroDocumento').text('');
+                })
+                $('#btnConfirmarEstorno').click(function () {
+                   
+                    if ($('#numeroDocumento').val() === '' || $('#numeroDocumento').val() === undefined || $('#numeroDocumento').val().replace(' ', '').length < 1)
+                    {
+                        $('#erroNumeroDocumento').text('Digite o número de documento');
+                        return false;
+                    }
+                    let assetId = selecionarIdsBemPatrimoniais().join("");
+                    event.preventDefault();
+                    $("#divProcessing").show();
+                    //window.location = 'ReverseIntegrating?Id=' + encodeURIComponent(assetId) + '&' + $('#numeroDocumento').val();
+                    let assetIds = selecionarIdsBemPatrimoniais().join("");
+                    $.post('ReverseIntegrating', { assetIds: assetIds, numeroDocumento: $('#numeroDocumento').val() }, function (data) {
+                        $('#numeroDocumento').val('');
+                        $("#divProcessing").hide();
+                        $('#divProcessing').addClass("processing-ivinsivel");
+                        if (data.status === 'Sucesso'){
+                            alert(data.Mensagem);
+                            sessionStorage.clear();
+                            window.location = 'Integrating';
+
+                        }
+                        else {
+                            sessionStorage.clear();
+                            alert(data.MensagemErro);
+                            window.location = 'Integrating';
+                          
+                        }
+                        
+                    });
+                })
+                $('.integracao-incorporar-todos').on('ifChecked', function (event) {
+                    habilitarDesabilitarIncorporacao(true);
+                    adicionarTodosBemSerIncorporado();
+                });
+                $('.integracao-incorporar-todos').on('ifUnchecked', function (event) {
+                    habilitarDesabilitarIncorporacao(false);
+                    removerTodosBemSerIncorporado();
+
+                });
+
+                $('.integracao-incorporar').on('ifChecked', function (event) {
+                    let assetId = $(this).data('value');
+                    adicionarBemSerIncorporado(assetId);
+                    $('#' + assetId).removeClass('check-nao-selecionado');
+                    verificarTodosBensSelecionado();
+                });
+                $('.integracao-incorporar').on('ifUnchecked', function (event) {
+                    let assetId = $(this).data('value');
+                    removerBemSerIncorporado(assetId);
+                    $('#' + assetId).addClass('check-nao-selecionado');
+                    verificarTodosBensSelecionado();
+                });
+                verificarBensSelecionados();
+            });
+            let habilitarDesabilitarIncorporacao = function (checked) {
+               // $('.integracao-incorporar').iCheck('check');
+                $('.integracao-incorporar').prop('checked', checked).iCheck('update');
+            }
+            let habilitarDesabilitarIdIncorporacao = function (assetId,checked) {
+                // $('.integracao-incorporar').iCheck('check');
+                $('#' + assetId).prop('checked', checked).iCheck('update');
+                if (checked === true)
+                    $('#' + assetId).removeClass('check-nao-selecionado');
+                else
+                    $('#' + assetId).addClass('check-nao-selecionado');
+            }
+            
+            let adicionarBemSerIncorporado = function (assetId) {
+                sessionStorage.setItem(assetId, assetId);
+            }
+            let removerBemSerIncorporado = function (assetId) {
+                sessionStorage.removeItem(assetId);
+            }
+
+            let adicionarTodosBemSerIncorporado = function () {
+                var favorite = [];
+                $.each($('.integracao-incorporar').iCheck('check'), function () {
+                    let assetId = $(this).data('value');
+                    favorite.push(assetId);
+                    adicionarBemSerIncorporado(assetId);
+                    habilitarDesabilitarIdIncorporacao(assetId, true);
+                });
+                
+                console.info('Add', favorite);
+            }
+            let removerTodosBemSerIncorporado = function () {
+                var favorite = [];
+                $.each($('.integracao-incorporar').iCheck('uncheck'), function () {
+                    let assetId = $(this).data('value');
+                    favorite.push(assetId);
+                    removerBemSerIncorporado(assetId);
+                    habilitarDesabilitarIdIncorporacao(assetId, false);
+                });
+                console.info('Remove', favorite);
+                //console.log(favorite);
+            }
+            let verificarBensSelecionados = function () {
+                for (var i = 0; i < sessionStorage.length; i++) {
+                    let assetId = parseInt(sessionStorage.getItem(sessionStorage.key(i)));
+
+                    if (parseInt($('#' + assetId).data('value')) === assetId)
+                        habilitarDesabilitarIdIncorporacao(assetId, true);
+                };
+                verificarTodosBensSelecionado();
+            }
+            let verificarTodosBensSelecionado = function () {
+                let todosSelecionados = $('.check-nao-selecionado');
+                if (todosSelecionados === undefined || todosSelecionados.length < 1) {
+                    $('.integracao-incorporar-todos').prop('checked', true).iCheck('update');
+                } else {
+                    $('.integracao-incorporar-todos').prop('checked', false).iCheck('update');
+                }
+            }
+
+            let selecionarIdsBemPatrimoniais = function () {
+                let builder = [];
+                builder.push('[');
+                for (var i = 0; i < sessionStorage.length; i++) {
+                    builder.push('{');
+                    let assetiId = parseInt(sessionStorage.getItem(sessionStorage.key(i)));
+                    builder.push('"AssetId":' + assetiId.toString());
+                    if (i == sessionStorage.length - 1)
+                        builder.push('}');
+                    else
+                        builder.push('},');
+                };
+                builder.push(']');
+                return builder;
+            }
+            $("#chamadaVideo").click(function () {
+                $.post(sam.path.webroot + "Principal/Video", { video: 3 }, function () { })
+                .done(function (data) {
+                    $("#corpo").html(data);
+                    $("#modalVideoSobreChamado").modal({ keyboard: false, backdrop: 'static', show: true });
+                });
+            });
+        </script>
+    }

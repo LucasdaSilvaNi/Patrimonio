@@ -1,0 +1,86 @@
+﻿
+@model SAM.Web.ViewModels.BPExclusaoViewModel
+
+<div class="col-sm-12" style="margin-top: 25px">
+    <div class="col-sm-4">
+        <h3 class="text-primary">Consulta de Bps Excluídos e Estornos</h3>
+        <hr style="margin-top: 0px" />
+    </div>
+</div>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formExcluidos" }))
+{
+    <div class="col-sm-12" style="margin-top: 5px">
+
+        @Html.Hidden("searchString")
+
+        <div class="col-sm-12" style="margin-bottom: 30px;">
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input type="text" id="search-tables" name="search-tables" value="@ViewBag.CurrentFilter" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnter(this,event)" />
+                    <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    @Html.DropDownList("cbFiltro", (SelectList)ViewBag.Filtros, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<table class="table" id="tableExcluidos">
+    <thead>
+        <tr>
+            <th class="text-info" data-sortable="true">Sigla</th>
+            <th class="text-info" data-sortable="true">Chapa</th>
+            <th class="text-info" data-sortable="true">Item Material</th>
+            <th class="text-info" data-sortable="true">Grupo Material</th>
+            <th class="text-info" data-sortable="true">UGE</th>
+            <th class="text-info" data-sortable="true">UA</th>
+            <th class="text-info" data-sortable="true">Responsável</th>
+            <th class="text-info" data-sortable="true">Processo</th>
+            <th class="text-info" data-sortable="true">Valor de Aquisição</th>
+            <th class="text-info" data-sortable="true">Data de Aquisição</th>
+            <th class="text-info" data-sortable="true">Data de Incorporação</th>
+            <th class="text-info" data-sortable="true">Tipo</th>
+            <th class="text-info" data-sortable="true">Data Estorno</th>
+            <th class="text-info" data-sortable="true">CPF Estorno</th>
+            <th class="text-info" data-sortable="true">NL Estorno</th>
+            <th class="text-info" data-sortable="true">NL de estorno da depreciação</th>
+            <th class="text-info" data-sortable="true">NL de estorno da reclassificação</th>
+        </tr>
+    </thead>
+</table>
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-excluidos-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+        $('#cbFiltro').change(function () {
+            $('#spanPesquisa').click()
+        });
+        $(document).ready(function () {
+            let excluidoDataTable = new ExcluidosDataTable();
+            excluidoDataTable.Load('#formExcluidos')
+        });
+    </script>
+}

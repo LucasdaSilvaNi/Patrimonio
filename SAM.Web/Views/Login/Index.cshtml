@@ -1,0 +1,56 @@
+﻿@model SAM.Web.ViewModels.LoginViewModel
+
+<style>
+    .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+        background-color: #ffffff;
+    }
+</style>
+
+<h2>Identifique-se</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        @using (Html.BeginForm("Index", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", @id = "formLogin" }))
+        {
+            @Html.AntiForgeryToken()
+            <input id="CPF_fake" name="CPF" type="text" autocomplete="off" style="display: none;">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(m => m.CPF, new { @class = "col-md-2 control-label" })
+                <div class="col-md-6">
+                    @Html.TextBoxFor(m => m.CPF, new { @class = "form-control", @maxlength = "11", @autocomplete = "off" })
+                    @Html.ValidationMessageFor(m => m.CPF, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Senha, new { @class = "col-md-2 control-label" })
+                <div class="col-md-6">
+                    @Html.PasswordFor(m => m.Senha, new { @class = "form-control", @readonly = "readonly", @onfocus = "$(this).removeAttr('readonly');" })
+                    @Html.ValidationMessageFor(m => m.Senha, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Entrar" class="btn btn-default" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <span style="margin-left: 25px; background-color: #d0d0d0; padding: 4px; border-radius: 3px;"> Sistema operante no navegador Google Chrome </span>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        
+    $(document).ready(function () {
+        // Metodos criados para contornar o autocomplete dos navegadores
+        $('#CPF_fake').val($('#CPF').val());
+        $('#CPF').change(function () { $('#CPF_fake').val($('#CPF').val()) });        
+    });
+    </script>
+}

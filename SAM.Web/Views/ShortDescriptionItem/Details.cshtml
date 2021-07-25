@@ -1,0 +1,35 @@
+﻿@model SAM.Web.Models.ShortDescriptionItem
+
+<div class="form-group">
+    @{ViewBag.Title = "Detalhes da Descrição Resumida do Item";}
+
+    <h2>@ViewBag.Title - @Model.Id </h2>
+
+    <div class="form-horizontal">
+        <hr />
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-5">
+                @Html.DisplayTextFor(model => model.Id)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-5">
+                @Html.DisplayTextFor(model => model.Description)
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.Partial("_EditButtons")
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

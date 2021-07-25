@@ -1,0 +1,60 @@
+﻿@model  PagedList.StaticPagedList<SAM.Web.Models.EventServiceContabilizaSP>
+@{
+    ViewBag.Title = "Tipos de Movimentações ContabilizaSP (Integração)";
+}
+
+@{
+    Html.RenderPartial("_DataTableReferenciaCss");
+    bool temPermissao = ViewBag.TemPermissao;
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formEventServicesContabilizaSP" }))
+{
+    @Html.Partial("_GridNewButtons")
+    @Html.Hidden("temPermissao", temPermissao ? "1" : "")
+
+    <table id="tableEventServicesContabilizaSP" class="table">
+        <thead>
+            <tr>
+                @*<th class="text-info text-datatable-label-size" data-sortable="false">Código Movimentação (SAM)</th>*@
+                <th class="text-info text-datatable-label-size" data-sortable="false">Tipo Movimentação (SAM)</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Tipo Agrupamento (ContabilizaSP)</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Tipo Entrada/Saída/Reclassificação/Depreciação (ContabilizaSP)</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Tipo Movimentação (ContabilizaSP)</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Estoque Origem (MetaDado)</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Estoque Destino (MetaDado)</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Data Movimentação (MetaDado)</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Valor Movimentação (MetaDado)</th>
+                @*<th class="text-info text-datatable-label-size" data-sortable="false">Nome Movimentação (SAM/ContabilizaSP)</th>*@
+                <th class="text-info text-datatable-label-size" data-sortable="false">Reclassificação Contábil</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Ordem Execução/Envio (SIAFEM)</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Data Ativação Integração</th>
+
+                <th class="text-info text-datatable-label-size border-table-tr actionButton col-xs-1" data-sortable="false">Ações</th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-eventServiceContabilizaSP-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+
+        $(document).ready(function () {
+            let eventServicesContabilizaSPDataTable = new EventServicesContabilizaSPDataTable();
+            eventServicesContabilizaSPDataTable.Load('#formEventServicesContabilizaSP');
+        });
+    </script>
+}

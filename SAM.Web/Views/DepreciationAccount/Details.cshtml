@@ -1,0 +1,33 @@
+﻿@model SAM.Web.Models.DepreciationAccount
+
+@{ViewBag.Title = "Detalhes da Conta de Depreciação";}
+
+<h2>@ViewBag.Title - @Model.Code</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Code)</dt>
+        <dd>@Html.DisplayFor(model => model.Code)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd>@Html.DisplayFor(model => model.Description)</dd>
+
+        <br />
+        <dt>Descrição para o Contabiliza</dt>
+        <dd>@Html.DisplayFor(model => model.DescricaoContaDepreciacaoContabilizaSP)</dd>
+
+        <dt></dt>
+        <dd>
+            <div class="form-group">
+                @Html.Partial("_EditButtons")
+            </div>
+        </dd>
+    </dl>
+</div>
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

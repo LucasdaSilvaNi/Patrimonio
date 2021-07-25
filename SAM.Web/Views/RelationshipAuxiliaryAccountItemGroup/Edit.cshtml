@@ -1,0 +1,47 @@
+﻿@model SAM.Web.Models.RelationshipAuxiliaryAccountItemGroup
+
+@{
+    ViewBag.Title = "Editar Relacionamento Grupo Material - Conta Contábil";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MaterialGroupId, "Grupo Material", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.MaterialGroupId, (SelectList)ViewBag.GruposMateriais, "-- Selecione --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MaterialGroupId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            @Html.LabelFor(model => model.AuxiliaryAccountId, "Conta Contábil", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.AuxiliaryAccountId, (SelectList)ViewBag.ContasContabeis, "-- Selecione --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AuxiliaryAccountId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Partial("_SaveButtons")
+            <div>
+                @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

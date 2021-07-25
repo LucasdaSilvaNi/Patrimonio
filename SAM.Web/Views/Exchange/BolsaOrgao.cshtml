@@ -1,0 +1,94 @@
+﻿@{ViewBag.Title = "Bolsa: " + @ViewBag.NomeOrgao;
+    int retiradaBolsa = ViewBag.RetiradaDaBolsa;
+    bool perfil = ViewBag.Permissao;
+}
+
+<div class="col-sm-12" style="margin-top: 25px">
+    <div class="col-sm-12">
+        <h3 class="text-primary">@ViewBag.Title</h3>
+        <hr style="margin-top: 0px" />
+    </div>
+</div>
+
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formBolsaOrgao" }))
+{
+    @Html.Hidden("searchString")
+    @Html.Hidden("retiradaBolsa", retiradaBolsa);
+    @Html.Hidden("habilitado", perfil ? "1" : "");
+    <button type="submit" id="filtroOculto" style="display: none"> </button>
+
+    <div class="col-sm-12" style="margin-bottom: 30px;">
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" id="search-tables" name="search-tables" value="@ViewBag.CurrentFilter" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnter(this,event)" />
+                <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="pull-right">
+                <a class="btnListar btn btn-info" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" href="@Url.Action("BolsaOrgaoRequisitar", "Exchange")">
+                    <i class="glyphicon glyphicon-arrow-down fa-lg listarclass"></i> Requisitar Itens da Bolsa
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table" id="tableBolsaOrgao">
+        <thead>
+            <tr>
+                <td class="text-info" data-sortable="false"><b>Sigla</b></td>
+                <td class="text-info" data-sortable="false"><b>Chapa</b></td>
+                <td class="text-info" data-sortable="false"><b>Item</b></td>
+                <td class="text-info" data-sortable="false"><b>Descrição Item</b></td>
+                <td class="text-info" data-sortable="false"><b>Orgão</b></td>
+                <td class="text-info" data-sortable="false"><b>Gestor</b></td>
+                <td class="text-info" data-sortable="false"><b>UO</b></td>
+                <td class="text-info" data-sortable="false"><b>UGE</b></td>
+                <td class="text-info border-table-tr actionButton" data-sortable="false"><b>Ações</b></td>
+            </tr>
+        </thead>
+
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modalView" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="width: 100%">
+    <div class="modal-dialog" style="width: 80%" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Requisições da Bolsa</h4>
+            </div>
+            <div class="modal-body">
+
+                <div id="ListarItem"> </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-success" value="Ok" onclick="sam.exchange.FecharModalBolsa()" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-bolsaOrgao-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+            $(document).ready(function(){
+                sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+                let bolsaOrgaoDataTable = new BolsaOrgaoDataTable();
+                bolsaOrgaoDataTable.Load('#formBolsaOrgao');
+            });
+    </script>
+}

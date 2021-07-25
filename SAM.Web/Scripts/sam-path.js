@@ -1,0 +1,3 @@
+﻿sam.path = {
+    webroot : ''
+}

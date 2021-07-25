@@ -1,0 +1,36 @@
+﻿@model SAM.Web.Models.RelPerfilNivel
+
+@{ViewBag.Title = "Editar Relacionamento Perfil por Nível ";}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IdNivel, "Selecione o Nível", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.IdNivel, (SelectList)ViewBag.Niveis, "-- Selecione --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IdNivel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IdPerfil, "Selecione o Perfil", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.IdPerfil, (SelectList)ViewBag.Perfis, "-- Selecione --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IdPerfil, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Partial("_EditButtons")
+        </div>
+    </div>
+}

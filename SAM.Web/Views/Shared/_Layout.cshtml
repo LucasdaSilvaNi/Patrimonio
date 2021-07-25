@@ -1,0 +1,232 @@
+﻿@using SAM.Web.Models
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - SAM - Sistema de Administração de Materiais</title>
+
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/lib/css")
+    @Styles.Render("~/Scripts/css")
+    @Styles.Render("~/Scripts/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css")
+
+    @Scripts.Render("~/bundles")
+    @Scripts.Render("~/Layout_2/js")
+
+    @Scripts.Render("~/Layout_5/js")
+</head>
+<body>
+    <nav id="menu-vertical" class="amazonmenu">
+    </nav>
+    <div class="navbar navbar-inverse navbar-fixed-top cabecalho">
+        <div class="menu-botao"><i class="glyphicon glyphicon-th-list"></i><span>Menu</span></div>
+
+        <div class="logo-header">
+
+            @if (Request.IsAuthenticated)
+            {
+                <a href="~/Principal">
+                    @*<img id="logo" src="~/Content/images/logo.png" alt="Página Principal" />*@
+                    <img id="logo" src="~/Content/images/logo__periodo_eleitoral.png" alt="Página Principal" />
+                    @*<span>SISTEMA ADMINISTRAÇÃO MATERIAIS</span>*@
+                </a>
+            }
+            else
+            {
+                @*<img id="logo" src="~/Content/images/logo.png" alt="Página Principal" />*@
+                <img id="logo" src="~/Content/images/logo__periodo_eleitoral.png" alt="Página Principal" />
+                <span>SISTEMA ADMINISTRAÇÃO MATERIAIS</span>
+            }
+        </div>
+
+        @{ ViewBag.Valida = "1";}
+        @* Dados do Usuário *@
+        @if (Request.IsAuthenticated)
+        {
+            SAM.Web.Common.ComumLayout comumLayout = new SAM.Web.Common.ComumLayout();
+
+            User u = comumLayout.CurrentUser();
+
+            if (u == null || u.Status == false)
+            {
+                FormsAuthentication.SignOut();
+                ViewBag.Valida = "0";
+                <div style="position: absolute;right: 0;width: 140px;">
+                    <ul id="login">
+                        <li>@Html.ActionLink("Entrar", "Index", "Login", routeValues: null, htmlAttributes: new { @class = "btn-acao", id = "loginLink" })</li>
+                    </ul>
+                </div>
+            }
+            else
+            {
+                RelationshipUserProfile rup = comumLayout.CurrentRelationshipUsersProfile(u.Id);
+
+                var profileDescricao = "Sem Perfil Vinculado";
+                var institution = "";
+                var managerUnit = "";
+                var budgetUnit = "";
+                var administrativeUnit = "";
+                var sectionUnit = "";
+                var mesAnoReferencia = "";
+
+                var profile = comumLayout.CurrentProfile(rup.Id);
+
+                if (profile != null)
+                {
+                    profileDescricao = profile.Description;
+
+                    var CurrentProfile = comumLayout.CurrentProfileLogin(rup.Id);
+                    bool administradorGeral = profile.flagPerfilMaster ?? false;
+
+                    int institutionId = CurrentProfile.InstitutionId;
+                    int budgetUnitId = (CurrentProfile.BudgetUnitId.HasValue ? CurrentProfile.BudgetUnitId.Value : 0);
+                    int managerUnitId = (CurrentProfile.ManagerUnitId.HasValue ? CurrentProfile.ManagerUnitId.Value : 0);
+                    int administrativeUnitId = (CurrentProfile.AdministrativeUnitId.HasValue ? CurrentProfile.AdministrativeUnitId.Value : 0);
+                    int sectionId = (CurrentProfile.SectionId.HasValue ? CurrentProfile.SectionId.Value : 0);
+                    SAM.Web.Models.ManagerUnit UGE = managerUnitId != 0 ? comumLayout.GetManagerUnit(managerUnitId) : null;
+                    institution = comumLayout.GetInstitutionCabecalho(institutionId);
+                    budgetUnit = budgetUnitId != 0 ? comumLayout.GetBudgetUnit(budgetUnitId) : "";
+                    managerUnit = managerUnitId != 0 ? UGE.Code.ToString() + " - " + UGE.Description : "";
+                    administrativeUnit = administrativeUnitId != 0 ? comumLayout.GetAdministrativeUnit(administrativeUnitId) : "";
+                    sectionUnit = sectionId != 0 ? comumLayout.GetSectionCabecalho(sectionId) : "";
+                    mesAnoReferencia = managerUnitId != 0 ? UGE.ManagmentUnit_YearMonthReference : string.Empty;
+                    UGE = null;
+
+                    if (!string.IsNullOrEmpty(mesAnoReferencia))
+                    {
+                        mesAnoReferencia = mesAnoReferencia.Substring(4, 2) + "/" + mesAnoReferencia.Substring(0, 4);
+                    }
+
+                    @Html.Hidden("id2", profile.Id);
+                    @Html.Hidden("institutionIdCurrent", institutionId);
+                    @Html.Hidden("budgetUnitIdCurrent", budgetUnitId);
+                    @Html.Hidden("managerUnitIdCurrent", managerUnitId);
+                    @Html.Hidden("administrativeUnitIdCurrent", administrativeUnitId);
+                    @Html.Hidden("sectionUnitIdCurrent", sectionId);
+
+                    Session.Add("UsuarioLogado", rup.RelatedUser.CPF);
+                    if (administradorGeral)
+                    {
+                        Session.Add("administradorGeral", administradorGeral);
+                    }
+                    else
+                    {
+                        Session.Remove("administradorGeral");
+                    }
+
+                    <div class="container div-usuario-logado">
+                        <div>
+                            <div class="usuario-logado">
+                                <table>
+                                    <tr>
+                                        <td class="titulo">Usuário</td>
+                                        <td>@u.Name</td>
+                                        <td class="titulo">Perfil</td>
+                                        <td>@profileDescricao</td>
+                                        <td class="titulo">Órgão</td>
+                                        <td>@institution</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="titulo">UO</td>
+                                        <td>@budgetUnit</td>
+                                        <td class="titulo">UGE</td>
+                                        <td>@managerUnit</td>
+                                        <td class="titulo">Mês Ref.</td>
+                                        <td id="mesAnoFechamentoShared">@mesAnoReferencia</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="titulo">UA</td>
+                                        <td>@administrativeUnit</td>
+                                        <td class="titulo">Divisão</td>
+                                        <td>@sectionUnit</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="usuario-deslogar">
+                        @using (Html.BeginForm("LogOff", "Login", FormMethod.Post, new { id = "logoutForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <ul id="login">
+                                <li>
+                                    @Html.ActionLink("Trocar Senha", "/ChangePassword/" + u.Id, "Users")
+                                </li>
+                                <li><a href="javascript:document.getElementById('logoutForm').submit()">Sair</a></li>
+                            </ul>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div style="position: absolute;right: 0;width: 140px;">
+                        <ul id="login">
+                            <li>@Html.ActionLink("Entrar", "Index", "Login", routeValues: null, htmlAttributes: new { @class = "btn-acao", id = "loginLink" })</li>
+                        </ul>
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <div style="position: absolute;right: 0;width: 140px;">
+                <ul id="login">
+                    <li>@Html.ActionLink("Entrar", "Index", "Login", routeValues: null, htmlAttributes: new { @class = "btn-acao", id = "loginLink" })</li>
+                </ul>
+            </div>
+        }
+    </div>
+    <div class="body-content">
+        @RenderBody()
+    </div>
+    <br /><br />
+    <div class="rodape">
+        <p>@DateTime.Now.Year - Prodesp - Processamento de Dados do Estado de São Paulo - @ViewContext.Controller.GetType().Assembly.GetName().Version</p>
+        <span style="float: right; margin-right: 30px; margin-top: -30px"> Sistema operante no navegador Google Chrome </span>
+    </div>
+    <div class="modal-loading" id="modal-loading" style="display:none;">
+        <div>
+            <div>
+                <img src="~/Content/images/preloader03.gif" class="modal-img" />
+                <span>Carregando...</span>
+            </div>
+        </div>
+    </div>
+
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Layout_3/js")
+    @Scripts.Render("~/Layout_4/js")
+
+    @RenderSection("scripts", required: false)
+
+    @{
+        <script>
+            if(@ViewBag.Valida == "1")
+            {
+                var isTrue = '@Request.IsAuthenticated';
+
+                if (isTrue == 'True') {
+                    sam.utils.getWebRoot(@Url.Content(Url.Action("Index", "Home")));
+                    var name = '@HttpContext.Current.User.Identity.Name';
+
+                    sam.menu.getMenu($("#id2").val());
+                    $("#id2").remove();
+                    amazonmenu.exibeMenu(true);
+                }
+                else {
+                    amazonmenu.exibeMenu(false);
+                }
+            }
+            else
+            {
+                sam.utils.getWebRoot(@Url.Content(Url.Action("Index", "Home")));
+                amazonmenu.exibeMenu(false);
+            }
+        </script>
+    }
+
+</body>
+
+</html>

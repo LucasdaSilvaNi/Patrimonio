@@ -1,0 +1,14 @@
+﻿@model SAM.Web.ViewModels.PrintBarCodeViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Scripts.Render("~/PrintBarCode/ReportPrintBarCode/js")
+
+<h3 style="margin-top:40px" class="cor-azul">Relatório Código de Barra / QrCode</h3>
+@Html.Partial("~/Views/PrintBarCode/_filterReportPrintBarCode.cshtml", Model)
+
+<script>
+    reportPrintBarCode.Load();
+</script>

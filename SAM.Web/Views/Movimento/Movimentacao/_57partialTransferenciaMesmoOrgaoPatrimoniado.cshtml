@@ -1,0 +1,59 @@
+﻿@model SAM.Web.ViewModels.MovimentoViewModel
+
+<div class="jumbotron">
+    <div class="form-group">
+        <label for="lblAvisoTipoBaixa" class="control-label col-md-1"></label>
+        <div class="col-md-7">
+            <label for="lblAvisoTipoBaixa" style="color:green">Baixa do(s) BP(s) após "Aceite"</label>
+        </div>
+    </div>
+    <br /> 
+    <div class="form-group" style="margin-top: -20px; color: #4f85db; font-size: 20px;">
+        <label class="control-label col-md-1">Destino: </label>
+    </div>
+    <div class="form-group">
+        <label for="Institutions" class="control-label col-md-1">Orgão</label>
+        <div class="col-md-7">
+            @Html.DropDownListFor(model => model.InstituationIdDestino, (SelectList)ViewBag.InstitutionsDestino, new { @class = "form-control comboinstitution2" })
+            <span id="spanInstitution" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="BudgetUnits" class="control-label col-md-1">UO</label>
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.BudgetUnitIdDestino, (SelectList)ViewBag.BudgetUnitsDestino, new { @class = "form-control comboBudgetUnit2" })
+            <span id="spanBudgetUnits" class="text-danger field-validation-error"></span>
+        </div>
+        <div id="omite_div_por_uo">
+            <label for="ManagerUnits" class="control-label col-md-1">UGE</label>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ManagerUnitIdDestino, (SelectList)ViewBag.ManagerUnitsDestino, new { @class = "form-control comboManagerUnit2" })
+                @Html.ValidationMessageFor(model => model.ManagerUnitIdDestino, "", new { id = "spanMovimentoDate", @class = "text-danger" })
+                <span id="spanManagerUnits" class="text-danger field-validation-error"></span>
+            </div>
+            <div class="col-md-0">
+                <a class="info" data-toggle="tooltip" data-original-title="Transferência(s) de BP(s) para mesma UGE serão realizadas via Movimentação Interna">
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="NumberProcess" class="control-label col-md-1">Nº Processo</label>
+        <div class="col-md-3">
+            @Html.TextBoxFor(model => model.NumberProcess, new { @class = "form-control", @maxlength = "25" })
+            <span id="spanNumberProcess" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        sam.commun.CancelaPostPartialView();
+        movimento.EventoAlteraOrgaoDestino();
+        movimento.BloqueioInicialTransferenciaMesmoOrgao();
+        sam.asset.loadModalView();
+    });
+
+    sam.transferencia.bind();
+</script>

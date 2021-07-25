@@ -1,0 +1,44 @@
+﻿@{ViewBag.Title = "Responsáveis Cadastrados";}
+
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formResponsible" }))
+{
+    @Html.Partial("_GridNewButtons")
+
+    <table id="tableResponsibles" class="table">
+                <thead>
+                    <tr>
+                        <th class="text-info text-datatable-label-size" data-sortable="false">Código Orgão</th>
+                        <th class="text-info text-datatable-label-size" data-sortable="false">Código UO</th>
+                        <th class="text-info text-datatable-label-size" data-sortable="false">Código UGE</th>
+                        <th class="text-info text-datatable-label-size" data-sortable="false">Código UA</th>
+                        <th class="text-info text-datatable-label-size" data-sortable="false">Descrição UA</th>
+                        <th class="text-info text-datatable-label-size" data-sortable="false">Nome</th>
+                        <th class="text-info text-datatable-label-size" data-sortable="false">Cargo</th>
+                        <th class="text-info text-datatable-label-size border-table-tr actionButton col-sm-1" data-sortable="false">Ações</th>
+                    </tr>
+                </thead>
+            </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJs");}
+    <script src="~/Scripts/datatables/sam-responsible-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+        $(document).ready(function () {
+            var responsibleDataTable = new ResponsibleDataTable();
+            responsibleDataTable.Load("#formResponsible");
+        });
+    </script>
+}

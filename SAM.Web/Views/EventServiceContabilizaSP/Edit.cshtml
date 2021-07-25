@@ -1,0 +1,274 @@
+﻿@model SAM.Web.ViewModels.EventServiceContabilizaSPViewModel
+@using Sam.Integracao.SIAF.Mensagem.Enum
+
+@{ViewBag.Title = "Edita Tipo de Movimentação ContabilizaSP";}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.CodigoTipoMovimento_SamPatrimonio)
+        @Html.HiddenFor(model => model.AccountEntryTypeId)
+        @Html.HiddenFor(model => model.InputOutputReclassificationDepreciationTypeCode)
+
+        @*Tipo Agrupamento (ContabilizaSP) *@
+        <div class="form-group">
+            @Html.LabelFor(model => model.AccountEntryType, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.AccountEntryTypeId, (SelectList)ViewBag.AccountEntryTypes, " -- Selecione -- ", new { @class = "form-control", @disabled = "disabled" })
+            </div>
+        </div>
+
+        @*Tipo Entrada/ Saída / Reclassificação / Depreciação (ContabilizaSP) *@
+        <div class="form-group">
+            @Html.LabelFor(model => model.InputOutputReclassificationDepreciationType, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.InputOutputReclassificationDepreciationTypeCode, (SelectList)ViewBag.InputOutputReclassificationDepreciationTypeCodes, " -- Selecione -- ", new { @class = "form-control", @disabled = "disabled" })
+            </div>
+        </div>
+
+        @*Tipo Movimentação (SAM) *@
+        <div class="form-group">
+            @Html.LabelFor(model => model.DescricaoTipoMovimento_SamPatrimonio, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.CodigoTipoMovimento_SamPatrimonio, (SelectList)ViewBag.TiposMovimentos_SamPatrimonio, " -- Selecione -- ", new { @class = "form-control", @disabled = "disabled" })
+            </div>
+        </div>
+
+        @*Tipo Movimentação (ContabilizaSP) *@
+        <div class="form-group">
+            @Html.LabelFor(model => model.DescricaoTipoMovimentacao_ContabilizaSP, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.CodigoTipoMovimento_ContabilizaSP, (SelectList)ViewBag.TiposMovimentos_Contabiliza, " -- Selecione -- ", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CodigoTipoMovimento_ContabilizaSP, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (Model.CodigoTipoMovimento_ContabilizaSP != 0 && Model.CodigoTipoMovimento_ContabilizaSP == MetaDataTypeServiceContabilizaSPType.TextualInformation.Value)
+        {
+            <div class="form-group" id="divTipoMovimentacaoContabiliza">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.DescricaoTipoMovimentacao_ContabilizaSP, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DescricaoTipoMovimentacao_ContabilizaSP, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group" id="divTipoMovimentacaoContabiliza" style="display: none;">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.DescricaoTipoMovimentacao_ContabilizaSP, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DescricaoTipoMovimentacao_ContabilizaSP, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        @*Estoque Origem (MetaDado)*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.MetaDataType_StockSourceDescription, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.CodigoEstoque_Origem, (SelectList)ViewBag.EstoqueOrigens, " -- Selecione -- ", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CodigoEstoque_Origem, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (Model.CodigoEstoque_Origem != 0 && Model.CodigoEstoque_Origem == MetaDataTypeServiceContabilizaSPType.TextualInformation.Value)
+        {
+            <div class="form-group" id="divEstoqueOrigem">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.MetaDataType_StockSourceDescription, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MetaDataType_StockSourceDescription, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group" id="divEstoqueOrigem" style="display: none;">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.MetaDataType_StockSourceDescription, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MetaDataType_StockSourceDescription, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        @*Estoque Destino (MetaDado)*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.MetaDataType_StockDestinationDescription, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.CodigoEstoque_Destino, (SelectList)ViewBag.EstoqueOrigens, " -- Selecione -- ", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CodigoEstoque_Destino, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (Model.CodigoEstoque_Destino != 0 && Model.CodigoEstoque_Destino == MetaDataTypeServiceContabilizaSPType.TextualInformation.Value)
+        {
+            <div class="form-group" id="divEstoqueDestino">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.MetaDataType_StockDestinationDescription, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MetaDataType_StockDestinationDescription, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group" id="divEstoqueDestino" style="display: none;">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.MetaDataType_StockDestinationDescription, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MetaDataType_StockDestinationDescription, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        @*Data Movimentação (MetaDado)*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.MetaDataType_DateFieldDescription, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.MetaDataType_DateField, (SelectList)ViewBag.DatasMovimentacao, " -- Selecione -- ", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MetaDataType_DateField, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*Valor Movimentação (MetaDado)*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.MetaDataType_AccountingValueFieldDescription, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.MetaDataType_AccountingValueField, (SelectList)ViewBag.ValoresMovimentacao, " -- Selecione -- ", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MetaDataType_AccountingValueField, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*Controle Específico*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.SpecificControl, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.CodigoCE, (SelectList)ViewBag.ControleEspecifico, " -- Selecione -- ", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CodigoCE, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (Model.CodigoCE != 0 && Model.CodigoCE == MetaDataTypeServiceContabilizaSPType.TextualInformation.Value)
+        {
+            <div class="form-group" id="divCE">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.SpecificControl, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SpecificControl, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group" id="divCE" style="display: none;">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.SpecificControl, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SpecificControl, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        @*Controle Específico de entrada*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.SpecificInputControl, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.CodigoCE_Entrada, (SelectList)ViewBag.CEEntrada, " -- Selecione -- ", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CodigoCE_Entrada, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (Model.CodigoCE_Entrada != 0 && Model.CodigoCE_Entrada == MetaDataTypeServiceContabilizaSPType.TextualInformation.Value)
+        {
+            <div class="form-group" id="divCEEntrada">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.SpecificInputControl, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SpecificInputControl, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group" id="divCEEntrada" style="display: none;">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.SpecificInputControl, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SpecificInputControl, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        @*Controle Específico de saída*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.SpecificOutputControl, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.CodigoCE_Saida, (SelectList)ViewBag.CESaida, " -- Selecione -- ", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CodigoCE_Saida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (Model.CodigoCE_Saida != 0 && Model.CodigoCE_Saida == MetaDataTypeServiceContabilizaSPType.TextualInformation.Value)
+        {
+            <div class="form-group" id="divCESaida">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.SpecificOutputControl, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SpecificOutputControl, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group" id="divCESaida" style="display: none;">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.SpecificOutputControl, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SpecificOutputControl, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        @*Ordem Execução/Envio (SIAFEM)*@
+        <div class="form-group" id="divOrdemExecucao">
+            @Html.LabelFor(model => model.ExecutionOrder, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.ExecutionOrder, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.ExecutionOrder, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*Data Ativação Integração*@
+        <div class="form-group" id="divDataAtivacao">
+            @Html.LabelFor(model => model.DataAtivacaoTipoMovimentacao, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.DataAtivacaoTipoMovimentacao, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.DataAtivacaoTipoMovimentacao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Partial("_SaveButtons")
+        </div>
+    </div>
+}
+
+@section Scripts{
+<script src="~/Scripts/sam-tipoMovimentacaoIntegracao.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        sam.tipoMovimentacaoIntegracao.create();
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    });
+</script>
+}

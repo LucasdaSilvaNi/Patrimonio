@@ -1,0 +1,81 @@
+﻿@*@model PagedList.StaticPagedList<SAM.Web.ViewModels.SectionsViewModel>
+    @using PagedList.Mvc;*@
+
+@{ViewBag.Title = "Divisões Cadastradas";}
+
+<div class="col-sm-12" style="margin-top: 25px">
+    <div class="col-sm-4">
+        <h3 class="text-primary">@ViewBag.Title</h3>
+        <hr style="margin-top: 0px" />
+    </div>
+</div>
+
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formSections" }))
+{
+    @Html.Hidden("searchString")
+    <button type="submit" id="filtroOculto" style="display: none"> </button>
+
+    <div class="col-sm-12" style="margin-bottom: 30px;">
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" id="search-tables" name="search-tables" value="@ViewBag.CurrentFilter" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnterDataTable(this, event)" />
+                <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                @Html.DropDownList("cbStatus", (SelectList)ViewBag.Status, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-sm-1">
+            <div class="pull-right">
+                <a class="btnNovo btn btn-info" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" href="@Url.Action("Create")">
+                    <i class="glyphicon glyphicon-plus fa-lg novoclass"></i> Novo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table" id="tableSections">
+        <thead>
+            <tr>
+                <th class="text-info" data-sortable="false">Código Orgão</th>
+                <th class="text-info" data-sortable="false">Código UO</th>
+                <th class="text-info" data-sortable="false">Código UGE</th>
+                <th class="text-info" data-sortable="false">Código UA</th>
+                <th class="text-info" data-sortable="false">Descrição UA</th>
+                <th class="text-info" data-sortable="false">Código</th>
+                <th class="text-info" data-sortable="false">Descrição</th>
+                @*<th class="text-info" data-sortable="false">Responsável</th>*@
+                <th class="text-info" data-sortable="false">Qtd de BPs</th>
+                <th class="text-info border-table-tr actionButton col-xs-1" data-sortable="false">Ações</th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-sections-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+            sam.sections.EventoTrocaStatusRetorno();
+            sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+
+            $(document).ready(function () {
+                let sectionsDataTable = new SectionsDataTable();
+                sectionsDataTable.Load('#formSections');
+            });
+
+    </script>
+}

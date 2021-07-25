@@ -1,0 +1,26 @@
+﻿@model SAM.Web.ViewModels.RelationshipModuleProfileViewModel
+
+@{ViewBag.Title = "Exclusão Módulo - Perfil";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.NomeModulo)</dt>
+        <dd>@Html.DisplayFor(model => Model.NomeModulo)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.DescricaoPerfil)</dt>
+        <dd>@Html.DisplayFor(model => model.DescricaoPerfil)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Status)</dt>
+        <dd>@Html.DisplayFor(model => model.Status)</dd>
+
+        <br />
+        <dt></dt>
+        <dd>
+            @Html.Partial("_DeleteButtons")
+        </dd>
+    </dl>
+</div>

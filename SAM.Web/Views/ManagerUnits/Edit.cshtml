@@ -1,0 +1,117 @@
+﻿@model SAM.Web.ViewModels.ManagerUnitViewModel
+
+@{ViewBag.Title = "Editar Unidade Gestora";}
+
+<h2>@ViewBag.Title - @Model.Description</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formManagerUnit", @class = "formSubmit" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.AlteracaoIntegracaoSiafem)
+    @Html.HiddenFor(x => x.OrgaoSelecionado, new { id = "InstitutionIdSelecionado" })
+    @Html.HiddenFor(x => x.UOSelecionado, new { id = "BudgetUnitIdSelecionado" })
+    @Html.HiddenFor(x => x.CodigoSelecionado, new { id = "CodeSelecionado" })
+    @Html.HiddenFor(x => x.DescricaoInicial, new { id = "DescriptionSelecionado" })
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InstitutionId, "Orgão", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitution" })
+                @Html.ValidationMessageFor(model => model.InstitutionId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BudgetUnitId, "UO", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit" })
+                @Html.ValidationMessageFor(model => model.BudgetUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @maxlength = "10" } })
+                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                @Html.ValidationMessage("CodigoJaExiste", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @maxlength = "120" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.FlagIntegracaoSiafem, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.CheckBoxFor(model => model.FlagIntegracaoSiafem, new { @class = "icheckbox_square-blue flag-integracao" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.FlagTratarComoOrgao, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.CheckBoxFor(model => model.FlagTratarComoOrgao, new { @class = "icheckbox_square-blue" })
+                <a class="info" data-toggle="tooltip" data-original-title="Ao selecionar essa opção, as movimentações DOAÇÃO INTRA-NO-ESTADO e TRANSFERÊNCIA OUTRO ORGÃO - PATRIMÔNIADO para esta UGE terão aceite automático">
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </a>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ManagmentUnit_YearMonthStart, "Mês/Ano Referência inicial", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.ManagmentUnit_YearMonthStart, new { htmlAttributes = new { @class = "form-control", @maxlength = "6" } })
+                @Html.ValidationMessageFor(model => model.ManagmentUnit_YearMonthStart, "*Formato (aaaamm)", new { @class = "text-info" })
+                @Html.ValidationMessage("DataInicialInvalida", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ManagmentUnit_YearMonthReference, "Mês/Ano Referência", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-1">
+                @Html.EditorFor(model => model.ManagmentUnit_YearMonthReference, new { htmlAttributes = new { @class = "form-control", @maxlength = "6" } })
+                @Html.ValidationMessageFor(model => model.ManagmentUnit_YearMonthReference, "*Formato (aaaamm)", new { @class = "text-info" })
+                @Html.ValidationMessage("DataInvalida", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Partial("_SaveButtons")
+        </div>
+    </div>
+    @section Scripts {
+        <script>
+            $(window).ready(function () {
+                $('.flag-integracao').on('ifChecked', function (event) {
+                    $('#AlteracaoIntegracaoSiafem').val(true);
+                });
+                $('.flag-integracao').on('ifUnchecked', function (event) {
+                    $('#AlteracaoIntegracaoSiafem').val(false);
+                });
+            })
+            $('#formManagerUnit').submit(function (event) {
+
+                let institutionId = $("#InstitutionId").val();
+                let budgetUnitId = $("#BudgetUnitId").val();
+                let code = $("#Code").val();
+                let description = $("#Description").val();
+
+                if (institutionId != $('#InstitutionIdSelecionado').val())
+                    $('#AlteracaoIntegracaoSiafem').val(false);
+                if (budgetUnitId != $('#BudgetUnitIdSelecionado').val())
+                    $('#AlteracaoIntegracaoSiafem').val(false);
+                if (code != $('#CodeSelecionado').val())
+                    $('#AlteracaoIntegracaoSiafem').val(false);
+                if (description != $('#DescriptionSelecionado').val())
+                    $('#AlteracaoIntegracaoSiafem').val(false);
+            })
+        </script>
+    }
+
+}

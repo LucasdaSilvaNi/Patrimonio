@@ -1,0 +1,15 @@
+﻿@model string
+@{
+    Layout = null;
+}
+
+@if (string.IsNullOrEmpty(Model) || string.IsNullOrWhiteSpace(Model))
+{
+    <p>Ocorreu um imprevisto. Por favor, feche a janela e recarregue a página novamente</p>
+}
+else
+{
+    <video controls="" disablePictureInPicture controlsList="nodownload" autoplay="" name="media" id="video" width="560" height="315">
+        <source src="@Model" type="video/mp4">
+    </video>
+}

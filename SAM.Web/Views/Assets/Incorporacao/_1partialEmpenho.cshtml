@@ -1,0 +1,67 @@
+﻿@model SAM.Web.ViewModels.AssetViewModel
+
+<div class="form-group">
+    @Html.LabelFor(model => model.NumberDoc, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-2">
+        @Html.EditorFor(model => model.NumberDoc, new { htmlAttributes = new { @class = "form-control documento", @maxlength = 14 } })        
+    </div>
+    <div class="col-md-4">
+        @Html.ValidationMessageFor(model => model.NumberDoc, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @*Empenho*@
+    @Html.LabelFor(model => model.numeroEmpenho, "Pesquisar Empenho", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-2">
+        @Html.EditorFor(model => model.numeroEmpenho, new { htmlAttributes = new { @class = "form-control numeroEmpenho", @maxlength = "20" } })
+        @Html.ValidationMessageFor(model => model.MaterialItemCode, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-md-1">
+        <button type="button" id="btnConsultarEmpenho" data-toggle="tooltip" data-placement="top" data-original-title="Click para consulta o Empenho!" class="btn btn-default">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+    </div>
+    <div class="col-md-1">
+        @Html.EditorFor(model => model.Ug, new { htmlAttributes = new { @class = "form-control Ug", @Value = ViewBag.Ug, @readonly = "readonly", @type = "hidden" } })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.numeroEmpenho, "Empenho", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-2">
+    @Html.EditorFor(Model => Model.EmpenhoResultado, new { htmlAttributes = new { @class = "form-control Empenho", @readonly = "readonly" } })
+    </div>
+    @*Fornecedor*@
+    @Html.LabelFor(model => model.SupplierId, "Fornecedor", htmlAttributes: new { @class = "control-label col-md-1" })
+    <div class="col-md-5">
+        @Html.EditorFor(model => model.SupplierId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+        @Html.EditorFor(model => model.SupplierName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.MaterialItemCode, "Item Material", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-2">
+        @Html.EditorFor(model => Model.MaterialItemCode, new { htmlAttributes = new { @class = "form-control materialItemCode", @readonly = "readonly" } })
+    </div>
+    <div class="col-md-6">
+        @Html.EditorFor(model => Model.MaterialItemDescription, new { htmlAttributes = new { @class = "form-control materialItemDescription", @readonly = "readonly" } })
+    </div>
+</div>
+
+<div class="form-group">
+    @*Descrição Resumida de Item*@
+    @Html.LabelFor(model => model.ShortDescriptionItemId, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-8">
+        @Html.EditorFor(model => model.ShortDescription, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        sam.materialItem.Load();
+        sam.asset.BuscarEmpenho();
+    });
+</script>

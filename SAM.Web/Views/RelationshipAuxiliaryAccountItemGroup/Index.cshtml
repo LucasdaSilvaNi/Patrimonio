@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Tabela Grupo Materiais - Conta Contábeis";
+}
+
+@{Html.RenderPartial("_DataTableReferenciaCss");
+    bool temPermissao = ViewBag.TemPermissao;}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formRelacaoGrupomaterialContaContabil" }))
+{
+    @Html.Partial("_GridNewButtons")
+    @Html.Hidden("temPermissao", temPermissao ? "1" : "")
+
+    <table class="table" id="tableRelacaoGrupomaterialContaContabil">
+        <thead>
+            <tr>
+                <th class="text-info" data-sortable="false">Código do Grupo Material</th>
+                <th class="text-info" data-sortable="false">Descrição do Grupo Material</th>
+                <th class="text-info" data-sortable="false">Conta Contábil</th>
+                <th class="text-info" data-sortable="false">Descrição da Conta Contábil</th>
+                <th class="text-info" data-sortable="false">Ações</th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-relacaoGrupomaterialContaContabil-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+        $(document).ready(function () {
+            let relacaoGrupomaterialContaContabil = new RelacaoGrupomaterialContaContabil();
+            relacaoGrupomaterialContaContabil.Load('#formRelacaoGrupomaterialContaContabil');
+        });
+    </script>
+}
+

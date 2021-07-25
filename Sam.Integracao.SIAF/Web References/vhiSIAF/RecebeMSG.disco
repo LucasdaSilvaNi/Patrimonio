@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="https://www6.fazenda.sp.gov.br/siafisico/RecebeMSG.asmx?wsdl" docRef="https://www6.fazenda.sp.gov.br/siafisico/RecebeMSG.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="https://www6.fazenda.sp.gov.br/siafisico/RecebeMSG.asmx" xmlns:q1="https://www.bec.sp.gov.br/SIAFISICO/RecebeMSG/" binding="q1:RecebeMSGSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="https://www6.fazenda.sp.gov.br/siafisico/RecebeMSG.asmx" xmlns:q2="https://www.bec.sp.gov.br/SIAFISICO/RecebeMSG/" binding="q2:RecebeMSGSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

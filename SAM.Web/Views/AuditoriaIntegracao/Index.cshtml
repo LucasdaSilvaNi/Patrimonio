@@ -1,0 +1,75 @@
+﻿@{ViewBag.Title = "Registros Auditoria Integração";}
+
+@{Html.RenderPartial("_DataTableReferenciaCss");
+    bool temPermissao = ViewBag.TemPermissao;}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formAuditoriaIntegracao" }))
+{
+    @Html.Partial("_GridNewButtons")
+    @Html.Hidden("temPermissao", temPermissao? "1":"")
+    
+    <table id="tableAuditoriaIntegracao"  class="table">
+        <thead>
+            <tr>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Id</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Data Envio</th>
+                @*<th class="text-info text-datatable-label-size" data-sortable="false">MsgEstimuloWS</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">MsgRetornoWS</th>*@
+                <th class="text-info text-datatable-label-size" data-sortable="false">Nome Sistema</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Usuario SAM</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Usuario SIAFEM</th>
+                @*<th class="text-info text-datatable-label-size" data-sortable="false">ManagerUnitId</th>*@
+                <th class="text-info text-datatable-label-size" data-sortable="false">TokenAuditoriaIntegracao</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Data Retorno</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">DocumentoId (Chave SIAFMONITORA)</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Tipo Movimento</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Data Movimento</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Uge Origem</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Gestão</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Tipo Entrada / Saída / Reclassificação / Depreciação</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Cpf / Cnpj / Uge Favorecida</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">GestaoFavorecida</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Item</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Tipo Estoque</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Estoque</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Estoque Destino</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Estoque Origem</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Tipo Movimentação</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Valor Total</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">CE</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">CE Entrada</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">CE Saída</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Fonte Recurso</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">NL Estorno</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Empenho</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Observação</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Nota Fiscal</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Item Material</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Nota Lançamento</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Msg Erro</th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-auditoriaIntegracao-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+
+        $(document).ready(function () {
+            let auditoriaIntegracaoDataTable = new AuditoriaIntegracaoDataTable();
+            auditoriaIntegracaoDataTable.Load('#formAuditoriaIntegracao');
+        });
+    </script>
+}

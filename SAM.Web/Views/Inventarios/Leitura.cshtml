@@ -1,0 +1,239 @@
+﻿@model SAM.Web.ViewModels.OperacoesComColetorViewModel
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+@{ViewBag.Title = "Operações Com Coletor de Dados";}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" />
+<h3 style="margin-top:40px;margin-bottom: 20px;" class="cor-azul">Operações Com Coletor de Dados (Importação Arquivos Coletor)</h3>
+<hr />
+@*@using (Html.BeginForm("ObtemRelacaoUAs_ArquivoRetornoColetor", "OperacoesComColetor", FormMethod.Post, new { id = "formLeitura", enctype = "multipart/form-data" }))*@
+@using (Html.BeginForm("ObtemRelacaoUAs_ArquivoRetornoColetor", "OperacoesComColetor", FormMethod.Post, new { id = "formLeitura", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" value="@ViewBag.caminhoDoArquivo" id="arquivoUa" name="arquivoUa"/>
+    <div class="form-group cor-azul">
+        <div class="col-md-12">
+            <div class="col-sm-1">
+                <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+            </div>
+            <div class="col-md-11">
+                <h4>Tipo de Dispositivo Inventariante</h4>
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.Label("Tipo de Dispositivo", new { @class = "control-label col-md-1" })
+            <div class="col-md-4">
+                <select id="TipoDispositivoInventarianteID" name="TiposDispositivoInventariante" class="form-control" , disabled="disabled">
+                    <option value="2">COMPEX CPX-8000</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="form-group cor-azul">
+        <div class="col-md-12">
+            <div class="col-sm-1">
+                <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+            </div>
+            <div class="col-md-11">
+                <h4>Tipo Operação</h4>
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="ListaTiposOperacaoDispositivoInventario" class="control-label col-md-1"> Tipo de Operação</label>
+            <div class="col-md-4">
+                <select id="TipoDispositivoInventarianteID" name="TiposDispositivoInventariante" class="form-control" , disabled="disabled">
+                    <option value="1">Leitura Arquivos</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="form-group" id="grpElementosLeituraUasArquivo">
+        <fieldset>
+            <legend id="legenda_LeituraUAsArquivoRetornoColetor">Leitura de listagem de UAs em arquivo de inventário gerado por coletor COMPEX CPX8000 (InventPat v1.20)</legend>
+            <div class="form-group">
+                @Html.LabelFor(model => model.PostFile, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    <input type="file" size="45" name="fileInput" id="fileInput">
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="form-group" style="margin-left:1%">
+        <button type="button" id="buttonLeitura" data-toggle="tooltip" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info" value="Index">
+            <i class="glyphicon glyphicon-log-in" aria-hidden="true"></i> Leitura
+        </button>
+    </div>
+    <hr />
+}
+@*Formulario para processamento de arquivo*@
+@using (Html.BeginForm(null, "OperacoesComColetor", FormMethod.Post, new { id = "formLeitura", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group" id="grpElementosLeituraArquivoRetornoColetor" style="display:none">
+        <fieldset>
+            <legend id="legenda_LeituraArquivoRetornoColetor">Leitura de arquivo de Inventário gerado por coletor COMPEX CPX8000 (InventPat v1.20)</legend>
+            <div class="form-group">
+    
+                @Html.Label("Selecione a UA's", new { @class = "control-label col-md-1" })
+                <div class="btn-group" style="width:400px !important">
+                    <select id="cboUas" multiple="multiple" style="display: none;width:400px !important"></select>
+                </div>
+            </div>
+            <div class="form-group" style="margin-left:1%">
+                <button type="button" id="buttonLeituraUaSelecionada" data-toggle="tooltip" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info" value="Index">
+                    <i class="glyphicon glyphicon-log-in" aria-hidden="true"></i> Leitura UA
+                </button>
+            </div>
+        </fieldset>
+    </div>
+    <hr />
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js" asp-append-version="true"></script>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#buttonLeitura').click(function () {
+                submitAjax();
+            });
+            $('#buttonLeituraUA').click(function () {
+                submitAjax();
+            });
+            $('#buttonLeituraUaSelecionada').click(function () {
+                enviaUas();
+            });
+        });
+
+        var submitAjax = function () {
+            // parar o envio para que possamos faze-lo manualmente.
+            event.preventDefault();
+            // crie um FormData {Object}
+            var formData = new FormData(); //FormData object
+            var fileInput = document.getElementById('fileInput');
+            //Iterating through each files selected in fileInput
+            for (i = 0; i < fileInput.files.length; i++) {
+                //Appending each file to FormData object
+                formData.append(fileInput.files[i].name, fileInput.files[i]);
+            }
+            // desabilitar o botão de "submit" para evitar multiplos envios até receber uma resposta
+            $("#buttonLeitura").prop("disabled", true);
+            // processar
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: '@Url.Action("ObtemRelacaoUAs_ArquivoRetornoColetor", "OperacoesComColetor")',
+                data: formData,
+                processData: false, // impedir que o jQuery tranforma a "data" em querystring
+                contentType: false, // desabilitar o cabeçalho "Content-Type"
+                cache: false, // desabilitar o "cache"
+                timeout: 600000, // definir um tempo limite (opcional)
+                // manipular o sucesso da requisição
+                success: function (data) {
+                    console.log(data);
+                    sessionStorage.clear();
+
+                    if (data.Sucesso == false) {
+                        alert(data.Mensagem);
+                        $("#buttonLeitura").prop("disabled", false);
+                    }
+                    else if (data.Sucesso == true) {
+                        $('#buttonLeitura').css('display', 'none');
+                        $('#grpElementosLeituraUasArquivo').css('display', 'none');
+
+                        $('#buttonLeituraUaSelecionada').css('display', 'block');
+                        $('#grpElementosLeituraArquivoRetornoColetor').css('display', 'block');
+
+                        $.each(data.Uas, function (key, item) {
+
+                            $('#cboUas').append($('<option>').text(item.Description).attr('value', item.Code));
+                        });
+                        $('#cboUas').multiselect({
+                            //includeSelectAllOption: true,
+                            nonSelectedText: 'Selecione a(s) UA(s) para inventariação...',
+                            allSelectedText: 'UAs selecionadas: ',
+                            //selectAllName: '',
+                            //nSelectedText: "Selecionada",
+                            onChange: function (option, checked) {
+
+                                var selectedOptions = $('#cboUas option:selected');
+                                console.log(checked);
+                                console.log(option);
+                                if (checked)
+                                    sessionStorage.setItem(option.context.value, option.context.value);
+                                else
+                                    sessionStorage.removeItem(option.context.value);
+                            }
+                        });
+                        // reativar o botão de "submit"
+                        $("#buttonLeitura").prop("disabled", false);
+                        $("#arquivoUa").val(data.nomeArquivoUa);
+
+                        if (data.Mensagem != null || data.Mensagem != '')
+                            alert("Informe!\n\n" + data.Mensagem);
+                    }
+                },
+                // manipular erros da requisição
+                error: function (e) {
+                    alert("Erro ao executar função 'ObtemRelacaoUAs_ArquivoRetornoColetor()'");
+                    // reativar o botão de "submit"
+                    $("#buttonLeitura").prop("disabled", false);
+                }
+            });
+        };
+        retornarUas = function () {
+            $.post('/Patrimonio/OperacoesComColetor/RetornarListaUas', {}, function (data) {
+                //console.log(data);
+                $.each(data, function (key, item) {
+                    $('#cboUas').append($('<option>').text(item.Description).attr('value', item.Code));
+                });
+                $('#cboUas').multiselect({
+                    onChange: function (option, checked) {
+
+                        var selectedOptions = $('#cboUas option:selected');
+                        console.log(checked);
+                        console.log(option);
+                        if (checked)
+                            sessionStorage.setItem(option.context.value, option.context.value);
+                        else
+                            sessionStorage.removeItem(option.context.value);
+                    }
+                });
+            })
+        }
+        let selecionarUaAquivo = function () {
+            let builder = [];
+            builder.push('[');
+            for (var i = 0; i < sessionStorage.length; i++) {
+                builder.push('{');
+                let administrativeUnitCode = parseInt(sessionStorage.getItem(sessionStorage.key(i)));
+                builder.push('"CodigoUa": ' + administrativeUnitCode.toString());
+                if (i == sessionStorage.length - 1)
+                    builder.push('}');
+                else
+                    builder.push('},');
+            };
+            builder.push(']');
+            return builder;
+        }
+        let enviaUas = function () {
+            var relacaoCodigosUAs = selecionarUaAquivo().join('');
+            console.log(relacaoCodigosUAs)
+            $.post('/Patrimonio/OperacoesComColetor/ProcessamentoMultiplasUAs_ArquivoImportadoColetor', { listagemUAsSelecionados: relacaoCodigosUAs, caminhoCompleto_ArquivoRetornoColetor: $('#arquivoUa').val() },
+                function (data) {
+                    if (data.Chave == "Erro") {
+                        $('#buttonLeitura').css('display', 'block');
+                        $('#grpElementosLeituraUasArquivo').css('display', 'block');
+                    }
+
+                    sessionStorage.clear();
+                    alert("Status: " + data.Chave + "\n" + "Processamento: " + data.Conteudo);
+                    location.reload();
+                });
+        }
+    </script>
+}

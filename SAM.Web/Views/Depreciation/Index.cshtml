@@ -1,0 +1,264 @@
+﻿@model SAM.Web.ViewModels.ManagerUnitDepreciationModel
+@using System.Globalization;
+@{
+    ViewBag.Title = "Detalhes da depreciação";
+}
+
+<div class="form-horizontal" style="margin-top: 25px">
+    <div class="col-xl-12 col-lg-12 col-sm-12 col-md-12">
+        @Html.HiddenFor(x=> x.ManagerUnitId)
+
+        <h5 class="text-center text-info">Depreciação(Caso não sejam preenchidos as opções de Chapa, Item de Material e Conta Contábil, serão depreciados todos os bens de materiais da UGE)</h5>
+        <br />
+        <div class="form-group">
+
+            @Html.LabelFor(m => m.NumberIdentification, new { @class = "col-xl-1 col-lg-1 col-sm-2 col-md-2 control-label padding-left-depreciation" })
+            <div class="col-xl-2 col-lg-2 col-sm-4 col-md-3">
+                @Html.TextBoxFor(m => m.NumberIdentification, new { @class = "form-control " })
+                @Html.ValidationMessageFor(m => m.NumberIdentification, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(m => m.MaterialItemCode, new { @class = "col-xl-1 col-lg-1 col-sm-2 col-md-2 control-label padding-left-depreciation" })
+            <div class="col-xl-2 col-lg-2 col-sm-4 col-md-3">
+                @Html.TextBoxFor(m => m.MaterialItemCode, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.MaterialItemCode, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(m => m.BookAccount, new { @class = "col-xl-2 col-lg-2 col-sm-2 col-md-2 control-label padding-left-depreciation-book" })
+            <div class="col-xl-2 col-lg-2 col-sm-4 col-md-3">
+                @Html.TextBoxFor(m => m.BookAccount, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.BookAccount, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-xl-2 col-lg-2 col-sm-4 col-md-3">
+                @if (Model.UGEemAbrilDeDoisMilEVinte)
+                {
+                    <buton type="button" class="btn btn-primary btn-lg button-confirmar"><i class="glyphicon glyphicon-ok"></i>Depreciar</buton>
+                }
+                else
+                {
+                    <a class="info" data-toggle="tooltip" data-original-title="Para realizar a depreciação, é necessário que a UGE esteja com mês de referência em abril/2020">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </a>
+                }
+            </div>
+            
+
+        </div>
+        <hr />
+    </div>
+    <h5 class="text-center text-warning">Resultado da(s) depreciação(ões)</h5>
+    <div class="col-xl-12 col-lg-12 col-sm-12 col-md-12 depreciacao-container">
+
+       
+    </div>
+</div>
+<div class="modal-loading" id="divProcessing" style="display:none;">
+    <div style="width:50% !important; height:50% !important">
+        <div style="width:50% !important; height:20% !important">
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <br />
+            <br />
+            <label class="label-info" style="font-size:16px !important">Executando a depreciação, por favor espere o término!...</label>
+        </div>
+    </div>
+
+</div>
+<div class="modal fade modalDepreciacao" id="modalDepreciacao" tabindex="-1" role="dialog" aria-labelledby="Modal de depreciação">
+
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+
+            $('.button-confirmar').click(function () {
+                Depreciar();
+            });
+            //alterarDataAquisicao();
+
+           
+
+
+
+            //$('#modalMensagemDepreciacao').hide();
+            //$('#modalDepreciacaoErro').hide();
+            //$('.depreciacao-cancelar').click(function () {
+            //    history.back();
+            //});
+            //console.log($('#depreciacaoErro').val());
+
+            //if ($('#depreciacaoErro').val() === undefined || $('#depreciacaoErro').val() === null || $('#depreciacaoErro').val() === '0' || $('#depreciacaoErro').val() === 0) {
+            //    $('#modalMensagemDepreciacao').modal('show');
+            //} else {
+            //    $('#modalDepreciacaoErro').modal('show');
+            //    $('.button-confirmar').attr('disabled', true);
+            //}
+            //$('.button-confirmar').click(function () {
+            //    var _url = sam.path.webroot + "/Closings/Depreciar";
+            //    $.post(_url, { assetId: $('#assetId').val() }, function (data) {
+
+
+            //        $('#modalDepreciacao').empty();
+            //        let builder = [];
+
+            //        builder.push('<div class="modal-dialog" role="document">');
+            //        builder.push(' <div class="modal-content">');
+            //        builder.push('    <div class="modal-header">');
+            //        builder.push('        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+            //        builder.push('        <h3 class="modal-title text-center text-warning">Depreciação Bem Patrimonial</h3>');
+            //        builder.push('    </div>');
+            //        builder.push('    <div class="modal-body">');
+            //        builder.push('    <h4 class="modal-title text-center">' + data.Mensagem + '</h4>')
+            //        builder.push('    </div>');
+            //        builder.push('    <div class="modal-footer">');
+            //        builder.push('        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
+            //        builder.push('    </div>');
+            //        builder.push('</div>');
+            //        builder.push('</div>');
+
+            //        $('#modalDepreciacao').append(builder.join(""));
+            //        $('#modalDepreciacao').modal('show');
+            //        $('.table').empty();
+            //    });
+
+            //})
+            
+        });
+
+        var Depreciar = function () {
+            $("#divProcessing").hide();
+            var _url = sam.path.webroot + "/Depreciation/Depreciar";
+            var model = {
+                ManagerUnitId: $('#ManagerUnitId').val(),
+                MaterialItemCode: $('#MaterialItemCode').val(),
+                BookAccount: $('#BookAccount').val(),
+                NumberIdentification: $('#NumberIdentification').val(),
+            }
+            $("#divProcessing").show();
+            $.post(_url, { model: model }, function (result) {
+                //console.info('depreciação', result.data);
+                if (result.erro != undefined) {
+                    alert(result.erro);
+                    $("#divProcessing").hide();
+                } else {
+                    $('.depreciacao-container').empty();
+
+                    result.data.forEach(function (depreciacao, index) {
+                        let build = [];
+                        console.log(depreciacao);
+                        build.push('<div class="card" style = "width: 100% !important;">');
+                        build.push('    <ul class="list-group list-group-flush" style="padding-bottom:1px !important;padding-top:1px !important;">');
+                        if (depreciacao.Erro === false || depreciacao.Erro === 'false') {
+                            build.push('        <li class="list-group-item" style="margin-top:2px !important; margin-bottom:2px !important; padding-top:10px !important; padding-bottom:10px !important">');
+                            build.push('             <label class="text-sucess"> Quantidade de bem patrimoniais depreciados :' + depreciacao.quantidadeDepreciada + '</label>   <label class="text-sucess" style="margin-left:50px !important;">' + depreciacao.Mensagem + '</label>    <span style="float:right">Status: <i class="text-success glyphicon glyphicon-ok" style="font-weight:bold"></i> </span>');
+                            build.push('        </li>');
+                        } else {
+                            build.push('        <li class="list-group-item" style="background-color:#f72f2f; margin-top:2px !important; margin-bottom:2px !important; padding-top:10px !important; padding-bottom:10px !important">');
+                            build.push('              Chapa:' + depreciacao.NumberIdentification + '  Item Material:' + depreciacao.MaterialItemCode + '<label class="text-white" style="margin-left:50px !important;">' + depreciacao.Mensagem + '</label>  <button id="btnEditar' + depreciacao.AssetId + '" type="button" data-id="' + depreciacao.AssetId + '" data-tipo="' + depreciacao.Tipo + '" data-aquisicao="' + depreciacao.AcquisitionDate + '" data-incorporacao="' + depreciacao.MovimentDate + '" class="btn btn-warning  btn-sm btn-data-aquisicao" style="float:right; padding:5px !important"><i class="text-danger glyphicon glyphicon-edit" style="font-weight:bold; margin-bottom:5px !important; padding-right:5px !important" data-toggle="tooltip" data-placement="top" title="Click para editar a data de aquuisição.">Editar</i> </button>');
+                            build.push('        </li>');
+                        }
+                        build.push('    </ul>');
+                        build.push('  </div>');
+
+                        $('.depreciacao-container').append(build.join(""));
+                    });
+                    $("#divProcessing").hide();
+                    $('#divProcessing').addClass("processing-ivinsivel");
+                    alterarDataAquisicao();
+                }
+            });
+        }
+        var alterarDataAquisicao = function () {
+            $('.btn-data-aquisicao').click(function () {
+                console.log(this);
+                let id = $(this).data('id');
+                let tipo = $(this).data('tipo');
+                let dataAquisicao = $(this).data('aquisicao');
+                let dataIncorporacao = $(this).data('incorporacao');
+
+                
+                console.log();
+                $('#modalDepreciacao').empty();
+                let builder = [];
+
+                builder.push('<div class="modal-dialog" role="document">');
+                builder.push(' <div class="modal-content">');
+                builder.push('    <div class="modal-header">');
+                builder.push('        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+                if (tipo === 'ambas') {
+                    builder.push('        <h3 class="modal-title text-center text-warning">Digite a data de aquisição e incorporação válidas.</h3>');
+                } else if (tipo === 'aquisicao') {
+                    builder.push('        <h3 class="modal-title text-center text-warning">Digite a data de aquisição válida.</h3>');
+
+                } else if (tipo === 'incorporacao') {
+                    builder.push('        <h3 class="modal-title text-center text-warning">Digite a data de incorporação válida.</h3>');
+
+                }
+                builder.push('    </div>');
+                builder.push('    <div class="modal-body">');
+                if (tipo === 'ambas') {
+                    builder.push('      <label class = "modal-title">Data Aquisição inválida:' + dataAquisicao + '</label>');
+                    builder.push('      <input type="date" class="form-control datepicker data-aquisicao-alterar", onkeydown="return false", autocomplete="off">')
+                    builder.push('      <label class = "modal-title">Data Incorporação inválida:' + dataIncorporacao + '</label>');
+                    builder.push('      <input type="date" class="form-control datepicker data-incorporacao-alterar", onkeydown="return false", autocomplete="off">')
+                } else if (tipo === 'aquisicao') {
+                    builder.push('      <label class = "modal-title">Data Aquisição inválida:' + dataAquisicao + '</label>');
+                    builder.push('      <input type="date" class="form-control datepicker data-aquisicao-alterar", onkeydown="return false", autocomplete="off">')
+                } else if (tipo === 'incorporacao') {
+                    builder.push('      <label class = "modal-title">Data Incorporação inválida:' + dataIncorporacao + '</label>');
+                    builder.push('      <input type="date" class="form-control datepicker data-incorporacao-alterar", onkeydown="return false", autocomplete="off">')
+                }
+                builder.push('    </div>');
+                builder.push('    <div class="modal-footer">');
+                builder.push('        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
+                builder.push('        <button type="button" class="btn btn-primary btn-confirmar-aquisicao" data-dismiss="modal" data-id="' + id + '">Confirmar</button>');
+                builder.push('    </div>');
+                builder.push('</div>');
+                builder.push('</div>');
+
+                $('#modalDepreciacao').append(builder.join(""));
+                $('#modalDepreciacao').modal('show');
+
+                $('.btn-confirmar-aquisicao').click(function () {
+                    let id = $(this).data('id');
+                    let _url = sam.path.webroot + "/Closings/ConfirmarDataAquisicao";
+                    let dataAquisicao = $('.data-aquisicao-alterar').val();
+                    let dataIncorporacao = $('.data-incorporacao-alterar').val();
+
+                    if (dataAquisicao === '' || dataAquisicao === undefined)
+                        dataAquisicao = null;
+                    if (dataIncorporacao ==='' || dataAquisicao === undefined)
+                        dataIncorporacao = null;
+
+                    $.post(_url, { assetId: id, dataAquisicao: dataAquisicao, dataIncorporacao: dataIncorporacao }, function (result) {
+                        $('#modalDepreciacao').empty();
+                        let builder = [];
+
+                        builder.push('<div class="modal-dialog" role="document">');
+                        builder.push(' <div class="modal-content">');
+                        builder.push('    <div class="modal-header">');
+                        builder.push('        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+                        builder.push('        <h3 class="modal-title text-center text-warning">Depreciação Bem Patrimonial</h3>');
+                        builder.push('    </div>');
+                        builder.push('    <div class="modal-body">');
+                        builder.push('    <h4 class="modal-title text-center">' + result.Mensagem + '</h4>')
+                        builder.push('    </div>');
+                        builder.push('    <div class="modal-footer">');
+                        builder.push('        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
+                        builder.push('    </div>');
+                        builder.push('</div>');
+                        builder.push('</div>');
+
+                        $('#modalDepreciacao').append(builder.join(""));
+                        $('#modalDepreciacao').modal('show');
+
+                        Depreciar();
+                    })
+                })
+            });
+
+
+        }
+    </script>
+}
+

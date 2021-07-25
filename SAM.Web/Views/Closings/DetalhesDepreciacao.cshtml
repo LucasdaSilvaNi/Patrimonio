@@ -1,0 +1,280 @@
+﻿@model PatrimonioBusiness.fechamento.interfaces.ISimulacaoResultado
+@using System.Globalization;
+@{
+   ViewBag.Title = "Detalhes da depreciação";
+}
+
+<div class="form-horizontal" style="height:120% !important">
+    <input type="hidden" id="depreciacaoErro" value="@Model.DepreciacoesErros.Count" />
+    <input type="hidden" id="assetId" value="@ViewBag.assetId" />
+
+    <div class="row col-xl-12 col-lg-12 col-sm-12 col-md-12">
+        @if (Model.DepreciacoesErros != null && Model.DepreciacoesErros.Count > 0)
+        {
+
+            <br />
+            <br />
+
+            <table class="table table-responsive" id="tableDepreciacaoErro" style="max-height:00px !important">
+                <thead>
+                    <tr>
+                        <th class="text-info" data-sortable="true">Id inicial</th>
+                        <th class="text-info" data-sortable="true">Número do erro</th>
+                        <th class="text-info" data-sortable="true">Mensagem do erro</th>
+                        <th class="text-info" data-sortable="true">Código do material</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var erro in Model.DepreciacoesErros)
+                    {
+                        <tr>
+                            <td class="text-info" data-sortable="true">@erro.AssetStartId.ToString()</td>
+                            <td class="text-info" data-sortable="true">@erro.ErrorNumber.ToString()</td>
+                            <td class="text-info" data-sortable="true">@erro.ErrorMessage</td>
+                            <td class="text-info" data-sortable="true">@erro.MaterialItemCode.ToString()</td>
+                            <td class="text-info" data-sortable="false">
+                                @if (erro.ErrorNumber > 0)
+                                {
+                                    <button id="btnDataAquisicao" class="btn btn-warning btn-data-aquisicao" data-id="@erro.AssetId">
+                                        <i class="text-danger glyphicon glyphicon-edit" style="font-weight:bold; margin-bottom:5px !important; padding-right:5px !important" data-toggle="tooltip" data-placement="top" title="Click para editar a data de aquuisição.">Editar</i>
+                                    </button>
+                                }
+                               
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        }
+        else if (Model.Depreciacoes != null && Model.Depreciacoes.Count > 0)
+        {
+            <br />
+            <br />
+            <div class="col-xl-12 col-lg-12 col-sm-12 col-md-12">
+                <table class="table table-responsive table-depreciacao table" id="tableDepreciacao">
+                    <thead class="thead">
+                        <tr>
+                            <th class="text-info" data-sortable="true">Id inicial</th>
+                            <th class="text-info" data-sortable="true">Código do Material</th>
+                            <th class="text-info" data-sortable="true">Data de Aquisição</th>
+                            <th class="text-info" data-sortable="true">Data de Incorporação</th>
+                            <th class="text-info" data-sortable="true">Data do Fechamento</th>
+                            <th class="text-info" data-sortable="true">Vida Útil</th>
+                            <th class="text-info" data-sortable="true">Mês Atual</th>
+                            <th class="text-info" data-sortable="true">Valor de Aquisição</th>
+                            <th class="text-info" data-sortable="true">Depreciação Mensal</th>
+                            <th class="text-info" data-sortable="true">Depreciação Acumulada</th>
+                            <th class="text-info" data-sortable="true">Decreto</th>
+
+                        </tr>
+                    </thead>
+                    <tbody class="tbody">
+                        @{
+                            CultureInfo culture = CultureInfo.CreateSpecificCulture("pt-BR");
+                        }
+
+                        @foreach (var depreciacao in Model.Depreciacoes)
+                        {
+                            <tr class="tr">
+                                <td class="text-info" data-sortable="true">@depreciacao.AssetStartId.ToString()</td>
+                                <td class="text-info" data-sortable="true">@depreciacao.MaterialItemCode.ToString()</td>
+                                <td class="text-info" data-sortable="true">@depreciacao.AcquisitionDate.ToString("dd/MM/yyyy")</td>
+                                <td class="text-info" data-sortable="true">@depreciacao.DateIncorporation.ToString("dd/MM/yyyy")</td>
+                                <td class="text-info" data-sortable="true">@depreciacao.CurrentDate.ToString("dd/MM/yyyy")</td>
+                                <td class="text-info" data-sortable="true">@depreciacao.LifeCycle.ToString()</td>
+                                <td class="text-info" data-sortable="true">@depreciacao.CurrentMonth.ToString()</td>
+                                <td class="text-info" data-sortable="true">@depreciacao.ValueAcquisition.ToString("c", culture)</td>
+                                <td class="text-info" data-sortable="true">@depreciacao.RateDepreciationMonthly.ToString("c", culture)</td>
+                                <td class="text-info" data-sortable="true">@depreciacao.AccumulatedDepreciation.ToString("c", culture)</td>
+                                <td class="text-info" data-sortable="true">@(depreciacao.Decree == true ? "Sim" : "Não") </td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+            <div class="col-xl-12 col-lg-12 col-sm-12 col-md-12">
+                <div class="col-xl-4 col-lg-4 col-sm-6 col-md-12">
+
+                </div>
+                <div class="col-xl-2 col-lg-2 col-sm-12 col-md-12">
+                    <buton class="btn btn-default btn-lg depreciacao-cancelar"><i class="glyphicon glyphicon-share-alt"></i>Cancelar</buton>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-sm-12 col-md-12">
+                    <buton class="btn btn-primary btn-lg button-confirmar"><i class="glyphicon glyphicon-ok"></i>Confirmar</buton>
+                </div>
+
+                <div class="col-xl-4 col-lg-4 col-sm-6 col-md-12">
+
+                </div>
+            </div>
+            <br />
+            <br />
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+        }
+    </div>
+
+</div>
+
+<div class="modal fade modalMensagemDepreciacao" id="modalMensagemDepreciacao" tabindex="-1" role="dialog" aria-labelledby="Modal de depreciação">
+    <div class="modal-dialog" role="document" style="width: 50%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"> Mensagem </h4>
+            </div>
+            <div class="modal-body">
+                <h4>Segue para ciência de BPS que sofreram alteração na depreciação conforme regras SEFAZ. Favor clicar no botão Confirmar.</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade modalDepreciacaoErro" id="modalDepreciacaoErro" tabindex="-1" role="dialog" aria-labelledby="Modal de depreciação">
+    <div class="modal-dialog" role="document" style="width: 50%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"> Mensagem </h4>
+            </div>
+            <div class="modal-body">
+                <h4>Por favor verificar o erro ocorrido na depreciação e entre em contato com o suporte sam através da abertura de chamado comunicando o erro, de preferência envia um print do erro.</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal fade modalDepreciacao" id="modalDepreciacao" tabindex="-1" role="dialog" aria-labelledby="Modal de depreciação">
+
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#modalMensagemDepreciacao').hide();
+            $('#modalDepreciacaoErro').hide();
+            $('.depreciacao-cancelar').click(function () {
+                history.back();
+            });
+
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+            console.log($('#depreciacaoErro').val());
+
+            if ($('#depreciacaoErro').val() === undefined || $('#depreciacaoErro').val() === null || $('#depreciacaoErro').val() === '0' || $('#depreciacaoErro').val() === 0) {
+                $('#modalMensagemDepreciacao').modal('show');
+            } else {
+                $('#modalDepreciacaoErro').modal('show');
+                $('.button-confirmar').attr('disabled', true);
+            }
+            $('.button-confirmar').click(function () {
+                var _url = sam.path.webroot + "/Closings/Depreciar";
+                $.post(_url, { assetId: $('#assetId').val() }, function (data) {
+
+
+                    $('#modalDepreciacao').empty();
+                    let builder = [];
+
+                    builder.push('<div class="modal-dialog" role="document">');
+                    builder.push(' <div class="modal-content">');
+                    builder.push('    <div class="modal-header">');
+                    builder.push('        <button type="button" class="close fechar-modal-depreciacao" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+                    builder.push('        <h3 class="modal-title text-center text-warning">Depreciação Bem Patrimonial</h3>');
+                    builder.push('    </div>');
+                    builder.push('    <div class="modal-body">');
+                    builder.push('    <h4 class="modal-title text-center">' + data.Mensagem + '</h4>')
+                    builder.push('    </div>');
+                    builder.push('    <div class="modal-footer">');
+                    builder.push('        <button type="button" class="btn btn-default fechar-modal-depreciacao" data-dismiss="modal">Fechar</button>');
+                    builder.push('    </div>');
+                    builder.push('</div>');
+                    builder.push('</div>');
+
+                    $('#modalDepreciacao').append(builder.join(""));
+                    $('#modalDepreciacao').modal('show');
+                    $('.table').empty();
+                    $('.fechar-modal-depreciacao').click(function () {
+                        history.back();
+                    });
+                   
+                });
+
+            })
+            alterarDataAquisicao();
+            
+        });
+
+        var alterarDataAquisicao = function () {
+            $('.btn-data-aquisicao').click(function () {
+                console.log(this);
+                let id = $(this).data('id');
+
+                $('#modalDepreciacao').empty();
+                let builder = [];
+
+                builder.push('<div class="modal-dialog" role="document">');
+                builder.push(' <div class="modal-content">');
+                builder.push('    <div class="modal-header">');
+                builder.push('        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+                builder.push('        <h3 class="modal-title text-center text-warning">Digite a data de aquisição válida.</h3>');
+                builder.push('    </div>');
+                builder.push('    <div class="modal-body">');
+                builder.push('      <input type="date" class="form-control datepicker data-aquisicao-alterar", onkeydown="return false", autocomplete="off">')
+                builder.push('    </div>');
+                builder.push('    <div class="modal-footer">');
+                builder.push('        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
+                builder.push('        <button type="button" class="btn btn-primary btn-confirmar-aquisicao" data-dismiss="modal" data-id="' + id + '">Confirmar</button>');
+                builder.push('    </div>');
+                builder.push('</div>');
+                builder.push('</div>');
+
+                $('#modalDepreciacao').append(builder.join(""));
+                $('#modalDepreciacao').modal('show');
+
+                $('.btn-confirmar-aquisicao').click(function () {
+                    let id = $(this).data('id');
+                    let _url = sam.path.webroot + "/Closings/ConfirmarDataAquisicao";
+                    let dataAquisicao = $('.data-aquisicao-alterar').val();
+
+                    $.post(_url, { assetId:id, dataAquisicao: dataAquisicao }, function (result) {
+                        $('#modalDepreciacao').empty();
+                        let builder = [];
+
+                        builder.push('<div class="modal-dialog" role="document">');
+                        builder.push(' <div class="modal-content">');
+                        builder.push('    <div class="modal-header">');
+                        builder.push('        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+                        builder.push('        <h3 class="modal-title text-center text-warning">Depreciação Bem Patrimonial</h3>');
+                        builder.push('    </div>');
+                        builder.push('    <div class="modal-body">');
+                        builder.push('    <h4 class="modal-title text-center">' + result.Mensagem + '</h4>')
+                        builder.push('    </div>');
+                        builder.push('    <div class="modal-footer">');
+                        builder.push('        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>');
+                        builder.push('    </div>');
+                        builder.push('</div>');
+                        builder.push('</div>');
+
+                        $('#modalDepreciacao').append(builder.join(""));
+                        $('#modalDepreciacao').modal('show');
+
+                        location.reload();
+                    })
+                })
+            });
+
+           
+        }
+    </script>
+}

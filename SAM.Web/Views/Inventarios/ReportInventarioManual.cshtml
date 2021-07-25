@@ -1,0 +1,101 @@
+﻿@model SAM.Web.ViewModels.InventarioViewModel
+@{ViewBag.Title = "Inventário Manual";}
+
+<h3 class="text-primary">@ViewBag.Title</h3>
+@Styles.Render("~/Layout_5/css")
+
+@*@using (Html.BeginForm("ReportInventarioManual", "Inventarios", FormMethod.Post, new { id = "formBemPatrimonial" }))*@
+@*using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formBemPatrimonial" }))*@
+@using (Html.BeginForm("ReportInventarioManual", "Inventarios", FormMethod.Post, new { id = "formBemPatrimonial" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+
+            @Html.LabelFor(model => model.InstitutionId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitution" })
+                @Html.ValidationMessageFor(model => model.InstitutionId, "", new { @class = "text-danger" })
+            </div>
+
+            @*UO*@
+            @Html.LabelFor(model => model.BudgetUnitId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit" })
+                @Html.ValidationMessageFor(model => model.BudgetUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            @*UGE*@
+            @Html.LabelFor(model => model.ManagerUnitId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit" })
+                @Html.ValidationMessageFor(model => model.ManagerUnitId, "", new { @class = "text-danger" })
+            </div>
+            @*UA*@
+            @Html.LabelFor(model => model.AdministrativeUnitId, "Unidade Administrativa", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.AdministrativeUnitId, (SelectList)ViewBag.AdministrativeUnits, new { @class = "form-control selectpicker comboAdministrativeUnit" })
+                @Html.ValidationMessageFor(model => model.AdministrativeUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            @*Divisão*@
+            @Html.LabelFor(model => model.SectionId, "Divisão", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.SectionId, (SelectList)ViewBag.Sections, new { @class = "form-control selectpicker comboSection" })
+            </div>
+            @*Responsável*@
+            @Html.LabelFor(model => model.idResponsable, "Responsavel", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.idResponsable, (SelectList)ViewBag.User, "Selecione o Responsavel", new { @class = "form-control comboResponsible" })
+                @Html.ValidationMessageFor(model => model.idResponsable, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*<div class="form-group">
+            <div class="col-md-10 text-right">
+                <button type="button" id="btnGerarRelatorio" class="btn btn-info"  title="Gravação Inventario Manual"><i class="glyphicon glyphicon-save-file"></i> Gravação Inventario Manual</button>
+            </div>
+        </div>*@
+        <div class="form-group">
+            <div class="col-md-10 text-right">
+                <button type="submit" id="btnGerarPdf" class="btn btn-info" title="Gerar PDF de Inventário Manual"><i class="glyphicon glyphicon-print"></i> Gerar PDF de Inventário Manual</button>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            var submitAjax = function (form, url) {
+
+                let dados = $(form).serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: dados,
+                    success: function (data) {
+                       
+                        alert(data.Conteudo);
+                    },
+                    error: function (objeto) {
+                      
+                        alert('Ocorreu um erro, verifique coma Administrador(rede ou sistema)');
+                    }
+
+                });
+
+            };
+        });
+    </script>
+}
+        

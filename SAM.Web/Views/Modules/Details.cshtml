@@ -1,0 +1,45 @@
+﻿@model SAM.Web.ViewModels.ModuloTelaViewModel
+
+@{ViewBag.Title = "Detalhes do Módulo ";}
+
+<h2>@ViewBag.Title @Model.Nome</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.NomeMenu)</dt>
+        <dd>@Html.DisplayFor(model => Model.NomeMenu)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.NomeModuloSuperior)</dt>
+        <dd>@Html.DisplayFor(model => model.NomeModuloSuperior)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Nome)</dt>
+        <dd>@Html.DisplayFor(model => model.Nome)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Descricao)</dt>
+        <dd>@Html.DisplayFor(model => model.Descricao)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Caminho)</dt>
+        <dd>@Html.DisplayFor(model => model.Caminho)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Sequencia)</dt>
+        <dd>@Html.DisplayFor(model => model.Sequencia)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Status)</dt>
+        <dd>@Html.DisplayFor(model => model.Status)</dd>
+
+        <br />
+        <dt></dt>
+        <dd>
+            <div class="form-group">
+                @Html.Partial("_EditButtons")
+            </div>
+        </dd>
+    </dl>
+</div>
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

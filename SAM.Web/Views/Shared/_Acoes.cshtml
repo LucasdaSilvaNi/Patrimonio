@@ -1,0 +1,17 @@
+﻿<div class="form-group" style="margin-left: -1%;">
+        <a class="btnEditar" href="@Url.Action("Edit", new { id = @Model.Id })" title="Editar">
+            <i class="glyphicon glyphicon-pencil editarclass"></i>
+            <span class="sr-only">Editar</span>
+        </a>
+    &nbsp;
+        <a class="btnDetalhe" href="@Url.Action("Details", new { id = @Model.Id })" title="Detalhes">
+            <i class="glyphicon glyphicon-search detalheclass"></i>
+            <span class="sr-only">Detalhes</span>
+        </a>
+    &nbsp;
+        <a class="btnExcluir" href="@Url.Action("Delete", new { id = @Model.Id })" title="Excluir">
+            <i class="glyphicon glyphicon-remove deleteclass"></i>
+            <span class="sr-only">Excluir</span>
+        </a>
+    &nbsp;
+</div>

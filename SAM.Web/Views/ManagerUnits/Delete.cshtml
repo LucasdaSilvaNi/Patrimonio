@@ -1,0 +1,30 @@
+﻿@model SAM.Web.Models.ManagerUnit
+
+@{ViewBag.Title = "Exclusão da Unidade Gestora";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.BudgetUnitId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedBudgetUnit.Description)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Code)</dt>
+        <dd>@Html.DisplayFor(model => model.Code)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd>@Html.DisplayFor(model => model.Description)</dd>
+
+        <dt>@Html.DisplayName("Mês/Ano Referência")</dt>
+        <dd>@Html.DisplayFor(model => model.ManagmentUnit_YearMonthReference)</dd>
+
+        <dt></dt>
+        <dd>
+            @Html.Partial("_DeleteButtons")
+        </dd>
+    </dl>
+
+</div>

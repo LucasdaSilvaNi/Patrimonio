@@ -1,0 +1,24 @@
+﻿@model SAM.Web.Models.Configuration
+
+@{ViewBag.Title = "Exclusão da Configuração";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+<div>
+    <h4>Configuracao</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>@Html.DisplayNameFor(model => model.InitialYearMonthAsset)</dt>
+        <dd>@Html.DisplayFor(model => model.InitialYearMonthAsset)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.ReferenceYearMonthAsset)</dt>
+        <dd>@Html.DisplayFor(model => model.ReferenceYearMonthAsset)</dd>
+
+        <dt></dt>
+        <dd>
+            @Html.Partial("_DeleteButtons")
+        </dd>
+    </dl>
+</div>

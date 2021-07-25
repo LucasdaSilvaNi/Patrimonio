@@ -1,0 +1,57 @@
+﻿@model  IEnumerable<SAM.Web.ViewModels.ReclassificaoEscolherContaViewModel>
+
+Os seguintes BPs sofrerão uma "Reclassificação de Conta Contábil" na data de @Model.FirstOrDefault().DataMovimentacao.ToShortDateString()
+
+<table class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr class="text-center">
+            <td>Sigla</td>
+            <td>Chapa</td>
+            <td>Valor de aquisição</td>
+            <td>Depreciação Acumulada</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var valores in Model)
+        {
+            <tr>
+                <td class="text-center">@Html.DisplayFor(val => valores.Sigla)</td>
+                <td>@Html.DisplayFor(val => valores.Chapa)</td>
+                <td>@Html.DisplayFor(val => valores.ValorDeAquisicao)</td>
+                <td>@Html.DisplayFor(val => valores.DepreciacaoAcmumulada)</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="2"><strong>Total:</strong></td>
+            <td>@Model.FirstOrDefault().totalValorAquisicao</td>
+            <td>@Model.FirstOrDefault().totalDepreciacaoAcumulada</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="form-group text-center">
+    <strong>Anote bem esses valores, para poder ser feita a reclassificação no SIAFEM
+    <br />
+    (Para valores contábeis mais atulizados, recomendamos que a reclassificação seja feita a partir de 11/2020)
+    </strong>
+</div>
+
+@if (Model.FirstOrDefault().GrupoPossuiMaisDeUmaConta)
+{
+    <div class="form-group text-center">
+        Qual será a nova conta contábil desses BPs?
+        @Html.DropDownList("IdContaContabil", (SelectList)ViewBag.AuxiliaryAccounts, " -- Selecione -- ", new { @class = "form-control", @id = "IdContaContabil" })
+        <br />
+        <button type="button" class="btn btn-primary" id="reclassificarComEscolha" data-dismiss="modal">Reclassificar</button>
+    </div>
+}
+else
+{
+    @Html.Hidden("IdContaContabil", Model.FirstOrDefault().IdContaContabil);
+    <div class="form-group text-center">
+        A nova conta contábil dos BPs será
+        @Html.Label(Model.FirstOrDefault().DescricaoContaContabil)
+        <br />
+        <button type="button" class="btn btn-primary" id="reclassificarEmDefinitivo" data-dismiss="modal">Reclassificar</button>
+    </div>
+}

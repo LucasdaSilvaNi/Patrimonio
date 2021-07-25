@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="https://www.bec.sp.gov.br/SIAFISICO/RecebeMSG/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="https://www.bec.sp.gov.br/SIAFISICO/RecebeMSG/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">PRODESP - Cia de Processamento de Dados do Estado de São Paulo  &lt;br&gt;--------------------------------------&lt;br&gt;Recebe mensagens para integração com base de dados MF&lt;br&gt;&lt;br&gt;&lt;br&gt;11/06/2013 V4.39  - MWAS- SFCOOC-VHI&lt;BR&gt;21/06/2013 V4.40b - MWAS- SIAFNCTRANSFUO, SIAFNCCTOBRAS - K2A&lt;BR&gt;25/07/2013 V4.46c - MWAS- SIAFEXEPD,  SIAFCANNEADTES, SIAFCANNEADVIN, SIAFCANNEADVNP, SIAFCANNETES(Migrado), SIAFNLPGOBRAS (Migrado),SIAFNLCONVENIO - Inclusão de LOG de ERRO.&lt;BR&gt;, Alteração Retorno. &lt;BR&gt;26/07/2013 V4.47b - MWAS- SIAFNLCTOBRAS.&lt;BR&gt;31/07/2013 V4.48  - MWAS- Inclusão localizador.&lt;BR&gt;25/10/2013 V4.49b - MWAS- SIAFGRDEPV001, SIAFCANGRDEPV001, SIAFOB001&lt;BR&gt;27/12/2013 V4.50c - MWAS- Migração: SIAFLOGIN001, SIAFGRDEPC001, SIAFPROCESSO001, SIAFND001, SIAFNE001, SIAFNL001, SIAFNR001, SIAFPD001, SIAFNLCONSUMO, SIAFCONORGAO, &lt;BR&gt;SIAFCONUA, SIAFCONUG, SIAFCONUGCGC, SIAFINCOBRAS, SIAFALTOBRAS, SIAFEXCOBRAS, SIAFREAOBRAS, SIAFCANDISDICO, SIAFCANDISCOTA, &lt;BR&gt;SIAFDISCOTA, SIAFDISDICOTA, SIAFDETACONTA, SIAFDETACONTAGEN, SIAFCGEDESPESSPROD, SIAFDETALHACC, SIAFRE, &lt;BR&gt;SIAFRT, SIAFLISTAEMPENHOS, SIAFCONSULTAEMPENHOS, SIAFINCCREDOR, SIAFNLCESPE, SIAFALTCREKDIN, SIAFEXCCREDOR, SIAFREACREDOR, &lt;BR&gt;SIAFCONCREDOR, SIAFLI001, SIAFNLOBRAS, SIAFAPLICACAO, SIAFAUTOSEF, SIAFRESGATE, SIAFLIBBEC, SIAFDISBEC, SIAFNE002, &lt;BR&gt;SIAFAUTORIZAOB, SIAFEXEPD2, SIAFLISTAND, SIAFLISTAPT, SIAFCONSULTANL, SIAFCONSULTANR, SIAFLISTACONTA, SIAFRENE001, &lt;BR&gt;SIAFINCDESCNE001, SIAFCANNEVINC, SIAFCANNR, SIAFROLCOTEMP, SIAFROLCOTLIQ, SIAFROLCOTRES, SIAFDETPTRES, SIAFALTLISTABOLETOS, SIAFLISTABOLETOS, &lt;BR&gt;SIAFALTPROCESS, SIAFCANPD, SIAFCONSULTAPD, SIAFANULSIAFI, SIAFEXCPROCESS, SIAFEXCLICOBAR, SIAFREAPROCESSO, SIAFCONPROCESSO, &lt;BR&gt;SIAFLISTAPROCESSO, SIAFCONLISTA, SIAFLISTAOB, SIAFLISTAGR, SIAFMONITORA, SIAFINCANEXO, SIAFCONSULTAOB, SIAFALTANEXO &lt;BR&gt;07/01/2014 V4.51b - MWAS- SIAFCANR001.&lt;BR&gt;16/01/2014 V4.52 - MWAS- Passou a diferenciar ano base 2013 e 2014.&lt;BR&gt;21/01/2014 V4.53 - MWAS - SIAFLI001 passou a funcionar com versao anterior, SIAFGRDEPC001 passou a usar: roboGuiaRecolhimentoC &lt;br&gt;28/01/2014 V4.54 - Prodesp - Inclusão da MSG SIAFNLUEP1 &lt;br&gt;18/02/2014 V4.55 - Prodesp - Inclusão das MSGs SIAFNLPGOBRAS(SIAFEM), SIAFNLOBRAS(SIAFEM),SFCOConsultaCT(SIAFISICO),SFCOConsultaOC(SIAFISICO) &lt;br&gt;11/03/2014 v4.56 - Prodesp - Alteração da MSG SIAFCANNEVINC para SIAFCANNEVIN &lt;br&gt;13/03/2014 v5.0  - Prodesp - Migração das MSGs SIAFEM/SIAFISICO &lt;br&gt;17/03/2014 v5.1  - Prodesp - Migração das MSGs NAVEGA &lt;br&gt;18/03/2014 v5.2  - Prodesp - Alteração Login NAVEGA &lt;br&gt;25/04/2014 v5.3  - Prodesp - Inclusão das MSGs SIAFRolCotDis, SIAFRolCotDbDa, SFCOCanCTTes, SFCOCanCTVinc e SFCOIncContRE &lt;br&gt;21/05/2014 v5.4  - Prodesp - Migração de msgs siafisico: SFCOSobeOC, SFCOConfbaixOC e SFCOBaixadasOcs &lt;br&gt;10/06/2014 v5.5  - Prodesp - Migração das MSGS SIAFISICO: SFCOCONNLPREGAOITEM,SFCONLPREGAEXECUTA,SFCOHOMOPREGAO,SFCOHOMOLOGA,SFCOCONITEMDETALHA,SFCOCONNLITEM &lt;br&gt;17/06/2014 v5.6  - Prodesp - Migração das MSGs SIAFISICO: SFCOLIQUIDANL,SFCONLPREGAO &lt;br&gt;15/07/2014 v5.7  - Prodesp - Migração das MSGs SIAFISICO: SFCONLESTLIQUIDA, SFCOLIQNLBEC / MSGs SIAFEM: SIAFConfonte, SIAFAltUA, SIAFIncUA &lt;br&gt;25/08/2014 v5.8  - Prodesp - Inclusão de MSGs SIAFEM: SIAFNLRETINSS &lt;br&gt;30/09/2014 v5.9  - Prodesp - Migração das MSGs SIAFISICO: SFCOEXCCONTNE, SFCOCONTNLBEC, SFCOCONTNLBECDET, SFCOCONTNLEST, SFCOCONTNLESTDET, SFCOCONTITEMDETALHA &lt;br&gt;30/09/2014 v5.91 - Prodesp - Migração das MSGs SIAFEM: SIAFALTCREDWEB &lt;br&gt;14/11/2014 v5.92 - Prodesp - Migração das MSGs SIAFEM: SIAFRAZAO, SIAFINCONTA, SIAFINCCONTA, SIAFINCEVENTO, SIAFCONSULTANS, SIAFLISTANS , SIAFCONSULTAGR / SIAFISICO: SFCOPDBEC001 &lt;br&gt;03/12/2014 v5.93 - Prodesp - Migração da MSG SIAFEM: SIAFCONSULTANC &lt;br&gt;03/12/2014 v5.93 - Prodesp - Migração da MSG SIAFEM: SIAFALTEVENTO / MSG SIAFISICO: SFCOCONTNLBEC &lt;br&gt;14/04/2014 v5.94 - Prodesp - Migração da MSG SIAFISICO: SFCODOCALTDESCOCRP, SFCONLESTORNO &lt;br&gt;14/04/2014 v5.95 - Prodesp - Migração da MSGs NAVEGA: SIAFNAVEGATROCSEN, SIAFATRPERCAD, SIAFCONSATRPERCAD, SIAFCONSHABUSUPER, SIAFCONSIALPAHUSU, SIAFCONSIALUSU, SIAFEXCUSUSIS, SIAFHABUSUPER, SIAFIALPAHUSU, SIAFIALUSU &lt;br&gt;09/06/2015 v5.96 - Prodesp - Migração das MSgs SIAFEM SIAFLI001 e SIAFNLEMLIQ &lt;br&gt;</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="https://www.bec.sp.gov.br/SIAFISICO/RecebeMSG/">
+      <s:element name="Mensagem">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Senha" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AnoBase" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UnidadeGestora" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DocumentoXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MensagemResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MensagemResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="MensagemSoapIn">
+    <wsdl:part name="parameters" element="tns:Mensagem" />
+  </wsdl:message>
+  <wsdl:message name="MensagemSoapOut">
+    <wsdl:part name="parameters" element="tns:MensagemResponse" />
+  </wsdl:message>
+  <wsdl:portType name="RecebeMSGSoap">
+    <wsdl:operation name="Mensagem">
+      <wsdl:input message="tns:MensagemSoapIn" />
+      <wsdl:output message="tns:MensagemSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RecebeMSGSoap" type="tns:RecebeMSGSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Mensagem">
+      <soap:operation soapAction="https://www.bec.sp.gov.br/SIAFISICO/RecebeMSG/Mensagem" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="RecebeMSGSoap12" type="tns:RecebeMSGSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Mensagem">
+      <soap12:operation soapAction="https://www.bec.sp.gov.br/SIAFISICO/RecebeMSG/Mensagem" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RecebeMSG">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">PRODESP - Cia de Processamento de Dados do Estado de São Paulo  &lt;br&gt;--------------------------------------&lt;br&gt;Recebe mensagens para integração com base de dados MF&lt;br&gt;&lt;br&gt;&lt;br&gt;11/06/2013 V4.39  - MWAS- SFCOOC-VHI&lt;BR&gt;21/06/2013 V4.40b - MWAS- SIAFNCTRANSFUO, SIAFNCCTOBRAS - K2A&lt;BR&gt;25/07/2013 V4.46c - MWAS- SIAFEXEPD,  SIAFCANNEADTES, SIAFCANNEADVIN, SIAFCANNEADVNP, SIAFCANNETES(Migrado), SIAFNLPGOBRAS (Migrado),SIAFNLCONVENIO - Inclusão de LOG de ERRO.&lt;BR&gt;, Alteração Retorno. &lt;BR&gt;26/07/2013 V4.47b - MWAS- SIAFNLCTOBRAS.&lt;BR&gt;31/07/2013 V4.48  - MWAS- Inclusão localizador.&lt;BR&gt;25/10/2013 V4.49b - MWAS- SIAFGRDEPV001, SIAFCANGRDEPV001, SIAFOB001&lt;BR&gt;27/12/2013 V4.50c - MWAS- Migração: SIAFLOGIN001, SIAFGRDEPC001, SIAFPROCESSO001, SIAFND001, SIAFNE001, SIAFNL001, SIAFNR001, SIAFPD001, SIAFNLCONSUMO, SIAFCONORGAO, &lt;BR&gt;SIAFCONUA, SIAFCONUG, SIAFCONUGCGC, SIAFINCOBRAS, SIAFALTOBRAS, SIAFEXCOBRAS, SIAFREAOBRAS, SIAFCANDISDICO, SIAFCANDISCOTA, &lt;BR&gt;SIAFDISCOTA, SIAFDISDICOTA, SIAFDETACONTA, SIAFDETACONTAGEN, SIAFCGEDESPESSPROD, SIAFDETALHACC, SIAFRE, &lt;BR&gt;SIAFRT, SIAFLISTAEMPENHOS, SIAFCONSULTAEMPENHOS, SIAFINCCREDOR, SIAFNLCESPE, SIAFALTCREKDIN, SIAFEXCCREDOR, SIAFREACREDOR, &lt;BR&gt;SIAFCONCREDOR, SIAFLI001, SIAFNLOBRAS, SIAFAPLICACAO, SIAFAUTOSEF, SIAFRESGATE, SIAFLIBBEC, SIAFDISBEC, SIAFNE002, &lt;BR&gt;SIAFAUTORIZAOB, SIAFEXEPD2, SIAFLISTAND, SIAFLISTAPT, SIAFCONSULTANL, SIAFCONSULTANR, SIAFLISTACONTA, SIAFRENE001, &lt;BR&gt;SIAFINCDESCNE001, SIAFCANNEVINC, SIAFCANNR, SIAFROLCOTEMP, SIAFROLCOTLIQ, SIAFROLCOTRES, SIAFDETPTRES, SIAFALTLISTABOLETOS, SIAFLISTABOLETOS, &lt;BR&gt;SIAFALTPROCESS, SIAFCANPD, SIAFCONSULTAPD, SIAFANULSIAFI, SIAFEXCPROCESS, SIAFEXCLICOBAR, SIAFREAPROCESSO, SIAFCONPROCESSO, &lt;BR&gt;SIAFLISTAPROCESSO, SIAFCONLISTA, SIAFLISTAOB, SIAFLISTAGR, SIAFMONITORA, SIAFINCANEXO, SIAFCONSULTAOB, SIAFALTANEXO &lt;BR&gt;07/01/2014 V4.51b - MWAS- SIAFCANR001.&lt;BR&gt;16/01/2014 V4.52 - MWAS- Passou a diferenciar ano base 2013 e 2014.&lt;BR&gt;21/01/2014 V4.53 - MWAS - SIAFLI001 passou a funcionar com versao anterior, SIAFGRDEPC001 passou a usar: roboGuiaRecolhimentoC &lt;br&gt;28/01/2014 V4.54 - Prodesp - Inclusão da MSG SIAFNLUEP1 &lt;br&gt;18/02/2014 V4.55 - Prodesp - Inclusão das MSGs SIAFNLPGOBRAS(SIAFEM), SIAFNLOBRAS(SIAFEM),SFCOConsultaCT(SIAFISICO),SFCOConsultaOC(SIAFISICO) &lt;br&gt;11/03/2014 v4.56 - Prodesp - Alteração da MSG SIAFCANNEVINC para SIAFCANNEVIN &lt;br&gt;13/03/2014 v5.0  - Prodesp - Migração das MSGs SIAFEM/SIAFISICO &lt;br&gt;17/03/2014 v5.1  - Prodesp - Migração das MSGs NAVEGA &lt;br&gt;18/03/2014 v5.2  - Prodesp - Alteração Login NAVEGA &lt;br&gt;25/04/2014 v5.3  - Prodesp - Inclusão das MSGs SIAFRolCotDis, SIAFRolCotDbDa, SFCOCanCTTes, SFCOCanCTVinc e SFCOIncContRE &lt;br&gt;21/05/2014 v5.4  - Prodesp - Migração de msgs siafisico: SFCOSobeOC, SFCOConfbaixOC e SFCOBaixadasOcs &lt;br&gt;10/06/2014 v5.5  - Prodesp - Migração das MSGS SIAFISICO: SFCOCONNLPREGAOITEM,SFCONLPREGAEXECUTA,SFCOHOMOPREGAO,SFCOHOMOLOGA,SFCOCONITEMDETALHA,SFCOCONNLITEM &lt;br&gt;17/06/2014 v5.6  - Prodesp - Migração das MSGs SIAFISICO: SFCOLIQUIDANL,SFCONLPREGAO &lt;br&gt;15/07/2014 v5.7  - Prodesp - Migração das MSGs SIAFISICO: SFCONLESTLIQUIDA, SFCOLIQNLBEC / MSGs SIAFEM: SIAFConfonte, SIAFAltUA, SIAFIncUA &lt;br&gt;25/08/2014 v5.8  - Prodesp - Inclusão de MSGs SIAFEM: SIAFNLRETINSS &lt;br&gt;30/09/2014 v5.9  - Prodesp - Migração das MSGs SIAFISICO: SFCOEXCCONTNE, SFCOCONTNLBEC, SFCOCONTNLBECDET, SFCOCONTNLEST, SFCOCONTNLESTDET, SFCOCONTITEMDETALHA &lt;br&gt;30/09/2014 v5.91 - Prodesp - Migração das MSGs SIAFEM: SIAFALTCREDWEB &lt;br&gt;14/11/2014 v5.92 - Prodesp - Migração das MSGs SIAFEM: SIAFRAZAO, SIAFINCONTA, SIAFINCCONTA, SIAFINCEVENTO, SIAFCONSULTANS, SIAFLISTANS , SIAFCONSULTAGR / SIAFISICO: SFCOPDBEC001 &lt;br&gt;03/12/2014 v5.93 - Prodesp - Migração da MSG SIAFEM: SIAFCONSULTANC &lt;br&gt;03/12/2014 v5.93 - Prodesp - Migração da MSG SIAFEM: SIAFALTEVENTO / MSG SIAFISICO: SFCOCONTNLBEC &lt;br&gt;14/04/2014 v5.94 - Prodesp - Migração da MSG SIAFISICO: SFCODOCALTDESCOCRP, SFCONLESTORNO &lt;br&gt;14/04/2014 v5.95 - Prodesp - Migração da MSGs NAVEGA: SIAFNAVEGATROCSEN, SIAFATRPERCAD, SIAFCONSATRPERCAD, SIAFCONSHABUSUPER, SIAFCONSIALPAHUSU, SIAFCONSIALUSU, SIAFEXCUSUSIS, SIAFHABUSUPER, SIAFIALPAHUSU, SIAFIALUSU &lt;br&gt;09/06/2015 v5.96 - Prodesp - Migração das MSgs SIAFEM SIAFLI001 e SIAFNLEMLIQ &lt;br&gt;</wsdl:documentation>
+    <wsdl:port name="RecebeMSGSoap" binding="tns:RecebeMSGSoap">
+      <soap:address location="https://www6.fazenda.sp.gov.br/siafisico/RecebeMSG.asmx" />
+    </wsdl:port>
+    <wsdl:port name="RecebeMSGSoap12" binding="tns:RecebeMSGSoap12">
+      <soap12:address location="https://www6.fazenda.sp.gov.br/siafisico/RecebeMSG.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

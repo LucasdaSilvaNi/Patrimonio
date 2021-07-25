@@ -1,0 +1,125 @@
+﻿@model SAM.Web.ViewModels.AssetEAssetMovimentViewModel
+<div class="form-group">
+    @{ViewBag.Title = "Detalhes do Bem Patrimonial Pendente";}
+
+    <h2>@ViewBag.Title - @Model.Asset.NumberIdentification </h2>
+
+    <div class="form-horizontal">
+        <hr />
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados Básico</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.Asset.InitialId, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-sm-2">
+                @Html.DisplayTextFor(model => model.Asset.RelatedInitial.Description)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.Asset.NumberIdentification, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-2">
+                @Html.DisplayTextFor(model => model.Asset.ChapaCompleta)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.AssetMoviment.AuxiliaryAccountId, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-5">
+                @Html.DisplayTextFor(model => model.AssetMoviment.RelatedAuxiliaryAccount.Description)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.AssetMoviment.InstitutionId, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-5">
+                @Html.DisplayTextFor(model => model.AssetMoviment.RelatedInstitution.Description)
+            </div>
+        </div>
+
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.AssetMoviment.BudgetUnitId, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-5">
+                @Html.DisplayTextFor(model => model.AssetMoviment.RelatedBudgetUnit.Description)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.AssetMoviment.ManagerUnitId, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-5">
+                @Html.DisplayTextFor(model => model.AssetMoviment.RelatedManagerUnit.Description)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.AssetMoviment.AdministrativeUnitId, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-5">
+                @Html.DisplayTextFor(model => model.AssetMoviment.RelatedAdministrativeUnit.Description)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.AssetMoviment.SectionId, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-5">
+                @Html.DisplayTextFor(model => model.AssetMoviment.RelatedSection.Description)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.AssetMoviment.ResponsibleId, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-5">
+                @Html.DisplayTextFor(model => model.AssetMoviment.RelatedResponsible.Name)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.Asset.MaterialItemCode,"Item Material", htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-sm-9">
+                @Html.DisplayTextFor(model => model.Asset.MaterialItemCode)
+                -
+                @Html.DisplayTextFor(model => model.Asset.MaterialItemDescription)
+            </div>
+        </div>
+
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.Asset.ValueAcquisition, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-5">
+                @Html.DisplayTextFor(model => model.Asset.ValueAcquisition)
+            </div>
+        </div>
+        <div class="form-group form-group-details">
+            @Html.LabelFor(model => model.Asset.AcquisitionDate, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="control-label-left col-md-5">
+                @Html.DisplayTextFor(model => model.Asset.AcquisitionDate)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-group" style="margin-left:1%">
+                <a class="btnEditar btn btn-info" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" href="@Url.Action("Edit", new { id = @Model.Asset.Id })">
+                    <i class="glyphicon glyphicon-pencil editarclass"></i> Editar
+                </a>
+
+                <a class="btnvoltar btn btn-default" href="javascript:history.back()">
+                    <i class="glyphicon glyphicon-share-alt"></i> Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        sam.transaction.controleTransacaoDetailsPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+    </script>
+}

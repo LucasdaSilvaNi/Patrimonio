@@ -1,0 +1,64 @@
+﻿@model SAM.Web.ViewModels.DadosPopupContabiliza
+
+@Html.Partial("Modais/_LoginSIAFEM")
+
+<div class="modal fade" id="modalExtratoSIAFEM" tabindex="-1" role="dialog" aria-labelledby="botões">
+    <div class="modal-dialog" role="document" style="width: 30%; max-height: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title tituloModalSiafem">Dados do SIAFEM</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><strong>Será (serão) gerada(s) a(s) Nota(s) de Lançamento abaixo:</strong></div>
+                <div class="bodyModalDadosSiafem">
+                    @foreach (var valores in Model.MsgSIAFEM)
+                    {
+                        <div class="text-center" style="border: 1px solid #000">@valores</div>
+                                    <br />
+                    }
+                </div>
+                <div class="form-group text-center botoes">
+                    <div class="text-center"> O sistema pode prosseguir com o processo de geração de NL(s) pelo ContabilizaSP?</div>
+                    <button type="button" class="btn btn-primary" id="prosseguir" data-dismiss="modal">Pode prosseguir</button>
+                    <button type="button" class="btn btn-danger" id="abortar" data-dismiss="modal">Não, aborta</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="Ids" value="@Model.ListaIdAuditoria" />
+@Html.EditorFor(model => model.LoginSiafem, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+@Html.EditorFor(model => model.SenhaSiafem, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+
+<div id="retornoSIAFEM">
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#SaveLoginSiafem').click(function () {
+
+            if ($('#CPFSIAFEMModal').val().length != 11) {
+                alert('Digite os 11 números do CPF');
+                return false;
+            }
+
+            if ($('#LoginSiafem').val() == "" || $('#SenhaSiafem').val() == "") {
+                $('#LoginSiafem').val($('#CPFSIAFEMModal').val());
+                $('#SenhaSiafem').val($('#SenhaSIAFEMModal').val());
+
+                if ($('#LoginSiafem').val() == "" || $('#SenhaSiafem').val() == "") {
+                    return false;
+                } else {
+                    sam.asset.MostraExtratoSIAFEM();
+                }
+            }
+        });
+
+        if ($('#CPFSIAFEMModal').val() == "" || $('#SenhaSIAFEMModal').val() == "") {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('#modalLoginSiafem').modal({ keyboard: false, backdrop: 'static', show: true });
+        }
+    });
+</script>

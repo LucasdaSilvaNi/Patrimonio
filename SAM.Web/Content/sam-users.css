@@ -1,0 +1,4 @@
+﻿/*Override the less of bootstrap*/
+#Name, #Phrase, #RelatedAddress_Street,#Institutions,#Managers,#BudgetUnits,#ManagerUnits,#AdministrativeUnits,#Sections,#Profiles, #RelatedAddress_ComplementAddress{
+      min-width: 100% !important;
+}

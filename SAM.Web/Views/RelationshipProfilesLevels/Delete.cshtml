@@ -1,0 +1,31 @@
+﻿@model SAM.Web.Models.RelPerfilNivel
+
+@{ViewBag.Title = "Exclusão do Relacionamento dos Perfils por Nível";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.IdPerfil)</dt>
+        <dd>@Html.DisplayFor(model => model.PerfilRelacionado.Descricao)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.IdNivel)</dt>
+        <dd>@Html.DisplayFor(model => model.NivelRelacionado.Descricao)</dd>
+
+        <dt></dt>
+        <dd>
+            <div class="acao-editar">
+                <a href="@Url.Action("Delete", new { id = @Model.Id })" title=" editar" class="btn btn-default">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                    <span class="sr-only">Editar</span>
+                </a>
+                <a href="@Url.Action("Index")" title="Voltar" class="btn btn-default">
+                    <i class="glyphicon glyphicon-arrow-left"></i>
+                    <span class="sr-only">Voltar</span>
+                </a>
+            </div>
+        </dd>
+    </dl>
+</div>

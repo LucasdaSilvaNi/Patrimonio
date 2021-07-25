@@ -1,0 +1,32 @@
+﻿@model SAM.Web.Models.Mobile
+
+@{ViewBag.Title = "Detalhes do Módulo ";}
+
+<h2>@ViewBag.Title @Model.Name</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.InstitutionId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedInstitutions.Description)</dd>
+        <dt>@Html.DisplayNameFor(model => model.BudgetUnitId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedBudgetUnits.Description)</dd>
+        <dt>@Html.DisplayNameFor(model => model.ManagerUnitId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedManagerUnits.Description)</dd>
+        <dt>@Html.DisplayNameFor(model => model.AdministrativeUnitId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAdministrativeUnits.Description)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Brand)</dt>
+        <dd>@Html.DisplayFor(model => model.Brand)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Model)</dt>
+        <dd>@Html.DisplayFor(model => model.Model)</dd>
+        <dt>@Html.DisplayNameFor(model => model.MacAddress)</dt>
+        <dd>@Html.DisplayFor(model => model.MacAddress)</dd>
+        <dd>
+            <div class="form-group">
+                @Html.Partial("_EditButtons")
+            </div>
+        </dd>
+    </dl>
+</div>

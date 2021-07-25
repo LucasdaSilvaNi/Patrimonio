@@ -1,0 +1,104 @@
+﻿@model SAM.Web.ViewModels.ReclassificacaoContabilViewModel
+@{
+    ViewBag.Title = "Reclassificação Contábil";
+}
+
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+
+<div class="col-sm-12" style="margin-top: 25px">
+        <h3 class="text-primary">Reclassificação Contábil</h3>
+        <h6>Caso o BP pertecente a determinado grupo não esteja com a conta contábil atualmente adequada, a reclassificação desse BP pode ser feita por aqui</h6>
+        <hr style="margin-top: 0px" />
+</div>
+
+<div class="form-horizontal panel-filter">
+    <div class="form-group">
+        <label for="Institutions" class="control-label col-md-2">Orgão</label>
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitution" })
+            <span id="spanInstitution" class="text-danger field-validation-error error-spanInstitution"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="BudgetUnits" class="control-label col-md-2">UO</label>
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit" })
+            <span id="spanBudgetUnits" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Id" class="control-label col-md-2">UGE</label>
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit" })
+            <span id="spanManagerUnits" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+    <div class="form-group" id="divGrupoMaterial">
+        <label class="control-label col-md-2">Grupo Material</label>
+        <div class="col-md-6">
+            <select class="form-control" id="GrupoMaterial"></select>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formtabela" }))
+{
+<div id="ListaDosBPs" class="form-group">
+    <div class="col-sm-4">
+        <div class="input-group">
+            <input type="text" id="search-tables" name="search-tables" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnter(this,event)" />
+            <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+        </div>
+    </div>
+    <table id="tableListaBPs">
+            <thead>
+                <tr>
+                    <td class="text-info">Selecione</td>
+                    <td class="text-info">Sigla</td>
+                    <td class="text-info">Chapa</td>
+                    <td class="text-info">Descrição Resumida</td>
+                    <td class="text-info">Conta Contábil atual</td>
+                </tr>
+            </thead>
+        </table>
+        <button class="btn btn-primary" id="reclassificarTodos">Reclassificar todos</button>
+        <button class="btn btn-primary" id="reclassificar">Reclassificar BPs escolhidos</button>
+</div>
+}
+
+<div class="modal fade" id="modalTrocaDeConta" tabindex="-1" role="dialog" aria-labelledby="botões">
+    <div class="modal-dialog" role="document" style="width: 30%; max-height: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title tituloModalTrocaDeConta">Mudança de conta contábil</h4>
+            </div>
+            <div class="modal-body">
+                <div class="bodyModalTrocaDeConta"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalMsgFinal" tabindex="-1" role="dialog" aria-labelledby="botões">
+    <div class="modal-dialog" role="document" style="width: 30%; max-height: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title tituloModalMsgFinal">Mudança de conta contábil</h4>
+            </div>
+            <div class="modal-body text-center">
+                <div class="bodyModalMsgFinal"></div>
+                <button id="ok" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/ReclassificacaoContabil/js")
+@{Html.RenderPartial("_DataTableReferenciaJS");}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            reclassificacaoContabil.load();
+        });
+    </script>
+}

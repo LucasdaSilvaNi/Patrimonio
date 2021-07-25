@@ -1,0 +1,210 @@
+﻿@model SAM.Web.ViewModels.ExportarLegadoViewModel
+
+@{
+    ViewBag.Title = "Importar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    div.flex-align {
+        display: -webkit-flexbox;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .processing-ivinsivel {
+        display: none;
+    }
+</style>
+<div class="form-horizontal">
+    <hr />
+    @using (Html.BeginForm("ExportarExcel", null, FormMethod.Post, new { id = "formLegado", @class = "formSubmit" , enctype = "multipart/form-data" }))
+    {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <fieldset>
+            <legend>Exportar arquivo(Excel) para produção</legend>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.baseNome, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.IdBase, (SelectList)ViewBag.Bases, new { @class = "form-control drop-list-destino", disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.baseNome, "", new { @class = "text-danger validacao-destino" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.PostFile, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(model => model.PostFile, new { type= "file"})
+                    @Html.ValidationMessageFor(model => model.PostFile, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <div class="col-md-6">
+                <button type="button" id="btnCriarJson" class="btn btn-default btn-lg" data-toggle="tooltip" data-placement="top" data-original-title="Click para exportar a planilha do Excel para o Patriminio">
+                    <i class="glyphicon glyphicon-log-in" aria-hidden="true"></i>
+                    <span class="sr-only">Criar Arquivo</span>
+
+                </button>
+                <a href="@Url.Action("Importar")" id="btnvoltar" data-toggle="tooltip" data-placement="top" data-original-title="Click para retornar a importação" class="btn btn-default btn-lg">
+                    <i class="glyphicon glyphicon-remove"></i>
+                    <span class="sr-only">Exportar</span>
+                </a>
+            </div>
+
+
+        </div>
+
+
+        <div class="modal fade" id="thankyouModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Exportando a planilha do Excel</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="divResult">
+                            <p>Processando, Espere por favor . . . <img src="~/Content/images/preloader01.gif" alt="Processando......"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="form-group">
+                <div class="col-md-12">
+                    <div id="divProcessing">
+                        <p>Processando, Espere retorno . . . <img src="~/Content/images/preloader01.gif" alt="Processando......"></p>
+                    </div>
+                </div>
+            </div>*@
+
+        <div class="flex-align processing-ivinsivel" id="divProcessing">
+            <!-- começa o flex -->
+            <div class="container span7 text-center col-md-4 col-md-offset-3" style="margin: 0 auto;float: none; border: 3px solid orange">
+                <div class="row">
+                    <p>Processando, Espere retorno . . . <img src="~/Content/images/preloader01.gif" alt="Processando......"></p>
+                </div>
+            </div>
+
+        </div>
+        <section id="sectionMensagem" class="col-md-12"></section>
+    }
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+                    $(document).ready(function () {
+
+                        $('.drop-list-destino').change(function () {
+                            $('.validacao-orgao').text('');
+                        });
+
+                        $('#divProcessing').removeClass("processing-ivinsivel");
+                        // Hide the "busy" Gif at load:
+                        $("#divProcessing").hide();
+
+                        // Attach click handler to the submit button:
+                        $('#btnCriarJson').click(function () {
+                            if (validarDropListBox() == false)
+                                return false;
+
+                            $('#formLegado').submit();
+                        });
+
+                        // Handle the form submit event, and make the Ajax request:
+                        $("#formLegado").on("submit", function (event) {
+                            event.preventDefault();
+                            $('.drop-list-destino').prop("disabled", false);
+                            $('#sectionMensagem').empty();
+                            // Show the "busy" Gif:
+                            $("#divProcessing").show();
+                            var url = $(this).attr("action");
+                            var formData = new FormData($('#formLegado')[0]);// $(this).serialize();
+                           
+                            $.ajax({
+                                url: url,
+                                type: "POST",
+                                data: formData,
+                                contentType: false,
+                                dataType: 'json',
+                                encode: true,
+                                async: true,
+                                processData: false,
+                                cache: false,
+                                success: function (resp) {
+                                    $('.validacao-orgao').text('');
+                                    $('.drop-list-destino').prop("disabled", true);
+                                    $("#divProcessing").hide();
+                                    $('#divProcessing').addClass("processing-ivinsivel");
+                                    $('#thankyouModal').modal('show');
+                                    // Do something useful with the data:
+                                    $("#divResult").empty();
+                                    $("#divResult").append("<h3>Verifique a mensagem de retorno</h3>");
+                                    createRespostaDaImportacao(resp);
+                                }
+                            })
+                        });
+                    });
+
+                    var validarDropListBox = function () {
+                        //$('#Crd option:selected').text();
+                        var oragaoId = $('.drop-list-orgao option:selected').val();
+
+                        if (oragaoId < 1) {
+                            $('.validacao-orgao').text('Selecione o orgão');
+
+                            return false;
+                        }
+
+                    }
+
+                    var createRespostaDaImportacao = function (data) {
+                        var retorno = [];
+                        var download = 'undefined';
+
+                        //console.log(data);
+                        retorno.push('<fieldset>');
+                        retorno.push('<legend>Resultado da Exportação(Excel)</legend>');
+                        var jsonData = $.parseJSON(data);
+                        //console.log(jsonData);
+                        $.each(jsonData, function (index, resultado) {
+                            retorno.push('<div class="form-group">');
+                            retorno.push('<div class="col-md-12">');
+                            retorno.push('<h3 class="text-center">' + index.replace('NaoImportado', 'Não Importado') + '</h3>');
+                            retorno.push('</div>');
+                            $.each(resultado, function (index, value) {
+                                if (value.caminhoDoArquivoDownload !== undefined)
+                                    download = value.caminhoDoArquivoDownload;
+
+                                retorno.push(value.mensagemImportacao);
+                            });
+
+                            if (download !== undefined && download != '') {
+                                retorno.push('<div class="form-group">');
+                                retorno.push('<div class="col-md-4">');
+                                retorno.push('<a href="' + download + '" download><img src="/Patrimonio/Content/images/Excel-icon.png" width = "50px" heigth="50px" alt="Arquivo do Excel" />Dowload</a>');
+
+                                retorno.push('</div>');
+                            }
+                            retorno.push('</div>');
+                            retorno.push('</div>');
+                        });
+                        //console.log(download);
+
+                        retorno.push('</fieldset>');
+
+                        $('#sectionMensagem').append(retorno.join(""));
+                    }
+
+                  
+    </script>
+}

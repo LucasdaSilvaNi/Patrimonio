@@ -1,0 +1,24 @@
+﻿@model SAM.Web.ViewModels.AssetViewModelEmpenho
+
+<table class="table" id="result-tables">
+    <tr>
+        <th>@HttpUtility.HtmlDecode("Selecione")</th>
+        <th>@HttpUtility.HtmlDecode("Codigo Material")</th>
+        <th>@HttpUtility.HtmlDecode("Descrição Material")</th>
+    </tr>
+
+    @foreach (var item in Model.Assets)
+    {
+        <tr>
+            <td><input class="radioSelecionado" type="radio" id=@item.MaterialItemCode name="checkselecionado" /></td>
+            <td>@Html.DisplayFor(modelItem => item.MaterialItemCode)</td>
+            <td>@Html.DisplayFor(modelItem => item.MaterialItemDescription)</td>
+        </tr>
+    }
+</table>
+
+<script>
+    $(document).ready(function () {
+        sam.commun.InicializaICheck();
+    });
+</script>

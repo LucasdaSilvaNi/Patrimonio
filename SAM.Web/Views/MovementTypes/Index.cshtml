@@ -1,0 +1,51 @@
+﻿@model  PagedList.StaticPagedList<SAM.Web.Models.MovementType>
+@using PagedList.Mvc;
+@using SAM.Web.Controllers.IntegracaoContabilizaSP;
+
+@{
+    ViewBag.Title = "Tipos de Movimentos";
+}
+
+@Html.Partial("_GridNewButtons")
+@{ 
+    bool movimentacaPatrimonialPossuiContraPartidaContabil = false;
+    bool movimentacaPatrimonialReclassifica = false;
+}
+
+<table class="table" id="result-tables">
+    <tr>
+        <th class="text-info">@Html.DisplayNameFor(model => model.FirstOrDefault().Code)</th>
+        <th class="text-info">@Html.DisplayNameFor(model => model.FirstOrDefault().Description)</th>
+        <th class="text-info">@Html.DisplayName("Grupo de Movimento")</th>
+        <th class="text-info">@Html.DisplayName("ContraPartida Contábil (ContabilizaSP)")</th>
+        <th class="text-info">@Html.DisplayName("Reclassificação Contábil (ContabilizaSP)")</th>
+        <th class="text-info">@Html.DisplayNameFor(model => model.FirstOrDefault().Status)</th>
+        <th class="text-info">Ações</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        movimentacaPatrimonialPossuiContraPartidaContabil = item.PossuiContraPartidaContabil();
+        //movimentacaPatrimonialReclassifica = item.ContraPartidaContabilReclassifica();
+        movimentacaPatrimonialReclassifica = item.ContraPartidaContabilDepreciaOuReclassifica();
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Code)</td>
+            <td>@Html.DisplayFor(modelItem => item.Description)</td>
+            <td>@Html.DisplayFor(modelItem => item.RelatedGroupMoviment.Description)</td>
+            <td>@Html.DisplayFor(modelItem => movimentacaPatrimonialPossuiContraPartidaContabil)</td>
+            <td>@Html.DisplayFor(modelItem => movimentacaPatrimonialReclassifica)</td>
+            <td>@Html.DisplayFor(modelItem => item.Status)</td>
+            <td>@Html.Partial("_Acoes", @item)</td>
+        </tr>
+    }
+</table>
+
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.CurrentFilter }))
+
+    @section Scripts {
+        <script>
+            sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+        </script>
+    }

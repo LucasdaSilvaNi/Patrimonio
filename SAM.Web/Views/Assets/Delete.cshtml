@@ -1,0 +1,222 @@
+﻿@model SAM.Web.ViewModels.BPExclusaoViewModel
+@using SAM.Web.ViewModels
+
+<style type="text/css">
+    .aviso {
+    text-align: center;
+    font-size:15px;
+    border-bottom: 30px;
+    padding: 0px 10px;
+    padding-bottom: 30px;
+    border: solid 2px #000000
+    }
+</style>
+
+@{ViewBag.Title = "Exclusão do Bem Patrimonial";}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="aviso">
+    Essa tela serve para a exclusão dos dados relacionados ao Bem Patrimonial cujo o estorno se encontra inviável no momento por diversos motivos (responsável não se encontra ativo na UGE, incorporação com data distante do mês-referência atual, etc.)<br />
+    Recomendamos que, sempre que possível, opte por fazer o estorno do histórico do BP, que se encontra na Visão Geral.<br />
+    (A exclusão desse BP via essa tela não atualiza os valores contábeis do SIAFEM, fazendo-se necessário a correção manual dos valores direto no SIAFEM)
+</div>
+
+<br />
+
+@using (Html.BeginForm(null, null, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+
+    <fieldset >
+        <legend>Dados do BP</legend>
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Sigla, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.Sigla, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+                @Html.LabelFor(model => model.Chapa, htmlAttributes: new { @class = "control-label col-md-1" })
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.Chapa, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+                @Html.LabelFor(model => model.ItemMaterial, htmlAttributes: new { @class = "control-label col-md-1" })
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.ItemMaterial, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.GrupoMaterial, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.GrupoMaterial, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+                <div class="col-md-6">
+                    @Html.TextBoxFor(model => model.DescricaoDoGrupo, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.DescricaoResumida, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(model => model.DescricaoResumida, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.ValorDeAquisicao, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.ValorDeAquisicao, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+                @Html.LabelFor(model => model.Processo, htmlAttributes: new { @class = "control-label col-md-1" })
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.Processo, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ApenasDataAquisicao, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.ApenasDataAquisicao, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+                @if (Model.BPTemUmTipo)
+                {
+                    string tipo = (Model.flagAcervo ? "acervo" : (Model.flagTerceiro ? "terceiro" : "decreto"));
+                    <div class="col-md-2">BP do tipo @tipo</div>
+                }
+            </div>
+        </div>
+    </fieldset>
+    
+    <fieldset >
+        <legend>Histórico do BP</legend>
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Data da Movimentação</th>
+                    <th>Tipo de Movimentação</th>
+                    <th>UGE</th>
+                    <th>UA</th>
+                    <th>Divisão</th>
+                    <th>Repsonsável</th>
+                    <th>Conta Contabil</th>
+                    <th>Mais Detalhes</th>
+                </tr>
+            </thead>
+                @{ int cont = 1;}
+                @foreach (HistoricoBPExclusaoViewModel historico in Model.historico)
+                {
+                    <tr>
+                        <td>@historico.ApenasDataHistorico</td>
+                        <td>@historico.Historico</td>
+                        <td>@historico.UGE</td>
+                        <td>@historico.UA</td>
+                        <td>@historico.Divisao</td>
+                        <td>@historico.Responsavel</td>
+                        <td>@historico.ContaContabil</td>
+                        <td class="text-center">
+                            <a style="font-size: 200%" href="#his_@cont" data-toggle="modal" data-target="#his_@cont"><i class="glyphicon glyphicon-list-alt"></i></a>
+                        </td>
+                    </tr>
+                    cont += 1;
+                }
+        </table>
+    
+        @{ cont = 1;}
+        @foreach (HistoricoBPExclusaoViewModel historico in Model.historico)
+        {
+            <div class="modal fade" id="his_@cont" tabindex="-1" role="dialog" aria-labelledby="botões">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title tituloModalSiafem">Histórico do BP</h4>
+                        </div>
+                        <div class="modal-body">
+                            <dl class="dl-horizontal">
+                                <dt>@Html.DisplayNameFor(model => historico.ApenasDataHistorico)</dt>
+                                <dd>@Html.DisplayFor(model => historico.ApenasDataHistorico)</dd>
+    
+                                <dt>@Html.DisplayNameFor(model => historico.Historico)</dt>
+                                <dd>@Html.DisplayFor(model => historico.Historico)</dd>
+    
+                                <dt>@Html.DisplayNameFor(model => historico.Orgao)</dt>
+                                <dd>@Html.DisplayFor(model => historico.Orgao)</dd>
+    
+                                <dt>@Html.DisplayNameFor(model => historico.UO)</dt>
+                                <dd>@Html.DisplayFor(model => historico.UO)</dd>
+    
+                                <dt>@Html.DisplayNameFor(model => historico.UGE)</dt>
+                                <dd>@Html.DisplayFor(model => historico.UGE)</dd>
+    
+                                <dt>@Html.DisplayNameFor(model => historico.UA)</dt>
+                                <dd>@Html.DisplayFor(model => historico.UA)</dd>
+    
+                                <dt>@Html.DisplayNameFor(model => historico.Divisao)</dt>
+                                <dd>@Html.DisplayFor(model => historico.Divisao)</dd>
+    
+                                <dt>@Html.DisplayNameFor(model => historico.Responsavel)</dt>
+                                <dd>@Html.DisplayFor(model => historico.Responsavel)</dd>
+    
+                                <dt>@Html.DisplayNameFor(model => historico.ContaContabil)</dt>
+                                <dd>@Html.DisplayFor(model => historico.ContaContabil)</dd>
+    
+                                <dt>@Html.DisplayNameFor(model => historico.NumeroDocumento)</dt>
+                                <dd>@Html.DisplayFor(model => historico.NumeroDocumento)</dd>
+    
+                                <dt>@Html.DisplayNameFor(model => historico.Observacao)</dt>
+                                <dd>@Html.DisplayFor(model => historico.Observacao)</dd>
+    
+                                @if (historico.ValorDoReparo > 0)
+                                {
+                                    <dt>@Html.DisplayNameFor(model => historico.ValorDoReparo)</dt>
+                                    <dd>@Html.DisplayFor(model => historico.ValorDoReparo)</dd>
+                                }
+    
+                                @if (!string.IsNullOrEmpty(historico.CPFCPNJ) && string.IsNullOrWhiteSpace(historico.CPFCPNJ))
+                                {
+                                    <dt>@Html.DisplayNameFor(model => historico.CPFCPNJ)</dt>
+                                    <dd>@Html.DisplayFor(model => historico.CPFCPNJ)</dd>
+                                }
+                            </dl>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-success" data-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            cont += 1;
+        }
+    </fieldset>
+
+    <hr />
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Observacao, "Explique o motivo da exclusão", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.TextAreaFor(model => model.Observacao, new { @class = "form-control", @maxLength = 100 })
+                @Html.ValidationMessageFor(model => model.Observacao, "", new { @class = "text-danger" })
+            </div>
+            <button type="submit" data-toggle="tooltip" data-placement="top" class="btn btn-danger" value="Delete">
+                <i class="glyphicon glyphicon-ok" aria-hidden="true"></i> Excluir
+            </button>
+            <a class="btnvoltar btn btn-default" href="@Url.Action("Edit", new { id = @Model.Id })">
+                <i class="glyphicon glyphicon-share-alt"></i> Voltar
+            </a>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("button[type='submit']").click(function () {
+            if ($("textarea[id='Observacao']").val().trim() === "")
+            {
+                $("span[data-valmsg-for='Observacao']").text("Necessário preencher o campo de explicação");
+                return false;
+            }
+        });
+    });
+</script>

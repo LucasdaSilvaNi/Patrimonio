@@ -1,0 +1,52 @@
+﻿@model SAM.Web.ViewModels.IncorporacaoEmLoteViewModel
+
+@Styles.Render("~/IncorporacaoEmLote/css")
+
+@{ViewBag.Title = "Incorporação em Lote";}
+
+<h3 style="margin-top:40px;margin-bottom: 20px;" class="cor-azul">Incorporação em Lote</h3>
+
+<hr />
+
+<div class="form-horizontal">
+    <div class="form-group">
+        @* Tipo Incorporação *@
+        @Html.LabelFor(model => model.MovementTypeId, "Tipo de Incorporação *", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-7">
+            @Html.DropDownListFor(model => model.MovementTypeId, (SelectList)ViewBag.MovementTypes, "-- Selecione --", new { @class = "form-control desabilitar-movimentacao" })
+            @Html.ValidationMessageFor(model => model.MovementTypeId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <hr />
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formtabela" }))
+{
+    <div id="divTabelaNumeroDocumentos" style="display:none">
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" id="search-tables" name="search-tables" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnter(this,event)" />
+                <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+            </div>
+        </div>
+        <table id="tabelaNumeroDocumentos">
+            <thead>
+                <tr>
+                    <th>Número de documento</th>
+                    <th>UGE de Origem</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+}
+
+</div>
+
+@Scripts.Render("~/IncorporacaoEmLote/js")
+<script>
+    $(document).ready(function () {
+        incorporacaoEmLote.load();
+    });
+</script>

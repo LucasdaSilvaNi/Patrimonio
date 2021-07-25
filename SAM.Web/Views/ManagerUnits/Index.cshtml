@@ -1,0 +1,51 @@
+﻿@{ViewBag.Title = "Unidades Gestoras Cadastradas";}
+
+@{  Html.RenderPartial("_DataTableReferenciaCss");
+    bool perfilPermissao = ViewBag.PerfilPermissao;
+    bool perfilOperadorUGE = ViewBag.PerfilOperadorUGE;
+    string UGE = ViewBag.UGE;
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formManagerUnits" }))
+{
+    @Html.Hidden("perfilPermissao", ViewBag.PerfilPermissao ? "1" : "")
+    @Html.Hidden("perfilOperadorUGE", ViewBag.PerfilOperadorUGE ? "1" : "")
+    @Html.Hidden("UgeAtual", UGE)
+    @Html.Partial("_GridNewButtons")
+
+    <table class="table" id="tableManagerUnits">
+        <thead>
+            <tr>
+                <th class="text-info" data-sortable="true">Código UO</th>
+                <th class="text-info" data-sortable="true">Descrição UO</th>
+                <th class="text-info" data-sortable="true">Código UGE</th>
+                <th class="text-info" data-sortable="true">Descrição UGE</th>
+                <th class="text-info" data-sortable="true">Mês/Ano Inicial</th>
+                <th class="text-info" data-sortable="true">Mês/Ano Referência</th>
+                <th class="text-info" data-sortable="false">Integração SIAFEM</th>
+                <th class="text-info border-table-tr actionButton col-xs-1" data-sortable="false">Ações</th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-managerUnits-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+
+        $(document).ready(function () {
+            let managerUnitsDataTable = new ManagerUnitsDataTable();
+            managerUnitsDataTable.Load('#formManagerUnits');
+        });
+    </script>
+}

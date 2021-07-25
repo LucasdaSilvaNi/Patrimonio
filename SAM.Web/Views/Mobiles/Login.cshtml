@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Faça seu login</h2>
+
+
+
+<table class="table">
+    <tr>
+        <td>
+            <input type="text" id="usuario" placeholder="Digite seu usuário" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" id="senha" placeholder="Digite sua senha" />
+        </td>
+    </tr>
+    <tr>
+        <td><a href="@Url.Action("Login", new { user = "30778432858", password = "prodesp01", macaddress = "AB:00:FF:EE:09:BB:CC:04"})" title="Teste">Fazer Login</a></td>
+    </tr>
+</table>
+

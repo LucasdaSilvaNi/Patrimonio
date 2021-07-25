@@ -1,0 +1,61 @@
+﻿@model SAM.Web.ViewModels.PrintBarCodeViewModel
+
+@{
+    Layout = null;
+}
+
+
+<script>
+    $(function () {
+        $('.colorpicker').colorpicker({
+            colorSelectors: {
+                'black': '#000000',
+                'white': '#ffffff',
+                'red': '#FF0000',
+                'default': '#777777',
+                'primary': '#337ab7',
+                'success': '#5cb85c',
+                'info': '#5bc0de',
+                'warning': '#f0ad4e',
+                'danger': '#d9534f'
+            },
+            format: 'hex'
+        });
+    });
+</script>
+
+<div class="modal fade modalView" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="closemodal" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Opções de Impressão</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.TypeReading, "Tipo de Leitura:", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-7">
+                        @Html.RadioButtonFor(model => model.TypeReading, "0", new { @checked = "checked" }) &nbsp; @Html.Label("Código de Barras") &nbsp;&nbsp;&nbsp;
+                        @Html.RadioButtonFor(model => model.TypeReading, "1") &nbsp; @Html.Label("QR Code")
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="margin-top: 5px;">
+                    @Html.LabelFor(model => model.ColorPlate, "Cor da Chapa:", htmlAttributes: new { @class = "control-label col-md-4", @style = "margin-top: 12px" })
+                    <div class="col-md-7 input-group colorpicker-component colorpicker input-append color" data-color-format="hex">
+                        @Html.EditorFor(model => model.ColorPlate, new { htmlAttributes = new { @class = "form-control", @value = "primary", @format = "alias" } })
+                        <span class="input-group-addon"><i></i></span>
+                        @Html.ValidationMessageFor(model => model.ColorPlate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+            <div class="modal-footer">
+                <input type="submit" class="btn btn-success buttonClose" data-dismiss="modal" value="Ok" onclick="reportPrintBarCode.SubmitForm();" />
+            </div>
+        </div>
+    </div>
+</div>

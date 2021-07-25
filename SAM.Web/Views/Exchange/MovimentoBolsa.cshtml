@@ -1,0 +1,129 @@
+﻿@model SAM.Web.ViewModels.MovimentoViewModel
+
+@Scripts.Render("~/MovimentoBolsa/Movimento/js")
+
+<h3 style="margin-top:40px;margin-bottom: 20px;" class="cor-azul">Movimento do Bem</h3>
+
+<hr />
+
+@{string flagIntegracaoSiafem = ViewBag.flagIntegracaoSiafem;}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formMovimentacaoBolsa" }))
+{
+    @Html.EditorFor(model => model.LoginSiafem, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+    @Html.EditorFor(model => model.SenhaSiafem, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(x => x.AssetId);
+    @Html.HiddenFor(x => x.ManagerUnitId);
+    @*@Html.EditorFor(model => model.SearchString, new { htmlAttributes = new { @class = "form-control", Value= @Model.SearchString, @type = "hidden" } })*@
+    @Html.Hidden("SearchString", @Model.SearchString)
+    @Html.Hidden("flagIntegracaoSiafem", flagIntegracaoSiafem)
+
+    <div class="form-group cor-azul">
+        <div class="col-md-12">
+            <div class="col-sm-1">
+                <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+            </div>
+            <div class="col-md-11">
+                <h4>Dados da Movimentação</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="MovimentType" class="control-label col-md-1">Tipo de Movimento</label>
+            <div class="col-md-7">
+                @Html.DropDownListFor(model => model.MovementTypeId, (SelectList)ViewBag.MovimentType, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="jumbotron">
+            @if (!ViewBag.RetiradaBolsa)
+            {
+                <div class="form-group">
+                    <label for="lblAvisoTipoBaixa" class="control-label col-md-1"></label>
+                    <div class="col-md-7">
+                        <label for="lblAvisoTipoBaixa" style="color:green">Baixa do(s) BP(s) após "Aceite"</label>
+                    </div>
+                </div>
+                <br />
+            }
+            <div class="form-group">
+                <label for="Institutions" class="control-label col-md-1">Orgão</label>
+                <div class="col-md-7">
+                    @Html.DropDownListFor(model => model.InstituationIdDestino, (SelectList)ViewBag.InstitutionsDestino, new { @class = "form-control comboinstitution2" })
+                    <span id="spanInstitution" class="text-danger field-validation-error"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="BudgetUnits" class="control-label col-md-1">UO</label>
+                <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.BudgetUnitIdDestino, (SelectList)ViewBag.BudgetUnitsDestino, new { @class = "form-control comboBudgetUnit2" })
+                    <span id="spanBudgetUnits" class="text-danger field-validation-error"></span>
+                </div>
+                <div id="omite_div_por_uo">
+                    <label for="ManagerUnits" class="control-label col-md-1">UGE</label>
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.ManagerUnitIdDestino, (SelectList)ViewBag.ManagerUnitsDestino, new { @class = "form-control comboManagerUnit2" })
+                        <span id="spanManagerUnits" class="text-danger field-validation-error"></span>
+                    </div>
+                </div>
+            </div>
+            @if (ViewBag.Transferencia || ViewBag.DoacaoIntra)
+            {
+            <div class="form-group">
+                <label for="NumberProcess" class="control-label col-md-1">Nº Processo</label>
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.NumberProcess, new { @class = "form-control", @maxlength = "25" })
+                    <span id="spanNumberProcess" class="text-danger field-validation-error"></span>
+                </div>
+            </div>
+            }
+        </div>
+
+        <div class="form-group">
+            @if (ViewBag.RetiradaBolsa)
+            {
+                @Html.LabelFor(model => model.MovimentoDate, "Data da Baixa", htmlAttributes: new { @class = "control-label col-md-1" })
+            }
+            else
+            {
+                @Html.LabelFor(model => model.MovimentoDate, "Data movimento", htmlAttributes: new { @class = "control-label col-md-1" })
+            }
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.MovimentoDate, new { htmlAttributes = new { @class = "form-control datepicker", @onkeydown = "return false", @autocomplete = "off" } })
+                @Html.ValidationMessageFor(model => model.MovimentoDate, "", new { id = "spanMovimentoDate", @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.Observation, "Observação", htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-4">
+                @Html.TextAreaFor(model => model.Observation, new { htmlAttributes = new { @class = "form-control" }, @style = "width: 100%; height: 150px;" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 50px;">
+        <div class="form-group" style="margin-left:1%">
+            <button type="submit" id="btnSalvarSubmit" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info" onkeypress="sam.search.clickEnterSubmit();" value="Create">
+                <i class="glyphicon glyphicon-ok" aria-hidden="true"></i> Salvar
+            </button>
+
+            <a class="btnvoltar btn btn-default" href="@Url.Action(@Model.SearchString, "Exchange")">
+                <i class="glyphicon glyphicon-share-alt"></i> Voltar
+            </a>
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        movimento.InicializaDatePicker();
+        movimento.SucessoBolsa('@Html.Raw(ViewBag.AlertComSucesso)', '@Html.Raw(ViewBag.Redirecionamento)');
+        sam.materialItem.CriarDivLoginSiafem();
+        movimento.LoginSiafemBolsa();
+        movimento.eventoSubmitFormBolsa('@Html.Raw(ViewBag.MsgBotaoSalvar)');
+        sam.utils.somenteNumerosPartial();
+    });
+</script>

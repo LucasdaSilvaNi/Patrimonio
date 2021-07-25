@@ -1,0 +1,36 @@
+﻿@model  IEnumerable<SAM.Web.ViewModels.HistoricSupportViewModel>
+
+<style>
+    .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+        border: 1px solid #0085DB;
+        background-color: #72a6db;
+    }
+</style>
+
+<div id="accordion">
+    @foreach (var item in Model)
+    {
+        <div class="form-group">
+            <div class="col-sm-3" style="text-align: left">
+                <span style="font-weight: bold"> CPF: </span> <span>@item.UserCPF </span>
+            </div>
+            <div class="col-sm-5" style="text-align: left">
+                <span style="font-weight: bold"> Nome: </span> <span>@item.UserName </span>
+            </div>
+            <div class="col-sm-3" style="text-align: right">
+                <span style="font-weight: bold"> Data: </span> <span>@item.InclusionDate</span>
+            </div>
+        </div>
+        <div>
+            @Html.TextArea("Observation", item.Observation, new { @class = "form-control", @disabled = "disabled", @style = "width: 100%; height: 300px;" })
+        </div>
+    }
+</div>
+
+<script>
+    $(function () {
+        $("#accordion").accordion({
+            collapsible: true
+        });
+    });
+</script>

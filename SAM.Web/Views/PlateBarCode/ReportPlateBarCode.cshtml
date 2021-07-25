@@ -1,0 +1,14 @@
+﻿@model SAM.Web.ViewModels.PlateBarCodeViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Scripts.Render("~/PlateBarCode/ReportPlateBarCode/js")
+
+<h3 style="margin-top:40px" class="cor-azul">Impressão de Chapas</h3>
+@Html.Partial("~/Views/PlateBarCode/_filterReportPlateBarCode.cshtml", Model)
+
+<script>
+    reportPlateBarCode.Load();
+</script>

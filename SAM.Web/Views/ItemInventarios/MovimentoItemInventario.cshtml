@@ -1,0 +1,208 @@
+﻿@model SAM.Web.ViewModels.MovimentoViewModel
+
+@Styles.Render("~/Layout_5/css")
+
+<h3 style="margin-top:40px;margin-bottom: 20px;" class="cor-azul">Movimento do Bem</h3>
+
+<hr />
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formMovimentacaoBolsa" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(x => x.AssetId);
+    @Html.HiddenFor(x => x.InstituationId);
+    @Html.HiddenFor(x => x.BudgetUnitId);
+    @Html.HiddenFor(x => x.ManagerUnitId);
+    @Html.HiddenFor(x => x.ItemInventarioId);
+    <input type="hidden" id="flagIntegracaoSiafem" value="@(ViewData["flagIntegracaoSiafem"])" />
+
+    @Html.EditorFor(model => model.LoginSiafem, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+    @Html.EditorFor(model => model.SenhaSiafem, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+    @Html.EditorFor(model => model.UGESiafem, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+
+    <div class="form-group cor-azul">
+        <div class="col-md-12">
+            <div class="col-sm-1">
+                <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+            </div>
+            <div class="col-md-11">
+                <h4>Dados da Movimentação</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="MovimentType" class="control-label col-md-1">Tipo de Movimento</label>
+            <div class="col-md-7">
+                @Html.DropDownListFor(model => model.MovementTypeId, (SelectList)ViewBag.MovimentType, "Selecione o Tipo de Movimento", new { @class = "form-control desabilitar-movimentacao-interna" })
+                @Html.ValidationMessageFor(model => model.MovementTypeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div id="partialViewTipoMovimento" style="display:none">
+
+            @if (Model != null)
+            {
+                switch (Model.MovementTypeId)
+                {
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovimentacaoInterna:
+                        @Html.Partial("../Movimento/Movimentacao/_10partialMovimentacaoInterna", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.VoltaConserto:
+                        @Html.Partial("../Movimento/Movimentacao/_13partialVoltaConserto", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.SaidaConserto:
+                        @Html.Partial("../Movimento/Movimentacao/_14partialSaidaConserto", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovInservivelNaUGE:
+                        @Html.Partial("../Movimento/Movimentacao/_19partialArrolamento", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.DisponibilizadoParaBolsaSecretaria:
+                        @Html.Partial("../Movimento/Movimentacao/_20partialDisponibilizadoParaBolsaSecretaria", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.DisponibilizadoParaBolsaEstadual:
+                        @Html.Partial("../Movimento/Movimentacao/_21partialDisponibilizadoParaBolsaEstadual", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.RetiradaDaBolsa:
+                        @Html.Partial("../Movimento/Movimentacao/_22partialRetiradaDaBolsa", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovSaidaInservivelUGEDoacao:
+                        @Html.Partial("../Movimento/Movimentacao/_42partialSaidaUGEDoacao", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovSaidaInservivelUGETransferencia:
+                        @Html.Partial("../Movimento/Movimentacao/_43partialSaidaUGETransferencia", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovComodatoConcedidoBensMoveis:
+                        @Html.Partial("../Movimento/Movimentacao/_44partialComodatoConcedidoBensMoveis", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovComodatoTerceirosRecebidos:
+                        @Html.Partial("../Movimento/Movimentacao/_45partialComodatoTerceirosRecebidos", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovDoacaoConsolidacao:
+                        @Html.Partial("../Movimento/Movimentacao/_46partialDoacaoConsolidacao", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovDoacaoIntraNoEstado:
+                        @Html.Partial("../Movimento/Movimentacao/_47partialDoacaoIntraNoEstado", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovDoacaoMunicipio:
+                        @Html.Partial("../Movimento/Movimentacao/_48partialDoacaoMunicipio", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovDoacaoOutrosEstados:
+                        @Html.Partial("../Movimento/Movimentacao/_49partialDoacaoOutrosEstados", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovDoacaoUniao:
+                        @Html.Partial("../Movimento/Movimentacao/_50partialDoacaoUniao", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovExtravioFurtoRouboBensMoveis:
+                        @Html.Partial("../Movimento/Movimentacao/_51partialExtravioFurtoRouboBensMoveis", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovMorteAnimalPatrimoniado:
+                        @Html.Partial("../Movimento/Movimentacao/_52partialMorteAnimalPatrimoniado", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovMudancaCategoriaDesvalorizacao:
+                        @Html.Partial("../Movimento/Movimentacao/_54partialMudancaCategoriaDesvalorizacao", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovSementesPlantasInsumosArvores:
+                        @Html.Partial("../Movimento/Movimentacao/_55partialSementesPlantasInsumosArvores", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovTransferenciaOutroOrgaoPatrimoniado:
+                        @Html.Partial("../Movimento/Movimentacao/_56partialTransferenciaOutroOrgaoPatrimoniado", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovTransferenciaMesmoOrgaoPatrimoniado:
+                        @Html.Partial("../Movimento/Movimentacao/_57partialTransferenciaMesmoOrgaoPatrimoniado", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovPerdaInvoluntariaBensMoveis:
+                        @Html.Partial("../Movimento/Movimentacao/_58partialPerdaInvoluntariaBensMoveis", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovPerdaInvoluntariaInservivelBensMoveis:
+                        @Html.Partial("../Movimento/Movimentacao/_59partialPerdaInvoluntariaInservivelBensMoveis", Model);
+                        break;
+                    case (int)SAM.Web.Common.Enum.EnumMovimentType.MovVendaLeilaoSemoventes:
+                        @Html.Partial("../Movimento/Movimentacao/_95partialVendaLeilaoSemovente", Model);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MovimentoDate, "Data Movimento", htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.MovimentoDate, new { htmlAttributes = new { @class = "form-control datepicker", @onkeydown = "return false", @autocomplete = "off" } })
+                @Html.ValidationMessageFor(model => model.MovimentoDate, "", new { id = "spanMovimentoDate", @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.Observation, "Observação", htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-4">
+                @Html.TextAreaFor(model => model.Observation, new { htmlAttributes = new { @class = "form-control desabilitar-movimentacao-interna" }, @style = "width: 100%; height: 150px;" })
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group">
+        @Html.ValidationMessage("MsgMovimentacaoEmLote", new { @class = "text-danger" })
+        <br />
+    </div>
+
+    if(Model != null)
+    {
+        if (Model.MsgSIAFEM != null && Model.MsgSIAFEM.Count > 0)
+        {
+            <div class="modal fade" id="modalExtratoSIAFEM" tabindex="-1" role="dialog" aria-labelledby="botões">
+                <div class="modal-dialog" role="document" style="width: 30%; max-height: 60%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title tituloModalSiafem">Dados do SIAFEM</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="bodyModalDadosSiafem">
+                                <div class="form-group"><strong>Será (serão) gerada(s) a(s) Nota(s) de Lançamento abaixo:</strong></div>
+                                @foreach (var valores in Model.MsgSIAFEM)
+                                {
+                                    <div class="text-center" style="border: 1px solid #000">@valores</div>
+                                    <br />
+                                }
+                            </div>
+                            <div class="form-group text-center botoes">
+                                <div class="text-center"> O sistema pode prosseguir com o processo de geração de NL(s) pelo ContabilizaSP?</div>
+                                <button type="button" class="btn btn-primary" id="prosseguir" data-dismiss="modal">Pode prosseguir</button>
+                                <button type="button" class="btn btn-danger" id="abortar" data-dismiss="modal">Não, aborta</button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="Ids" value="@Model.ListaIdAuditoria" />
+
+            <div id="retornoSIAFEM"></div>
+        }
+    }
+
+    <div class="form-group" style="margin-bottom: 50px;">
+        <div class="form-group" style="margin-left:1%">
+            <button type="submit" id="btnSalvarSubmit" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info" onkeypress="sam.search.clickEnterSubmit();" value="MovimentoItemInventario">
+                <i class="glyphicon glyphicon-ok" aria-hidden="true"></i> Salvar
+            </button>
+
+            <a class="btnvoltar btn btn-default" href="@Url.Action("Index", "ItemInventarios", new { InventarioId = (int)ViewBag.InventarioId})">
+                <i class="glyphicon glyphicon-share-alt"></i> Voltar
+            </a>
+        </div>
+    </div>
+    @Html.Hidden("MovimentoDeUmItemDeInventario");
+}
+
+@Scripts.Render("~/Movimento/Create/js")
+<script>
+    $(document).ready(function () {
+        sam.materialItem.CriarDivLoginSiafem();
+        movimento.LoadMovimentoItemInventario();
+        @(Model != null ? (Model.UGEIntegradaComSiafem && Model.NaoDigitouLoginSiafem ? "movimento.UGEIntegradaSemLoginSiafem()" : ""): "")
+        @(Model != null ? (Model.MsgSIAFEM != null && Model.MsgSIAFEM.Count > 0? "movimento.MostraExtratoSIAFEM()" : ""): "")
+    });
+</script>

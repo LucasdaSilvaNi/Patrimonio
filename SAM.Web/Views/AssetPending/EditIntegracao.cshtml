@@ -1,0 +1,606 @@
+﻿@model SAM.Web.ViewModels.AssetViewModel
+@using SAM.Web.Common.Enum
+
+@{ViewBag.Title = "Editar Bem Patrimonial da Integração";}
+
+@Styles.Render("~/Layout_5/css")
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formBemPatrimonialPendente" }))
+{
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(x => x.assetIdsIntegracao)
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.checkflagAnimalAServico)
+    if (Model.MetodoGet)
+    {
+        <div type="hidden" id="msgAnimalAServicoInicial"></div>
+    }
+    <div class="form-horizontal">
+        <hr />
+
+        <div class="jumbotron" id="omite_div_tela" style="display:block">
+            <div class="form-group cor-azul">
+                <div class="col-md-12">
+                    <div class="col-sm-1">
+                        <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                    </div>
+                    <div class="col-md-11">
+                        <h4>Dados de Identificação</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NumberDoc, "Documento", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.EditorFor(model => model.NumberDoc, new { htmlAttributes = new { @class = "form-control documento", @maxlength = 14 } })
+                    @Html.ValidationMessageFor(model => model.NumberDoc, "", new { @class = "text-danger" })
+                </div>
+                @Html.EditorFor(model => model.AssetMovementsId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+            </div>
+
+            <div class="form-group">
+                @if (Model.InitialDescription == "SIGLA_GENERICA" || Model.InitialId == 0 || (Model.flagVerificado == (int)EnumPendenciasDadosBP.PendenteSigla && Model.InitialId == 0))
+                {
+                    @Html.LabelFor(model => model.InitialId, "Pendente de Sigla *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.InitialId, (SelectList)ViewBag.Initial, "Selecione a Sigla", new { @class = "form-control comboInitial", @Value = "", @style = "background-color: #F3A77E" })
+                        @Html.ValidationMessageFor(model => model.InitialId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("Sigla", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.InitialId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.InitialId, (SelectList)ViewBag.Initial, new { @class = "form-control comboInitial" })
+                        @Html.ValidationMessageFor(model => model.InitialId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("Sigla", new { @class = "text-danger" })
+                    </div>
+                }
+
+
+                @if (Model.NumberIdentification == null || Model.NumberIdentification == "CHAPA_GENERICA" || Model.flagVerificado == (int)EnumPendenciasDadosBP.PendenteChapa)
+                {
+                    @Html.LabelFor(model => model.NumberIdentification, "Pendente de Chapa *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    <div class="col-md-2">
+                            @Html.EditorFor(model => model.NumberIdentification, new { htmlAttributes = new { @class = "form-control somenteNumerosInicial", @Value = "", @style = "background-color: #F3A77E", @min = "1", @max = "2147483647", @maxlength = "10" } })
+                            @Html.ValidationMessageFor(model => model.NumberIdentification, "", new { @class = "text-danger" })
+                            @Html.ValidationMessage("Chapa", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-1">
+                        @Html.EditorFor(model => model.DiferenciacaoChapa, new { htmlAttributes = new { @class = "form-control", @style = "background-color: #F3A77E", @maxlength = "7" } })
+                    </div>
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.NumberIdentification, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.NumberIdentification, new { htmlAttributes = new { @class = "form-control somenteNumerosInicial", @min = "1", @max = "2147483647", @maxlength = "10" } })
+                        @Html.ValidationMessageFor(model => model.NumberIdentification, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("Chapa", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-1">
+                        @Html.EditorFor(model => model.DiferenciacaoChapa, new { htmlAttributes = new { @class = "form-control", @style = "background-color: #F3A77E", @maxlength = "7" } })
+                    </div>
+                }
+            </div>
+
+            <div class="form-group">
+                @*Sigla Antiga*@
+                @Html.LabelFor(model => model.OldInitial, "Sigla Antiga", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.OldInitial, (SelectList)ViewBag.OldInitial, "Selecione a Sigla", new { @class = "form-control comboInitial" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @*chapa Antiga*@
+                @Html.LabelFor(model => model.OldNumberIdentification, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.EditorFor(model => model.OldNumberIdentification, new { htmlAttributes = new { @class = "form-control somenteNumerosInicial", @min = "1", @max = "2147483647", @maxlength = "10" } })
+                </div>
+                <div class="col-md-1">
+                    @Html.EditorFor(model => model.DiferenciacaoChapaAntiga, new { htmlAttributes = new { @class = "form-control", @maxlength = "7" } })
+                </div>
+            </div>
+            <hr />
+            <div class="form-group cor-azul">
+                <div class="col-md-12">
+                    <div class="col-sm-1">
+                        <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                    </div>
+                    <div class="col-md-11">
+                        <h4>Tipos de Incorporação</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Acervo</label>
+                <div class="col-md-1">
+                    @Html.EditorFor(model => model.checkFlagAcervo, new { @class = "icheckbox_square-blue" })
+                </div>
+            </div>
+            <div id="divAcervo">
+                <div class="form-group">
+                    @if ((Model.checkFlagAcervo || Model.checkFlagTerceiro || Model.checkFlagDecretoSefaz) && (Model.ValueUpdateModel == null || Convert.ToDecimal(Model.ValueUpdateModel) < 10 || Model.flagVerificado == (int)EnumPendenciasDadosBP.PendenteValorAtual))
+                    {
+                        @Html.LabelFor(model => model.ValueUpdate, "Valor Atualizado *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                        <div class="col-md-3" id="div_valueUpdate">
+                            @Html.EditorFor(model => model.ValueUpdateModel, new { maxlength = 11, htmlAttributes = new { @class = "form-control sam-moeda bloquear", @style = "background-color: #F3A77E" } })
+                            @Html.ValidationMessageFor(model => model.ValueUpdateModel, "", new { @class = "text-danger" })
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.LabelFor(model => model.ValueUpdate, "Valor Atualizado", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-3" id="div_valueUpdate">
+                            @Html.EditorFor(model => model.ValueUpdateModel, new { maxlength = 11, htmlAttributes = new { @class = "form-control sam-moeda bloquear" } })
+                            @Html.ValidationMessageFor(model => model.ValueUpdateModel, "", new { @class = "text-danger" })
+                        </div>
+                    }
+                </div>
+            </div>
+            <hr />
+            <div class="form-group cor-azul">
+                <div class="col-md-12">
+                    <div class="col-sm-1">
+                        <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                    </div>
+                    <div class="col-md-11">
+                        <h4>Item Material</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" id="div_pesquisaItemMaterial">
+                @if (Model.MaterialItemCode == 0 || Model.MaterialItemCode == 999999999 || Model.MaterialGroupCode == 0 || Model.flagVerificado == (int)EnumPendenciasDadosBP.CodigoMaterialOuGrupoMaterialInvalido)
+                {
+                    @Html.LabelFor(model => model.materialItemPesquisa, "Pendente de Pesquisa Item Material *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => Model.materialItemPesquisa, new { htmlAttributes = new { @class = "form-control materialItemId", @maxlength = "20", @style = "background-color: #F3A77E" } })
+                    </div>
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.materialItemPesquisa, "Pesquisar Item Material", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => Model.materialItemPesquisa, new { htmlAttributes = new { @class = "form-control materialItemId", @maxlength = "20" } })
+                    </div>
+                }
+
+                <div class="col-md-1">
+                    <button type="button" id="btnConsultar" data-toggle="tooltip" data-placement="top" data-original-title="Click para consultar o item de material no SIAFISICO!" class="btn btn-default">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.MaterialItemCode, "Item Material", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div id="div_ItemMaterialVindoDoEstoque">
+                    <div class="col-md-2">
+                        @if (Model.MaterialItemCode == 0 || Model.MaterialItemCode == 999999999)
+                        {
+                            @Html.EditorFor(model => Model.MaterialItemCode, new { htmlAttributes = new { @class = "form-control materialItemCode", @readonly = "readonly", @Value = "" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(model => Model.MaterialItemCode, new { htmlAttributes = new { @class = "form-control materialItemCode", @readonly = "readonly" } })
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        @if (Model.MaterialItemDescription == null || Model.MaterialItemDescription.Contains("ITEM_DE_MATERIAL"))
+                        {
+                            @Html.EditorFor(model => Model.MaterialItemDescription, new { htmlAttributes = new { @class = "form-control materialItemDescription", @readonly = "readonly", @Value = "" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(model => Model.MaterialItemDescription, new { htmlAttributes = new { @class = "form-control materialItemDescription", @readonly = "readonly" } })
+                        }
+                    </div>
+                </div>
+                <div id="div_ItemMaterialAcervo">
+                    <div class="col-md-2">
+                        <input readonly value="5628156" class="form-control materialItemCode"/>
+                    </div>
+                    <div class="col-md-3">
+                        <input readonly value="Acervos" class="form-control materialItemCode" />
+                    </div>
+                 </div>
+            </div>
+
+            <div class="form-group" id="div_GrupoMaterial">
+                @Html.LabelFor(model => model.MaterialGroupCode, "Grupo do Material", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.EditorFor(model => model.MaterialGroupCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.MaterialGroupDescription, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+            </div>
+            <div class="form-group">
+                @*Descrição Resumida de Item*@
+
+                @if (Model.flagVerificado == (int)EnumPendenciasDadosBP.PendenteDescricao)
+                {
+                    @Html.LabelFor(model => model.ShortDescriptionItemId, "Descrição Resumida do Item *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.ShortDescriptionItemId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+                        @Html.EditorFor(model => model.ShortDescription, new { htmlAttributes = new { @class = "form-control", @Value = "", @style = "background-color: #F3A77E" } })
+                        @Html.EditorFor(model => model.ShortDescriptionAuxiliar, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+                        @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.ShortDescriptionItemId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.ShortDescriptionItemId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+                        @Html.EditorFor(model => model.ShortDescription, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.ShortDescriptionAuxiliar, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @type = "hidden" } })
+                        @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+                    </div>
+                }
+
+            </div>
+
+            <div class="form-group">
+                @* Estado de Conservação *@
+                @if (Model.StateConservationId == 0 || Model.flagVerificado == (int)EnumPendenciasDadosBP.PendenteEstadoConservacao)
+                {
+                    @Html.LabelFor(model => model.StateConservationId, "Estado de Conservação *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.StateConservationId, (SelectList)ViewBag.StateConservations, "-- Selecione --", new { @class = "form-control", @style = "background-color: #F3A77E" })
+                        @Html.ValidationMessageFor(model => model.StateConservationId, "", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.StateConservationId, "Estado de Conservação", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.StateConservationId, (SelectList)ViewBag.StateConservations, "-- Selecione --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.StateConservationId, "", new { @class = "text-danger" })
+                    </div>
+                }
+            </div>
+            <div id="divDepreciacao">
+                <div class="form-group cor-azul">
+                    <div class="col-md-12">
+                        <div class="col-sm-1">
+                            <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                        </div>
+                        <div class="col-md-11">
+                            <h4>Dados de Depreciação</h4>
+                            <p class="text-info">Os campos de depreciação são preenchidos automaticamente com os dados do Grupo de material, <b> caso seja necessário alterar manualmente, informe os novos valores após a pesquisa do item de material.</b></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LifeCycle, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-1">
+                        @Html.EditorFor(model => model.LifeCycle, new { htmlAttributes = new { @class = "form-control lifeCycle" } })
+                        @Html.ValidationMessageFor(model => model.LifeCycle, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-0">
+                        @Html.EditorFor(model => model.RateDepreciationMonthly, new { htmlAttributes = new { @class = "form-control rateDepreciationMonthly", @readonly = "readonly", @type = "hidden" } })
+                        @Html.ValidationMessageFor(model => model.RateDepreciationMonthly, "", new { @class = "text-danger" })
+                    </div>
+                    @Html.LabelFor(model => model.ResidualValue, htmlAttributes: new { @class = "control-label col-sm-2 " })
+                    <div class="col-md-1">
+                        @Html.EditorFor(model => model.ResidualValue, new { htmlAttributes = new { @class = "form-control residualValue" } })
+                        @Html.ValidationMessageFor(model => model.ResidualValue, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+            <div class="form-group cor-azul">
+                <div class="col-md-12">
+                    <div class="col-sm-1">
+                        <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                    </div>
+                    <div class="col-md-11">
+                        <h4>Local</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.InstitutionId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitution" })
+                    @Html.ValidationMessageFor(model => model.InstitutionId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @if (Model.BudgetUnitId == 0 || Model.BudgetUnitCode == "99999" || Model.flagVerificado == (int)EnumPendenciasDadosBP.PendenteUO)
+                {
+                    @Html.LabelFor(model => model.BudgetUnitId, "Pendente de UO *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit", @style = "background-color: #F3A77E" })
+                        @Html.ValidationMessageFor(model => model.BudgetUnitId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("UO", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.BudgetUnitId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit" })
+                        @Html.ValidationMessageFor(model => model.BudgetUnitId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("UO", new { @class = "text-danger" })
+                    </div>
+                }
+
+
+                @if (Model.ManagerUnitId == 0 || Model.ManagerUnitCode == "999999" || Model.flagVerificado == (int)EnumPendenciasDadosBP.PendenteUGE)
+                {
+                    @Html.LabelFor(model => model.ManagerUnitId, "Pendente de UGE *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit", @style = "background-color: #F3A77E" })
+                        @Html.ValidationMessageFor(model => model.ManagerUnitId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("UGE", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.ManagerUnitId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit" })
+                        @Html.ValidationMessageFor(model => model.ManagerUnitId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("UGE", new { @class = "text-danger" })
+                    </div>
+                }
+
+            </div>
+
+            <div class="form-group">
+                @if (Model.AdministrativeUnitId == null || Model.AdministrativeUnitId == 0 || Model.AdministrativeUnitCode == 99999999 || Model.flagVerificado == (int)EnumPendenciasDadosBP.PendenteUA)
+                {
+                    @Html.LabelFor(model => model.AdministrativeUnitId, "Pendente de UA *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.AdministrativeUnitId, (SelectList)ViewBag.AdministrativeUnits, new { @class = "form-control selectpicker comboAdministrativeUnit", @style = "background-color: #F3A77E" })
+                        @Html.ValidationMessageFor(model => model.AdministrativeUnitId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("UA", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.AdministrativeUnitId, "UA", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.AdministrativeUnitId, (SelectList)ViewBag.AdministrativeUnits, new { @class = "form-control selectpicker comboAdministrativeUnit" })
+                        @Html.ValidationMessageFor(model => model.AdministrativeUnitId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("UA", new { @class = "text-danger" })
+                    </div>
+                }
+
+
+                @*@if (Model.SectionCode == null || Model.SectionCode == 0 || Model.SectionCode == 999)
+                    {
+                        @Html.LabelFor(model => model.SectionId, "Pendente de Divisão", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    }
+                    else
+                    {*@
+                @Html.LabelFor(model => model.SectionId, "Divisão", htmlAttributes: new { @class = "control-label col-md-2" })
+                @*}*@
+                <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.SectionId, (SelectList)ViewBag.Sections, new { @class = "form-control selectpicker comboSection" })
+                    @Html.ValidationMessageFor(model => model.SectionId, "", new { @class = "text-danger" })
+                    @Html.ValidationMessage("Divisao", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @if (Model.ResponsibleId == null || Model.ResponsibleId == 0)
+                {
+                    @Html.LabelFor(model => model.ResponsibleId, "Pendente de Responsável *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.ResponsibleId, (SelectList)ViewBag.Responsible, "Selecione o Responsavel", new { @class = "form-control comboResponsible", @style = "background-color: #F3A77E" })
+                        @Html.ValidationMessageFor(model => model.ResponsibleId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("Responsavel", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.ResponsibleId, "Responsável", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.ResponsibleId, (SelectList)ViewBag.Responsible, "Selecione o Responsavel", new { @class = "form-control comboResponsible" })
+                        @Html.ValidationMessageFor(model => model.ResponsibleId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("Responsavel", new { @class = "text-danger" })
+                    </div>
+                }
+
+
+                @if (Model.AuxiliaryAccountId == null || Model.AuxiliaryAccountId == 0 || Model.flagVerificado == (int)EnumPendenciasDadosBP.PendenteContaContabil || Model.flagVerificado == (int)EnumPendenciasDadosBP.ContaContabilInvalida)
+                {
+                    @Html.LabelFor(model => model.AuxiliaryAccountId, "Pendente de Conta Contábil *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.AuxiliaryAccountId, ViewBag.AuxiliaryAccounts == null ? Enumerable.Empty<SelectListItem>() : (SelectList)ViewBag.AuxiliaryAccounts, " -- Selecione -- ", new { @class = "form-control", @style = "background-color: #F3A77E" })
+                        @Html.ValidationMessageFor(model => model.AuxiliaryAccountId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("ContaAuxiliar", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.AuxiliaryAccountId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-3">
+                        @Html.DropDownListFor(model => model.AuxiliaryAccountId, (SelectList)ViewBag.AuxiliaryAccounts, " -- Selecione -- ", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AuxiliaryAccountId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("ContaAuxiliar", new { @class = "text-danger" })
+                    </div>
+                }
+            </div>
+
+            <hr />
+            <div class="form-group cor-azul">
+                <div class="col-md-12">
+                    <div class="col-sm-1">
+                        <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                    </div>
+                    <div class="col-md-11">
+                        <h4>Dados Incorporação</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NumberPurchaseProcess, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.NumberPurchaseProcess, new { htmlAttributes = new { @class = "form-control", @maxlength = 25 } })
+                    @Html.ValidationMessageFor(model => model.NumberPurchaseProcess, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-2" id="msgAnimalAServico" style="display:@(Model.MaterialGroupCode == 88 ? "block" : "none");">
+                    @if (Model.checkflagAnimalAServico)
+                    {
+                        @:Animal está a serviço do estado
+                            }
+                    else
+                    {
+                        @:Animal <b>não</b> está a serviço do estado
+                            }
+                </div>
+            </div>
+
+            <div class="form-group">
+                @if (Model.checkFlagDecretoSefaz == false && Model.checkFlagAcervo == false && Model.checkFlagTerceiro == false && (Model.ValueAcquisitionModel == null || Model.ValueAcquisitionModel.ToString() == "0" || Model.ValueAcquisitionModel.ToString().Substring(0, 4).Contains("0,00") || Model.flagVerificado == (int)EnumPendenciasDadosBP.PendenteValorAquisicao || Convert.ToDecimal(Model.ValueAcquisitionModel) < 10))
+                {
+                    @Html.LabelFor(model => model.ValueAcquisitionModel, "Pendente de Valor de Aquisição *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    <div class="col-md-3">
+                        @Html.EditorFor(model => model.ValueAcquisitionModel, new { maxlength = 11, htmlAttributes = new { @class = "form-control sam-moeda bloquear", @style = "background-color: #F3A77E" } })
+                        @Html.ValidationMessageFor(model => model.ValueAcquisitionModel, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("ValorAquisicao", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.ValueAcquisitionModel, "Valor de Aquisição", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-3">
+                        @Html.EditorFor(model => model.ValueAcquisitionModel, new { maxlength = 11, htmlAttributes = new { @class = "form-control sam-moeda bloquear" } })
+                        @Html.ValidationMessageFor(model => model.ValueAcquisitionModel, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("ValorAquisicao", new { @class = "text-danger" })
+                    </div>
+                }
+
+                @*@Html.LabelFor(model => model.ValueUpdate, "Valor Atualizado", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-3" id="div_valueUpdate">
+                        @Html.EditorFor(model => model.ValueUpdateModel, new { maxlength = 11, htmlAttributes = new { @class = "form-control sam-moeda bloquear" } })
+                        @Html.ValidationMessageFor(model => model.ValueUpdateModel, "", new { @class = "text-danger" })
+                    </div>*@
+            </div>
+
+            <div class="form-group">
+                @if (Model.AcquisitionDate.ToString().Contains("01/01/0001") || Model.AcquisitionDate.ToString().Contains("31/12/9999") || Model.flagVerificado == (int)EnumPendenciasDadosBP.DataAquisicaoInvalida || Model.flagVerificado == (int)EnumPendenciasDadosBP.PendenteDataAquisicao || Model.AcquisitionDate.Date > DateTime.Now)
+                {
+                    @Html.LabelFor(model => model.AcquisitionDate, "Pendente de Data Aquisição *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                    <div class="col-md-3">
+                        @Html.EditorFor(model => model.AcquisitionDate, new { htmlAttributes = new { @class = "form-control bloquear", @Value = "01/01/0001", @style = "background-color: #F3A77E" } })
+                        @Html.ValidationMessageFor(model => model.AcquisitionDate, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("DataAquisicao", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    @Html.LabelFor(model => model.AcquisitionDate, "Data Aquisição", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-3">
+                        @Html.EditorFor(model => model.AcquisitionDate, new { htmlAttributes = new { @class = "form-control bloquear" } })
+                        @Html.ValidationMessageFor(model => model.AcquisitionDate, "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("DataAquisicao", new { @class = "text-danger" })
+                    </div>
+                }
+
+                @* Data de movimento *@
+                @Html.LabelFor(model => model.MovimentDate, "Pendente de Data Incorporação *", htmlAttributes: new { @class = "control-label col-md-2 text-danger" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.MovimentDate, new { maxlength = 10, htmlAttributes = new { @class = "form-control", @Value = "01/01/0001", @style = "background-color: #F3A77E" } })
+                    @Html.ValidationMessageFor(model => model.MovimentDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <hr />
+            <div class="form-group cor-azul">
+                <div class="col-md-12">
+                    <div class="col-sm-1">
+                        <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                    </div>
+                    <div class="col-md-11">
+                        <h4>Dados Complementares</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.SerialNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.SerialNumber, new { htmlAttributes = new { @class = "form-control", @maxlength = 50 } })
+                    @Html.ValidationMessageFor(model => model.SerialNumber, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.ManufactureDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.ManufactureDate, new { maxlength = 10, htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ManufactureDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DateGuarantee, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.DateGuarantee, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DateGuarantee, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.ChassiNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.ChassiNumber, new { htmlAttributes = new { @class = "form-control", @maxlength = 20 } })
+                    @Html.ValidationMessageFor(model => model.ChassiNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.Brand, new { htmlAttributes = new { @class = "form-control", @maxlength = 20 } })
+                    @Html.ValidationMessageFor(model => model.Brand, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control", @maxlength = 20 } })
+                    @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NumberPlate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.NumberPlate, new { htmlAttributes = new { @class = "form-control", @maxlength = 8 } })
+                    @Html.ValidationMessageFor(model => model.NumberPlate, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.AdditionalDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.AdditionalDescription, new { htmlAttributes = new { @class = "form-control", @maxlength = 20 } })
+                    @Html.ValidationMessageFor(model => model.AdditionalDescription, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        @Html.Partial("Modais/_AnimaisAServico")
+        <hr />
+
+        <div class="form-group">
+            @Html.Partial("_SaveButtons")
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/AssetPending/Edit/js")
+    <script>
+        $(window).ready(function () {
+            sessionStorage.clear();
+        })
+        sam.assetpending.Load();
+    </script>
+}

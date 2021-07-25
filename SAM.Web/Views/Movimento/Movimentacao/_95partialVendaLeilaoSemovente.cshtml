@@ -1,0 +1,47 @@
+﻿@model SAM.Web.ViewModels.MovimentoViewModel
+
+<div class="jumbotron">
+    <div class="form-group">
+        <label for="lblAvisoTipoBaixa" class="control-label col-md-1"></label>
+        <div class="col-md-7">
+            <label for="lblAvisoTipoBaixa" style="color:green">Baixa Imediata do(s) BP(s)</label>
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="Institutions" class="control-label col-md-1">Orgão</label>
+        <div class="col-md-7">
+            @Html.DropDownListFor(model => model.InstituationIdDestino, (SelectList)ViewBag.InstitutionsDestino, new { @class = "form-control comboinstitution2" })
+            <span id="spanInstitution" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="BudgetUnits" class="control-label col-md-1">UO</label>
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.BudgetUnitIdDestino, (SelectList)ViewBag.BudgetUnitsDestino, new { @class = "form-control comboBudgetUnit2" })
+            <span id="spanBudgetUnits" class="text-danger field-validation-error"></span>
+        </div>
+        <div id="omite_div_por_uo">
+            <label for="ManagerUnits" class="control-label col-md-1">UGE</label>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ManagerUnitIdDestino, (SelectList)ViewBag.ManagerUnitsDestino, new { @class = "form-control comboManagerUnit2" })
+                <span id="spanManagerUnits" class="text-danger field-validation-error"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="NumberProcess" class="control-label col-md-1">Nº Processo</label>
+        <div class="col-md-3">
+            @Html.TextBoxFor(model => model.NumberProcess, new { @class = "form-control", @maxlength = "25" })
+            <span id="spanNumberProcess" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        sam.commun.CancelaPostPartialView();
+    });
+
+    sam.transferencia.bind();
+</script>

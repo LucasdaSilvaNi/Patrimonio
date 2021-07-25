@@ -1,0 +1,345 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.Models.ItemInventario>
+@using PagedList.Mvc;
+@using PagedList;
+@using SAM.Web.Common.Enum;
+
+
+<hr />
+@{ ViewBag.Title = "Detalhamento Inventário"; }
+@using (Html.BeginForm("AtualizaRelatorioInventarioManual", "ItemInventarios", FormMethod.Post, new { id = "formBemPatrimonial", @class = "formSubmit" }))
+{
+    @Html.HiddenFor(x => x.FirstOrDefault().ItemsInventarioID)
+    @Html.HiddenFor(x=> x.FirstOrDefault().InventarioId)
+    @Html.HiddenFor(x=> x.FirstOrDefault().Page)
+<hr />
+<h3 class="text-primary">@ViewBag.DescricaoInventario (Itens do Inventário)</h3>
+<hr />
+<h4 class="text-primary">@ViewBag.DetalhesResponsavel</h4 >
+<hr />
+<div class="form-group" style="margin-left: -1%;">
+    @Html.Hidden("searchString")
+    <button type="submit" id="filtroOculto" style="display: none"> </button>
+
+    <div class="col-sm-12" style="margin-bottom: 30px;">
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" id="search-tables" name="search-tables" value="@ViewBag.CurrentFilter" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnter(this,event)" />
+                <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="pull-right">
+                <a class="btnNovo btn btn-info" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" href="@Url.Action("Create", "Assets", new { siglaChapaInventario = Model.FirstOrDefault().InitialName, numeroChapaInventario = Model.FirstOrDefault().Code })">
+                    <i class="glyphicon glyphicon-plus fa-lg novoclass"></i> Novo
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<table class="table table-inventarios" id="result-tables">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().InitialName)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Code)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Item)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().DescricaoDivisao)</th>
+        @*<th>@Html.DisplayNameFor(model => model.FirstOrDefault().Estado)</th>*@
+        <th>@Html.DisplayName("Encontrado")</th>
+        @if (@ViewBag.Status != "1")
+        {
+            <th class="acoes">
+                Atualizar Estado dos Itens do Inventário
+                <a class="btnAtualizar" onclick="sam.inventario.atualizarItens(@ViewBag.InventarioId)" title="Atualizar Status">
+                    <i class="glyphicon glyphicon-refresh atualizarclass"></i>
+                    <span class="sr-only">Atualizar</span>
+                </a>
+            </th>
+        }
+        else
+        {
+            <th></th>
+        }
+    </tr>
+    <input type="hidden" id="inventarioPaginacaoSalvo" />
+    @{ int contadorLinhas = 1; }
+    @foreach (var item in Model)
+    {
+        var valueSim = item.Id.ToString() + "sim";
+        var valueNao = item.Id.ToString() + "nao";
+        var _checkedSim = (item.Estado == 1 ? "checked" :"");
+        var _checkedNao = (item.Estado == 0 ? "checked" : "");
+
+    <tr @((@item.Estado != 1) ? "style=background-color:#F3A77E" : "")>
+
+        <td>@Html.DisplayFor(modelItem => item.InitialName)</td>
+        <td>@Html.DisplayFor(modelItem => item.Code)</td>
+        <td>@Html.DisplayFor(modelItem => item.Item)</td>
+        <td>@Html.DisplayFor(modelItem => item.DescricaoDivisao)</td>
+
+        <td>
+            <fieldset data-role=@("controlgroup" + contadorLinhas) id=@("controlgroup" + contadorLinhas)>
+                @if (item.Estado == 1)
+                {
+                    <input type="hidden" class="identificador-elemento" value="@valueSim" />
+                }
+                else if (item.Estado == 0)
+                {
+                    <input type="hidden" class="identificador-elemento" value="@valueNao" />
+                }
+
+                <input type="radio" class="identificador-elemento-ok" name=@("controlgroup" + contadorLinhas) value="@valueSim" ;">
+                <label for=@("controlgroup" + contadorLinhas)>Sim</label>
+                <input type="radio" class="identificador-elemento-nok" name=@("controlgroup" + contadorLinhas) value="@valueNao" ;">
+                <label for=@("controlgroup" + contadorLinhas)>Não</label>
+            </fieldset>
+        </td>
+        @if (@ViewBag.Status == "1")
+        {
+            <td class="acoes">
+                <a class="btnDetalhe" href="@Url.Action("Details", new { id = item.Id, tela = 1 })" title="Detalhes">
+                    <i class="glyphicon glyphicon-search detalheclass"></i>
+                    <span class="sr-only">Detalhes</span>
+                </a>
+            </td>
+        }
+        else if (item.Estado == 3)
+        {
+            <td class="acoes">
+                <a class="btnNovo" href="@Url.Action("Create", "Assets", new { codChapaInventario = item.Code , numeroChapaInventario = 48788})" title="Novo">
+                    <i class="glyphicon glyphicon-plus-sign novoclass"></i>
+                    <span class="sr-only">Novo Patrimonio</span>
+                </a>
+                <a class="btnExcluir" href="@Url.Action("Delete", new { id = item.Id })" title="Excluir">
+                    <i class="glyphicon glyphicon-remove deleteclass"></i>
+                    <span class="sr-only">Excluir</span>
+                </a>
+            </td>
+        }
+        else
+        {
+            <td class="acoes">
+                <a class="btnDetalhe" href="@Url.Action("Details", new { id = item.Id, tela = 1 })" title="Detalhes">
+                    <i class="glyphicon glyphicon-search detalheclass"></i>
+                    <span class="sr-only">Detalhes</span>
+                </a>
+                <a class="btnExcluir" href="@Url.Action("Delete", new { id = item.Id })" title="Excluir">
+                    <i class="glyphicon glyphicon-remove deleteclass"></i>
+                    <span class="sr-only">Excluir</span>
+                </a>
+            </td>
+        }
+    </tr>
+        contadorLinhas++;
+    }
+
+</table>
+
+        //Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("ListagemRelatorioInventarioManual", new { InventarioId = ViewBag.InventarioId, page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+<hr />
+<div class="form-group">
+    <div class="form-group">
+        <div class="form-group" style="margin-left:1%">
+            <button type="button" id="btnSalvarSubmit" data-placement="top" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" class="btn btn-info" value="AtualizaRelatorioInventarioManual">
+                <i class="glyphicon glyphicon-ok" aria-hidden="true"></i> Salvar
+            </button>
+            <a class="btn btn-default" href="@Url.Action("Index", "Inventarios")">
+                <i class="glyphicon glyphicon-share-alt"></i> Voltar
+            </a>
+        </div>
+    </div>
+</div>
+        }
+@section Scripts {
+	<script>
+       
+		//sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+        $(document).ready(function () {
+            $('#Page').val(@ViewBag.Page);
+            $('#btnSalvarSubmit').click(function () {
+                getInventarios();
+                if (validarInvetariosPorPaginacao())
+                    submitAjax('#formBemPatrimonial', 'AtualizaRelatorioInventarioManual');
+            })
+           
+            $('.identificador-elemento-ok').on('ifChecked', function (event) {
+                var $input = $(this);
+                var id = $input.val();             
+                var checked = $input.is(":checked");
+                if (checked) {
+                    $input.parent().parent().parent().parent().css('background-color', '#fff');
+                    $input.parent().parent().parent().parent().css('color', '#000');
+                    if (sessionStorage.getItem(id.replace('sim', 'nao'))) {
+                        sessionStorage.removeItem(id.replace('sim', 'nao'));
+                    }
+                    sessionStorage.setItem(id, 'true');
+                    $('#inventarioPaginacaoSalvo').val(false);
+                }
+              
+            });
+            $('.identificador-elemento-nok').on('ifChecked', function (event) {
+                var $input = $(this);
+                var id = $input.val();
+                var checked = $input.is(":checked");
+                if (checked) {
+                    $input.parent().parent().parent().parent().css('background-color', '#fff');
+                    $input.parent().parent().parent().parent().css('color', '#000');
+                    if (sessionStorage.getItem(id.replace('nao', 'sim'))) {
+                        sessionStorage.removeItem(id.replace('nao', 'sim'));
+                    }
+                    sessionStorage.setItem(id, 'false');
+                    $('#inventarioPaginacaoSalvo').val(false);
+                }
+                
+            });
+
+        });
+
+        var getInventarios = function () {
+            var arrInevntario = [];
+            arrInevntario.push('[');
+            for (var i = 0; i < sessionStorage.length; i++) {
+                //console.log(sessionStorage.getItem(sessionStorage.key(i)));
+                var _encontrado = sessionStorage.getItem(sessionStorage.key(i)) === 'true';
+                var inventario = JSON.stringify({
+                    Id: parseInt(sessionStorage.key(i).replace('nao', '').replace('sim', '')),
+                    Encontrado: _encontrado //sessionStorage.getItem(sessionStorage.key(i))
+                });
+                if (i == sessionStorage.length - 1)
+                    arrInevntario.push(inventario);
+                else
+                    arrInevntario.push(inventario + ',');
+            }
+            arrInevntario.push('];');
+            $('#ItemsInventarioID').val(JSON.parse(JSON.stringify(arrInevntario.join(''))));
+            console.log($('#ItemsInventarioID').val());
+
+
+        }
+        $('.pagination').click(function () {
+            var validado = validarInvetariosPorPaginacao();
+            //return validado;
+        });
+        var setInventarios = function () {
+
+            for (var i = 0; i < sessionStorage.length; i++) {
+                var id = $(":radio[value=" + sessionStorage.key(i) + "]").val();
+                if (id == sessionStorage.key(i)) {
+                    $(':radio[value=' + sessionStorage.key(i) + ']').iCheck('check');
+                }
+            }
+
+            $('.table-inventarios > tbody  > tr').each(function () {
+                $(this).find('fieldset').each(function () {
+                    var radioSelecionado = $(this).find('input.identificador-elemento');
+
+                    if (radioSelecionado !== undefined) {
+                        $(':radio[value=' + radioSelecionado.val() + ']').iCheck('check');
+                        $(':radio[value=' + radioSelecionado.val() + ']').attr('disabled', true);
+                        sessionStorage.removeItem(radioSelecionado.val());
+
+                        if (radioSelecionado.val() !== undefined && radioSelecionado.val().indexOf('nao') !== -1) {
+                            $(':radio[value=' + radioSelecionado.val().replace('nao', 'sim') + ']').attr('disabled', true);
+                            sessionStorage.removeItem(radioSelecionado.val().replace('nao', 'sim'));
+                        }
+                        if (radioSelecionado.val() !== undefined && radioSelecionado.val().indexOf('sim') !== -1) {
+                            $(':radio[value=' + radioSelecionado.val().replace('sim', 'nao') + ']').attr('disabled', true);
+                            sessionStorage.removeItem(radioSelecionado.val().replace('sim', 'nao'));
+                        }
+
+
+                    }
+                });
+
+            });
+        }
+        window.addEventListener("load", function (event) {
+            setInventarios();
+            setBackgroudGrid();
+            $('#inventarioPaginacaoSalvo').val(true);
+        });
+
+        var validarInvetariosPorPaginacao = function () {
+            var retorno = true;
+            var inventarioPaginacaoSalvo;
+            $('.table-inventarios > tbody  > tr').each(function () {
+                $(this).find('fieldset').each(function () {
+                    var radioButtonSim = $(this).find('div').find('input.identificador-elemento-ok');
+                    var radioButtonNao = $(this).find('div').find('input.identificador-elemento-nok');
+
+                    if (radioButtonNao != undefined && radioButtonSim != undefined) {
+                        var checkedSim = $(radioButtonSim).is(":checked");
+                        var checkedNao = $(radioButtonNao).is(":checked");
+
+                        if (checkedSim == false && checkedNao == false) {
+                            //var pagina = getUrlParameter("page");
+                            //if (!pagina === null || !pagina === undefined || !pagina === '')
+                            retorno = false;
+                        } else {
+                            inventarioPaginacaoSalvo = $('#inventarioPaginacaoSalvo').val();
+                           
+                        }
+                    }
+                });
+                
+            });
+            if (inventarioPaginacaoSalvo !== undefined && inventarioPaginacaoSalvo === 'false') {
+                alert('Os inventários selecionados não foram salvos, não esqueça de retornar e salvar!')
+            }
+            return retorno;
+        }
+        var setBackgroudGrid = function () {
+
+            $('.table-inventarios > tbody  > tr').each(function () {
+                $(this).find('fieldset').each(function () {
+                    var radioButtonSim = $(this).find('div').find('input.identificador-elemento-ok');
+                    var radioButtonNao = $(this).find('div').find('input.identificador-elemento-nok');
+
+                    if (radioButtonNao != undefined && radioButtonSim != undefined) {
+                        var checkedSim = $(radioButtonSim).is(":checked");
+                        var checkedNao = $(radioButtonNao).is(":checked");
+
+                        if (checkedSim == false && checkedNao == false) {
+                            $(this).parent().parent().css('background-color', '#F2F1F0');
+                            $(this).parent().parent().css('color', '#000');
+                        }
+                    }
+                });
+
+            });
+            return false;
+        }
+        var getUrlParameter = function (name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
+        var submitAjax = function (form, url) {
+
+            let dados = $(form).serialize();
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: dados,
+                success: function (data) {
+                    $('.identificador-elemento-ok').attr('disabled', true);
+                    $('.identificador-elemento-nok').attr('disabled', true);
+                    $('#inventarioPaginacaoSalvo').val(true);
+                    alert(data.Conteudo);
+                },
+                error: function (objeto) {
+                    $('#inventarioPaginacaoSalvo').val(false);
+                    alert('Ocorreu um erro, verifique coma Administrador(rede ou sistema)');
+                }
+
+            });
+
+        };
+	</script>
+
+}
+

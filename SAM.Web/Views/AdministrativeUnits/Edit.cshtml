@@ -1,0 +1,72 @@
+﻿@model SAM.Web.ViewModels.AdministrativeUnitViewModel
+
+@{ViewBag.Title = "Editar Unidade Administrativa ";}
+
+<h2>@ViewBag.Title - @Model.Description</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formAdministrativeUnit"}))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.InstitutionIdAux)
+        @Html.HiddenFor(model => model.BudgetUnitIdAux)
+        @Html.HiddenFor(model => model.ManagerUnitIdAux)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InstitutionId, "Orgão", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitution" })
+                @Html.ValidationMessageFor(model => model.InstitutionId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BudgetUnitId, "UO", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit" })
+                @Html.ValidationMessageFor(model => model.BudgetUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ManagerUnitId, "UGE", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit" })
+                @Html.ValidationMessageFor(model => model.ManagerUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control somenteNumerosInicial", @min = "1", @max = "2147483647", @maxlength = "10" } })
+                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                @Html.ValidationMessage("CodigoJaExiste", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @maxlength = "120" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.RelationshipAdministrativeUnitId, "Selecione a UA Vinculada", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.RelationshipAdministrativeUnitId, (SelectList)ViewBag.AdministrativeUnits, "-- Selecione --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.RelationshipAdministrativeUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.Partial("_SaveButtons")
+        </div>
+    </div>
+}

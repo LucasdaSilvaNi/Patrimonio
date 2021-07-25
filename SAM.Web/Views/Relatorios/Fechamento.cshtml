@@ -1,0 +1,70 @@
+﻿@model SAM.Web.ViewModels.RelatorioViewModel
+
+@{ViewBag.Title = "Relatório Fechamento Mensal";}
+
+<h3 class="text-primary">@ViewBag.Title</h3>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formBemPatrimonial" }))
+{
+    @Html.HiddenFor(model => model.Excel)
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @Html.LabelFor(model => model.InstitutionId, "Órgão", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control ddl-asset-orgao comboinstitution" })
+                @Html.ValidationMessageFor(model => model.InstitutionId, "", new { @class = "text-danger" })
+            </div>
+
+            @*UO*@
+            @Html.LabelFor(model => model.BudgetUnitId, "UO", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit" })
+                @Html.ValidationMessageFor(model => model.BudgetUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            @*UGE*@
+            @Html.LabelFor(model => model.ManagerUnitId, "UGE", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit", @onchange = "MesReferencia()" })
+                @Html.ValidationMessageFor(model => model.ManagerUnitId, "", new { @class = "text-danger" })
+            </div>
+            @*UA*@
+            @Html.LabelFor(model => model.MesRef, "Mês Referência", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.MesRef, (SelectList)ViewBag.MesRef, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MesRef, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-7">
+
+            </div>
+            <div class="col-md-2">
+                <form method="post" target="_blank">
+                    <button type="submit" class="btn btn-info btnPDF" style="height: 33px"> Gerar PDF</button>
+                    <button type="submit" class="btn btn-success btnExcel" style="height: 33px"> Gerar Excel</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        sam.commun.EventoComboPeriodoPorUGE();
+        $(".btnExcel").click(function () {
+            $("#Excel").val(true);
+        });
+
+        $(".btnPDF").click(function () {
+            $("#Excel").val(false);
+        });
+    });
+</script>

@@ -1,0 +1,86 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.Models.Mobile>
+@using PagedList.Mvc;
+
+@{ViewBag.Title = "Módulos Cadastrados";}
+
+@Html.Partial("_GridNewButtons")
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().InstitutionId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().BudgetUnitId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().ManagerUnitId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().AdministrativeUnitId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Brand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Model)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().MacAddress)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelatedInstitutions.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelatedBudgetUnits.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelatedManagerUnits.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelatedAdministrativeUnits.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Brand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MacAddress)
+            </td>
+            <td class="acoes">
+
+                <a href="@Url.Action("Edit", new { id = item.Id })" title="Editar">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                    <span class="sr-only">Editar</span>
+                </a>
+
+                <a href="@Url.Action("Details", new { id = item.Id })" title="Detalhes">
+                    <i class="glyphicon glyphicon-search"></i>
+                    <span class="sr-only">detalhes</span>
+                </a>
+
+                <a href="@Url.Action("Delete", new { id = item.Id })" title="Excluir">
+                    <i class="glyphicon glyphicon-remove"></i>
+                    <span class="sr-only">Excluir</span>
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

@@ -1,0 +1,92 @@
+﻿@model SAM.Web.ViewModels.AssetViewModel
+
+<div class="form-group">
+    @Html.LabelFor(model => model.NumberDoc, "Número de documento *", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-2">
+        @Html.EditorFor(model => model.NumberDoc, new { htmlAttributes = new { @class = "form-control documento", @maxlength = 14 } })
+        @Html.ValidationMessageFor(model => model.NumberDoc, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @*Empenho*@
+    @Html.LabelFor(model => model.numeroEmpenho, "Pesquisar Empenho", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-2">
+        @Html.EditorFor(model => model.numeroEmpenho, new { htmlAttributes = new { @class = "form-control numeroEmpenho", @maxlength = "20" } })
+        @Html.ValidationMessageFor(model => model.numeroEmpenho, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-md-1">
+        <button type="button" id="btnConsultarEmpenhoRestosAPagar" data-toggle="tooltip" data-placement="top" data-original-title="Click para consulta o Empenho!" class="btn btn-default">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+    </div>
+    <div class="col-md-1">
+        @Html.EditorFor(model => model.Ug, new { htmlAttributes = new { @class = "form-control Ug", @Value = ViewBag.Ug, @readonly = "readonly", @type = "hidden" } })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.numeroEmpenho, "Empenho", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-2">
+        @Html.EditorFor(Model => Model.EmpenhoResultado, new { htmlAttributes = new { @class = "form-control Empenho", @readonly = "readonly" } })
+    </div>
+</div>
+
+<div class="form-group">
+    @*Material Item*@
+    @Html.LabelFor(model => model.materialItemPesquisa, "Pesquisar Item Material", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-2">
+        @Html.EditorFor(model => Model.materialItemPesquisa, new { htmlAttributes = new { @class = "form-control materialItemId", @maxlength = "20" } })
+        @Html.ValidationMessageFor(model => Model.MaterialItemCode, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-md-1">
+        <button type="button" id="btnConsultar" data-toggle="tooltip" data-placement="top" data-original-title="Click para consultar o item de material no SIAFISICO!" class="btn btn-default">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.MaterialItemCode, "Item Material", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-2">
+        @Html.EditorFor(model => Model.MaterialItemCode, new { htmlAttributes = new { @class = "form-control materialItemCode", @readonly = "readonly" } })
+    </div>
+    <div class="col-md-6">
+        @Html.EditorFor(model => Model.MaterialItemDescription, new { htmlAttributes = new { @class = "form-control materialItemDescription", @readonly = "readonly" } })
+    </div>
+</div>
+
+<div class="form-group">
+    @*Descrição Resumida de Item*@
+    @Html.LabelFor(model => model.ShortDescriptionItemId, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-6">
+        @Html.EditorFor(model => model.ShortDescription, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @*Sigla Antiga*@
+    @Html.LabelFor(model => model.OldInitial, "Sigla Antiga", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-3">
+        @Html.DropDownListFor(model => model.OldInitial, (SelectList)ViewBag.OldInitial, "Selecione a Sigla", new { @class = "form-control comboInitial" })
+    </div>
+    @*chapa Antiga*@
+    @Html.LabelFor(model => model.OldNumberIdentification, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-2">
+        @Html.EditorFor(model => model.OldNumberIdentification, new { htmlAttributes = new { @class = "form-control somenteNumerosInicial", @min = "1", @max = "2147483647", @maxlength = "10" } })
+    </div>
+    <div class="col-md-1">
+        @Html.EditorFor(model => model.DiferenciacaoChapaAntiga, new { htmlAttributes = new { @class = "form-control somenteNumerosInicial", @maxlength = "7" } })
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        sam.materialItem.Load();
+        sam.asset.loadModalView();
+        sam.utils.init();
+        sam.asset.BuscarEmpenhoRestosAPagar();
+    });
+</script>

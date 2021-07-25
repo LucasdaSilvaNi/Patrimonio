@@ -1,0 +1,80 @@
+﻿@model SAM.Web.ViewModels.RepairViewModel
+
+@{
+    ViewBag.Title = "Conserto - Retorno";
+}
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formConcert", @class = "submit" }))
+{
+    @Html.HiddenFor(model=> model.Id)
+    @Html.HiddenFor(model => model.AssetId)
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model=> model.InitialId)
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Identificação</h4>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.InitialId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.RelatedInitials.Description, new { htmlAttributes = new { @class = "form-control", @disabled="disabled" } })
+            </div>
+            @Html.LabelFor(model => model.NumberIdentification, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.NumberIdentification, new { htmlAttributes = new { @class = "form-control limpar-numero somenteNumeros ", @min = "1", @max = "2147483647", @maxlength = "10", @disabled = "disabled" } })
+            </div>
+            @Html.LabelFor(model => model.PartNumberIdentification, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.PartNumberIdentification, new { htmlAttributes = new { @class = "form-control limpar-numero somenteNumeros", @min = "1", @max = "2147483647", @maxlength = "10", @disabled = "disabled" } })
+            </div>
+        </div>
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Item de Material</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ReturnDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.ReturnDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ReturnDate, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.FinalCost, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.FinalCost, new { htmlAttributes = new { @class = "form-control limpar-numero sam-moeda", @maxlength = "18" } })
+                @Html.ValidationMessageFor(model => model.FinalCost, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.Partial("_SaveButtons")
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        sam.repair.init();
+        sam.repair.load();
+    </script>
+}
+

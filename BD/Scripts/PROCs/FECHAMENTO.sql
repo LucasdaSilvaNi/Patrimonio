@@ -1,0 +1,297 @@
+DROP PROCEDURE FECHAMENTO
+GO
+
+--CREATE PROCEDURE [dbo].[FECHAMENTO]
+--(    
+-- @managerUnitId int,    
+-- @loginID int     
+--)    
+--AS    
+--BEGIN    
+    
+--BEGIN TRANSACTION       
+--BEGIN TRY      
+      
+-- Declare @ClosingYearMonthReference varchar(6) = (select ManagmentUnit_YearMonthReference from ManagerUnit where Id = @managerUnitId);    
+-- Declare @DataReferencia datetime;    
+-- Declare @AnoMesReferencia varchar(8);    
+         
+     
+-- CREATE TABLE #Temp    
+-- (    
+--  AssetId int,    
+--  ManagerUnitId int NOT NULL,    
+--  ClosingYearMonthReference varchar(6) NOT NULL,    
+--  CurrentPrice decimal(18,2) NOT NULL,    
+--  DepreciacaoMensal decimal(18,10) NOT NULL,    
+--  DepreciacaoAcumulada decimal(18,2) NOT NULL,    
+--  MaterialItemCode int NOT NULL,    
+--  AceleratedDepreciation int NOT NULL,    
+--  MaterialGroupCode int NOT NULL,    
+--  VidaUtil int NOT NULL,    
+--  [Status] bit NOT NULL,    
+--  LoginID int NOT NULL,    
+--  ClosingDate Datetime NOT NULL,    
+--  AssetMovementsId int NULL,    
+--  ValueUpdate decimal(18,2) NULL,    
+--  MesesUtilizados int NOT NULL,    
+--  ValorResidualCalc decimal(18,2),    
+--  ValorDesdobramento decimal(18,2),    
+--  MesesDeUso int,    
+--  flagDepreciationCompleted bit null    
+-- )    
+    
+    
+-- --Armazena todos os valores necessários para o fechamento    
+--	INSERT INTO #Temp(AssetId,    
+--		ManagerUnitId,    
+--		ClosingYearMonthReference,    
+--		CurrentPrice,    
+--		DepreciacaoMensal,    
+--		DepreciacaoAcumulada,    
+--		MaterialItemCode,    
+--		AceleratedDepreciation,    
+--		MaterialGroupCode,    
+--		VidaUtil,    
+--		[Status],    
+--		LoginID,    
+--		ClosingDate,    
+--		AssetMovementsId,    
+--		ValueUpdate,    
+--		MesesUtilizados,    
+--		ValorResidualCalc,    
+--		ValorDesdobramento,    
+--		MesesDeUso,    
+--		flagDepreciationCompleted)    
+--	SELECT      
+--		a.Id as AssetId,    
+--		a.ManagerUnitId as ManagerUnitId,    
+--		@ClosingYearMonthReference as ClosingYearMonthReference,    
+--		a.ValueUpdate as CurrentPrice,    
+--		--Verifica se o bem ja alcançou seu cliclo de vida    
+--		CASE WHEN (a.LifeCycle = a.monthUsed or a.flagAcervo = 1 or a.flagTerceiro = 1) THEN     
+--			--Caso seja, o valor de depreciação deve ser 0    
+--			0    
+--		ELSE     
+--			--Caso contrário o bem terá seu valor depreciado normalmente    
+--			a.DepreciationByMonth            
+--		END as DepreciacaoMensal,    
+--		--Verifica se o bem é um acervo ou Terceiro   
+--		CASE WHEN a.flagAcervo = 1 OR a.flagTerceiro = 1  THEN    
+--			0    
+--		ELSE    
+--			(CASE WHEN a.flagDecreto = 1  THEN  
+--				a.DepreciationAccumulated
+--			ELSE
+--				(a.ValueAcquisition - a.ValueUpdate)  
+--			END)   
+--		END as DepreciacaoAcumulada,    
+--		a.MaterialItemCode as MaterialItemCode,    
+--		a.AceleratedDepreciation as AceleratedDepreciation,    
+--		a.MaterialGroupCode as MaterialGroupCode,    
+--		a.LifeCycle as VidaUtil,    
+--		1 as [Status],    
+--		@loginID as loginID,    
+--		GETDATE() as ClosingDate,    
+--		am.Id as AssetMovementsId,    
+--		a.ValueUpdate,    
+--		a.monthUsed as MesesUtilizados,    
+--		a.ResidualValueCalc as ValorResidualCalc,     
+--		--Verifica se a proxima depreciação sera a ultima, cujo valor deve levar em conta o desdobramento    
+--		CASE WHEN a.LifeCycle = (a.monthUsed + 1) THEN    
+--			--Retorna a diferença entre o valor residual e o valor atual (desdobramento)    
+--		  (a.ValueUpdate - a.ResidualValueCalc)  - a.DepreciationByMonth   
+--		ELSE    
+--			--Caso não tenha alcançado o ciclo de vida, não existe desdobro    
+--			0    
+--		END as ValorDesdobramento,    
+--		a.monthUsed,    
+--		CASE WHEN a.LifeCycle = a.monthUsed THEN    
+--			1    
+--		ELSE    
+--			0    
+--		END as flagDepreciationCompleted    
+--	FROM 
+--		Asset AS a     
+--	INNER JOIN 
+--		AssetMovements AS am 
+--	ON 
+--		(
+--			a.Id = am.AssetId AND 
+--			--am.[Status] = 1 AND
+--			am.Id = (
+--						select top 1 Id from AssetMovements
+--						where 
+--							AssetId = a.Id and
+--							MovimentDate <= (
+--												CONVERT(date,(SUBSTRING(@ClosingYearMonthReference, 1, 4) + SUBSTRING(@ClosingYearMonthReference, 5, 2) + '15'))
+--											) and
+--							(FlagEstorno is null or FlagEstorno = 0)
+								
+--						order by Id desc	
+--					)
+--		)
+--	INNER JOIN 
+--		AssetMovements AS am_Ini 
+--	ON 
+--		(a.Id = am_Ini.AssetId AND am_Ini.Id = (
+--													select MIN(Id) from AssetMovements
+--													group by AssetId 
+--													having AssetId = a.Id
+--												)
+--	    )
+--	WHERE 
+--		a.ManagerUnitId = @managerUnitId AND    
+--		a.[Status] = 1 AND
+--		a.flagVerificado IS NULL AND
+--		a.flagDepreciaAcumulada = 1 AND 
+--		CONVERT(int, (
+--			select RIGHT('0000'+CAST(YEAR(am_Ini.MovimentDate) AS VARCHAR(4)),4) + RIGHT('00'+CAST(MONTH(am_Ini.MovimentDate) AS VARCHAR(2)),2) + RIGHT('00'+CAST(DAY(am_Ini.MovimentDate) AS VARCHAR(2)),2)
+--	    )) 
+--		<= (
+--				select 
+--					CONVERT(int, (
+--						ManagmentUnit_YearMonthReference + '15'
+--					))  
+--				from 
+--					ManagerUnit 
+--				where 
+--					Id = @managerUnitId
+--			)
+--		--a.Id = 2484047    
+    
+      
+-- --Insere o registro de fechamento referente aquele patrimônio      
+-- INSERT INTO Closing(    
+--      AssetId,    
+--      ManagerUnitId,    
+--      ClosingYearMonthReference,    
+--      CurrentPrice,    
+--      DepreciationPrice,    
+--      MaterialItemCode,    
+--      AceleratedDepreciation,    
+--      MaterialGroupCode,    
+--      LifeCycle,    
+--      [Status],    
+--      LoginID,    
+--      ClosingDate,    
+--      AssetMovementsId,    
+--      MonthUsed,    
+--      ResidualValueCalc,    
+--      DepreciationAccumulated,    
+--      flagDepreciationCompleted)     
+    
+-- SELECT        
+--      AssetId,    
+--      ManagerUnitId,    
+--      ClosingYearMonthReference,    
+--      CurrentPrice,    
+--         (DepreciacaoMensal),    
+--      MaterialItemCode,    
+--      AceleratedDepreciation,    
+--      MaterialGroupCode,    
+--      VidaUtil,    
+--      [Status],    
+--      LoginID,    
+--      ClosingDate,    
+--      AssetMovementsId,    
+--      MesesDeUso,    
+--      ValorResidualCalc,    
+--      DepreciacaoAcumulada,    
+--      flagDepreciationCompleted    
+-- FROM #Temp    
+     
+      
+-- --Deprecia o valor do bem       
+-- UPDATE a     
+    
+--   --O novo valor depreciado é igual ao valor atualizado menos o valor de depreciação mensal menos o valor de desdobramento, caso exista.    
+--  SET a.ValueUpdate =  CASE     
+--         WHEN     
+--             --Verifica se é o ultimo mes do ciclo de vida     
+--          a.LifeCycle = a.monthUsed    
+--         THEN    
+--          a.ValueUpdate    
+--         ELSE    
+--          ROUND(    
+--            (    
+--             t.ValueUpdate - (t.DepreciacaoMensal + t.ValorDesdobramento)    
+--            ),     
+--            2)    
+--        END,    
+--   --Adiciona 1 mês ao seu uso, caso a quantidade de meses de uso for inferior a vida util do bem    
+--      a.monthUsed = (CASE     
+--        WHEN     
+--         --Verifica se é o ultimo mes do ciclo de vida    
+--         (a.LifeCycle = a.monthUsed)    
+--        THEN     
+--         t.VidaUtil    
+--        ELSE    
+--         (a.monthUsed + 1)    
+--         END),     
+--   --A depreciação acumulada é a subtração do valor de aquisição, para o valor do Bem atualmente    
+--   a.DepreciationAccumulated =     
+--           CASE WHEN  a.flagAcervo = 1  OR a.flagTerceiro = 1  THEN    
+--				0  
+--            ELSE 
+--				(CASE WHEN a.flagDecreto = 1 THEN  
+--                    (CASE WHEN a.LifeCycle = a.monthUsed THEN    
+--						a.DepreciationAccumulated
+--                     ELSE    
+--						(a.DepreciationByMonth + ISNULL(a.DepreciationAccumulated,0))  
+--                     END)
+--				ELSE (a.ValueAcquisition - (CASE WHEN a.LifeCycle = a.monthUsed THEN    
+--												a.ValueUpdate    
+--											ELSE    
+--												ROUND((t.ValueUpdate - (t.DepreciacaoMensal + t.ValorDesdobramento)),2)    
+--											END))
+--				END)     
+--            END,    
+--   --Atualiza o valor de desdobramento caso o mesmo tenha sido ajustado      
+--   a.ValorDesdobramento = (    
+--         CASE     
+--          WHEN     
+--           --Verifica se é o ultimo mes do ciclo de vida    
+--           a.LifeCycle = a.monthUsed    
+--          THEN     
+--           a.ValorDesdobramento    
+--          ELSE    
+--           t.ValorDesdobramento    
+--         END    
+--           ),    
+--      --Remove a mensagem de cálculo de pendencia para os bens que sofreram alguma alteração no valor    
+--      a.flagCalculoPendente = NULL,       
+--   a.flagDepreciationCompleted =  (    
+--           CASE     
+--            WHEN     
+--             --Verifica se é o ultimo mes do ciclo de vida    
+--             (a.LifeCycle = (a.monthUsed + 1)) or (a.LifeCycle < (a.monthUsed + 1))    
+--            THEN     
+--             1    
+--            ELSE    
+--             0    
+--           END    
+--             )    
+-- FROM Asset as a INNER JOIN #Temp as t     
+--  ON t.AssetId = a.Id    
+    
+    
+-- --Atualiza o mês de referência do fechamento da UGE    
+-- SET @DataReferencia = DATEADD(month, 1, SUBSTRING(@ClosingYearMonthReference, 1, 4) + SUBSTRING(@ClosingYearMonthReference, 5, 2) + '01')    
+-- SET @AnoMesReferencia = RIGHT('0000' + CONVERT(varchar(4), DATEPART(year, @DataReferencia)), 4) + RIGHT('00' + CONVERT(varchar(2), DATEPART(month, @DataReferencia)), 2)     
+        
+-- UPDATE ManagerUnit SET ManagmentUnit_YearMonthReference = @AnoMesReferencia where Id = @managerUnitId    
+      
+    
+--COMMIT TRANSACTION      
+--END TRY      
+      
+--BEGIN CATCH      
+-- SELECT        
+--         ERROR_PROCEDURE() AS ErrorProcedure        
+--        ,ERROR_LINE() AS ErrorLine        
+--        ,ERROR_MESSAGE() AS ErrorMessage;       
+-- ROLLBACK TRANSACTION      
+--END CATCH      
+    
+--END

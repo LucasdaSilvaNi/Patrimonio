@@ -1,0 +1,66 @@
+﻿@model  IEnumerable<SAM.Web.ViewModels.ExchangeViewModel>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formItensRequisitados" }))
+{
+
+    <div class="form-group">
+        <div class="form-control divGrid" style="height:360px; overflow: auto;">
+            <table class="table" id="result-tables-patrimonio">
+                <tr>
+                    <th></th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Orgão").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Descrição Orgão").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("UO").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("UGE").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Descrição UGE").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Requisitante").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Data Requisição").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                        @if (ViewBag.Tela.ToString().Equals("BolsaOrgao"))
+                        {
+                            <a class="btn btn-success btn-sm" href="@Url.Action("MovimentoBolsa", "Exchange", new { AssetId = item.AssetId, tipoMovimento = (int)SAM.Web.Common.Enum.EnumMovimentType.MovTransferenciaMesmoOrgaoPatrimoniado, institutionIdDestino = item.InstitutionId, budgetUnitIdDestino = item.BudgetUnitId, managerUnitIdDestino = item.ManagerUnitId, searchString = ViewBag.Tela })">
+                                <span class="glyphicon glyphicon-check"></span> Transferir
+                            </a>
+                        }
+                        else
+                        {
+                            if (ViewBag.InstitutionId == item.InstitutionId)
+                            {
+                                <a class="btn btn-success btn-sm" href="@Url.Action("MovimentoBolsa", "Exchange", new { AssetId = item.AssetId, tipoMovimento = (int)SAM.Web.Common.Enum.EnumMovimentType.MovTransferenciaMesmoOrgaoPatrimoniado, institutionIdDestino = item.InstitutionId, budgetUnitIdDestino = item.BudgetUnitId, managerUnitIdDestino = item.ManagerUnitId, searchString = ViewBag.Tela })">
+                                    <span class="glyphicon glyphicon-check"></span> Transferir
+                                </a>
+                            }
+                            else { 
+                                if (ViewBag.Ug == item.ManagerCodeRequisitante)
+                                {
+                                        <a class="btn btn-success btn-sm" href="@Url.Action("MovimentoBolsa", "Exchange", new { AssetId = item.AssetId, tipoMovimento = (int)SAM.Web.Common.Enum.EnumMovimentType.MovTransferenciaOutroOrgaoPatrimoniado, institutionIdDestino = item.InstitutionId, budgetUnitIdDestino = item.BudgetUnitId, managerUnitIdDestino = item.ManagerUnitId, searchString = ViewBag.Tela })">
+                                            <span class="glyphicon glyphicon-check"></span> Transferir
+                                        </a>
+                                }
+                                else
+                                {
+                                        <a class="btn btn-success btn-sm" href="@Url.Action("MovimentoBolsa", "Exchange", new { AssetId = item.AssetId, tipoMovimento = (int)SAM.Web.Common.Enum.EnumMovimentType.MovDoacaoIntraNoEstado, institutionIdDestino = item.InstitutionId, budgetUnitIdDestino = item.BudgetUnitId, managerUnitIdDestino = item.ManagerUnitId, searchString = ViewBag.Tela })">
+                                            <span class="glyphicon glyphicon-check"></span> Doar
+                                        </a>
+                                }
+                            }
+                        }
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.InstitutionCode)</td>
+                        <td>@Html.DisplayFor(modelItem => item.NameManagerReduced)</td>
+                        <td>@Html.DisplayFor(modelItem => item.BudgetUnitCode)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ManagerUnitCode)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ManagerUnitDescription)</td>
+                        <td>@Html.DisplayFor(modelItem => item.NomeRequisitante)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DateRequisition)</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+}

@@ -1,0 +1,61 @@
+﻿@model SAM.Web.ViewModels.ConfrontoContabilViewModel
+
+@{
+    ViewBag.Title = "Confronto Contábil";
+}
+
+<h2>Confronto Contábil</h2>
+
+@using (Html.BeginForm("GerarExcel", null, FormMethod.Post, new { id = "formConfrontoContabil" }))
+{
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.InstitutionId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitutionIntegradoSIAFEM" })
+                @Html.ValidationMessageFor(model => model.InstitutionId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    
+        <div class="form-group">
+            @Html.LabelFor(model => model.BudgetUnitId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnitIntegradoSIAFEM" })
+                @Html.ValidationMessageFor(model => model.BudgetUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    
+        <div class="form-group">
+            @Html.LabelFor(model => model.ManagerUnitId, "UGE", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit" })
+                @Html.ValidationMessageFor(model => model.ManagerUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    
+        <div class="form-group">
+            @Html.LabelFor(model => model.MesRef, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.DropDownListFor(model => model.MesRef, Enumerable.Empty<SelectListItem>(), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MesRef, "", new { @class = "text-danger" })
+            </div>
+            <button type="submit" class="btnExcel btn btn-success"> Gerar Excel </button>
+        </div>
+
+        <div class="form-group">
+            <div class="control-label col-md-2"></div>
+            <div id="msg"></div>
+        </div>
+
+    </div>
+}
+
+@Scripts.Render("~/ConfrontoContabil/js")
+<script>
+    $(document).ready(function () {
+        
+        hierarquiaIntegradaSiafem.bind();
+        confrontoContabil.load();
+    });
+</script>

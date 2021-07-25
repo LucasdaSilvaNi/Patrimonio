@@ -1,0 +1,41 @@
+﻿@{ViewBag.Title = "Metadados ContabilizaSP";}
+
+@{Html.RenderPartial("_DataTableReferenciaCss");}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formMetadata" }))
+{
+    @Html.Partial("_GridNewButtons")
+
+    <table id="tableMetadata" class="table">
+        <thead>
+            <tr>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Código</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Nome</th>
+                <th class="text-info text-datatable-label-size border-table-tr actionButton col-xs-1" data-sortable="false">Ações</th>
+            </tr>
+        </thead>
+
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-metadataContabilizaSP-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+            sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+            $(document).ready(function () {
+                let metadataContabilizaSPDataTable = new MetadataContabilizaSPDataTable();
+                metadataContabilizaSPDataTable.Load('#formMetadata');
+            });
+    </script>
+}

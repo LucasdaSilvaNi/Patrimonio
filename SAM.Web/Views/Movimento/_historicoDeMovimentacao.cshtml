@@ -1,0 +1,150 @@
+﻿@model  IEnumerable<SAM.Web.ViewModels.AssetEAssetMovimentViewModel>
+
+<div class="form-group">
+    @Html.Hidden("SiglaDoBPHistorico", Model.FirstOrDefault().Asset.RelatedInitial.Description)
+    @Html.Hidden("UGEIntegrada", Model.FirstOrDefault().Asset.RelatedManagerUnit.FlagIntegracaoSiafem ? "1" : "0")
+    @Html.Hidden("HistoricoIntegrado", Model.FirstOrDefault().possuiTipoMovimentoIntegradoAoSIAFEM ? "1" : "0")
+    <div class="form-control divGrid" style="height:360px; overflow: auto;">
+
+        @{
+            int contador = 0;
+        }
+
+        <table class="table" id="result-tables-patrimonio">
+            <tr>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode("Estorno"), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Tipo").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Data Movimento").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Documento").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Sigla").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Chapa").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Item").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Descrição do Item").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Orgão").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("UO").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("UGE").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("UA").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Divisão").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Descrição da Divisão").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Responsável").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Conta Contábil").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Depreciação").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Valor Atual (R$)").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Vida Útil (em meses)").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("NL Liquidação").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("NL Depreciação").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("NL Reclassificação").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Pendencia NL SIAFEM").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                @if (Model.FirstOrDefault().vindoComoTransferencia)
+                {
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Origem").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                }
+                @if (Model.FirstOrDefault().transferido)
+                {
+                    <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayName("Destino").ToString()), "Index", new { sortOrder = ViewBag.CodeSortParm })</th>
+                }
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                    @if (item.PodeEstornaMovimento == true)
+                    {
+                        <button type="button" class="btn btn-danger btn-sm estorno">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Estornar
+                        </button>
+                        <script defer id="rapido">movimento.EstornoDaMovimentacao(@item.Asset.Id, @item.AssetMoviment.Id,
+                                                                      @item.AssetMoviment.MovementTypeId,
+                                                                      @item.AssetMoviment.RelatedMovementType.RelatedGroupMoviment.Id,
+                                                                      '@item.Asset.NumberIdentification' )</script>
+                    }                        
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.AssetMoviment.RelatedMovementType.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AssetMoviment.MovimentDate)</td>
+                    @if (contador == 0)
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.Asset.NumberDoc)</td>
+                        contador = 1;
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(modelItem => item.AssetMoviment.NumberDoc)</td>
+                    }
+                    <td>@Html.DisplayFor(modelItem => item.Asset.RelatedInitial.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Asset.ChapaCompleta)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Asset.MaterialItemCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Asset.MaterialItemDescription)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AssetMoviment.RelatedInstitution.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AssetMoviment.RelatedBudgetUnit.Code)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AssetMoviment.RelatedManagerUnit.Code)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AssetMoviment.RelatedAdministrativeUnit.Code)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AssetMoviment.RelatedSection.Code)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AssetMoviment.RelatedSection.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AssetMoviment.RelatedResponsible.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ContaContabil)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Asset.RateDepreciationMonthly)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Asset.ValueUpdate)</td>
+                    <td style="padding-left:35px;padding-right:35px">@Html.DisplayFor(modelItem => item.Asset.LifeCycle)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AssetMoviment.NotaLancamento)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AssetMoviment.NotaLancamentoDepreciacao)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AssetMoviment.NotaLancamentoReclassificacao)</td>
+                    <td>@Html.DisplayFor(modelItem => item.descricaoPossuiPendenciaNLAtivaVinculada)</td>
+                    @if (Model.FirstOrDefault().vindoComoTransferencia)
+                    {
+                    <td>
+                        @if (item.movimentacaoComOrigem)
+                        {
+                            if (item.transferenciaFeita)
+                            {
+                                @:<b>BP:</b> @Html.DisplayFor(modelItem => item.siglaChapaOutroBP)
+                                <br />
+                            }
+                            @:<b>UGE:</b> @Html.DisplayFor(modelItem => item.codigoUGEOrigem)
+                        }
+                    </td>
+                    }
+                    @if (Model.FirstOrDefault().transferido)
+                    {
+                        <td>
+                           @if (item.movimentacaoComDestino)
+                           {
+                               @:<b>UGE:</b> @Html.DisplayFor(modelItem => item.AssetMoviment.RelatedSourceDestinyManagerUnit.Code)
+                           }
+                        </td>
+                    }
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+@Html.Hidden("LoginSiafem")
+@Html.Hidden("SenhaSiafem")
+@Html.Partial("Modais/_LoginSIAFEM")
+
+<div class="modal fade" id="modalExtratoEstornoSIAFEM" tabindex="-1" role="dialog" aria-labelledby="botões">
+    <div class="modal-dialog" role="document" style="width: 30%; max-height: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title tituloModalSiafem">Dados do SIAFEM</h4>
+            </div>
+            <div class="modal-body">
+                <div class="bodyModalDadosSiafem">
+                    <div class="form-group"><strong>Será (serão) gerada(s) a(s) Nota(s) de Lançamento abaixo:</strong></div>
+                    <div class="extratos">
+
+                    </div>
+                </div>
+                <div class="form-group text-center botoes">
+                    <div class="text-center"> O sistema pode prosseguir com o processo de geração de NL(s) pelo ContabilizaSP?</div>
+                    <button type="button" class="btn btn-primary" id="prosseguir" data-dismiss="modal">Pode prosseguir</button>
+                    <button type="button" class="btn btn-danger" id="abortar" data-dismiss="modal">Não, cancela o estorno</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="retornoSIAFEM"></div>

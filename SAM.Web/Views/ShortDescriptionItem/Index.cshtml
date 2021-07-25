@@ -1,0 +1,37 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.Models.ShortDescriptionItem>
+@using PagedList.Mvc;
+
+@{ViewBag.Title = "Descrição Resumida de Itens";}
+
+
+@Html.Partial("_GridNewButtons")
+
+<table class="table" id="result-tables">
+    <tr>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().Description).ToString()), "Index")</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Description)</td>
+            <td class="acoes">
+
+                @Html.Partial("_Acoes", @item)
+            </td>
+        </tr>
+
+    }
+</table>
+
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, searchString = ViewBag.CurrentFilter }))
+
+    @section Scripts {
+        <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+        </script>
+    }

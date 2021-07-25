@@ -1,0 +1,38 @@
+﻿@model SAM.Web.Models.ItemInventario
+
+@{ViewBag.Title = "Exclusão do Item do Inventário";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Code)</dt>
+        <dd>@Html.DisplayFor(model => model.Code)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Item)</dt>
+        <dd>@Html.DisplayFor(model => model.Item)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Estado)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedEstadoItemInventario.Descricao)</dd>
+       
+        <dt></dt>
+        <dd>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="acao-editar">
+                <button type="submit" class="btn btn-info" value="Delete">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                </button>
+                <a href="@Url.Action("Index", new { InventarioId = @Html.DisplayFor(model => model.InventarioId) })" title="Cancelar" class="btn btn-default">
+                    <i class="glyphicon glyphicon-remove"></i>
+                    <span class="sr-only">Cancelar</span>
+                </a>
+            </div>
+        }
+        </dd>
+    </dl>
+</div>

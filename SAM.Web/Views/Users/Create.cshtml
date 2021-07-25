@@ -1,0 +1,201 @@
+﻿@model SAM.Web.ViewModels.UserModel
+<style type="text/css">
+    .marginGrupo {
+        margin-top: 1px !important;
+        margin-bottom: 0px !important;
+        padding-top: 1px !important;
+        padding-bottom: 1px !important;
+    }
+
+    .perfilControl {
+        width: 100% !important;
+        margin-right: 2px !important;
+    }
+
+    .form-inline .form-group {
+        margin-left: 0;
+        margin-right: 0;
+    }
+</style>
+
+@{ViewBag.Title = "Novo Usuário";}
+
+@Styles.Render("~/Layout_5/css")
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formUsuario"}))
+{
+    @Html.AntiForgeryToken()
+    <input id="Email_fake" name="Email" autocomplete="off" style="display: none;" />
+    <input type="hidden" id="cpjCadastrado" value="" />
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(model => model.relationshipUserProfileInstitution)
+        @Html.Hidden("tipoForm", "I")
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados Básicos</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*CPF*@
+            @Html.LabelFor(model => model.CPF, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.CPF, new { htmlAttributes = new { @class = "form-control CPF mascara-cpf" } })
+                @Html.ValidationMessageFor(model => model.CPF, "", new { @class = "text-danger" })
+            </div>
+            @*Name*@
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-3 input">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control Name" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*Email*@
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+            @*Password*@
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-3">
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control text-box single-line" })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*Phrase*@
+            @*@Html.LabelFor(model => model.Phrase, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Phrase, new { htmlAttributes = new { @class = "form-control Phrase" } })
+                @Html.ValidationMessageFor(model => model.Phrase, "", new { @class = "text-danger" })
+            </div>*@
+            @Html.EditorFor(model => model.Phrase, new { htmlAttributes = new { @class = "form-control Phrase", @Value = "FRASE", @type = "hidden" } })
+            @Html.HiddenFor(model => model.ChangePassword)
+        </div>
+
+
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Relacionar usuário ao perfil</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="perfil" class="control-label col-md-1">Perfil</label>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.Profiles, (SelectList)ViewBag.Profiles, new { @class = "form-control Profiles" })
+                <span id="spanProfile" class="text-danger field-validation-error"></span>
+                @Html.ValidationMessageFor(model => model.Profiles, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Institutions" class="control-label col-md-1">Orgão</label>
+            <div class="col-md-7">
+                @Html.DropDownListFor(model => model.Institutions, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitution" })
+                <span id="spanInstitution" class="text-danger field-validation-error"></span>
+            </div>
+        </div>
+        <div class="form-group" id="omite_div_por_orgao">
+            <label for="BudgetUnits" class="control-label col-md-1">UO</label>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.BudgetUnits, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit" })
+                <span id="spanBudgetUnits" class="text-danger field-validation-error"></span>
+            </div>
+            <div id="omite_div_por_uo">
+                <label for="ManagerUnits" class="control-label col-md-1">UGE</label>
+                <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.ManagerUnits, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit" })
+                    <span id="spanManagerUnits" class="text-danger field-validation-error"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" id="omite_div_por_responsavel">
+            <label for="AdministrativeUnits" class="control-label col-md-1">UA</label>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model=> model.AdministrativeUnits, (SelectList)ViewBag.AdministrativeUnits, new { @class = "form-control selectpicker comboAdministrativeUnit" })
+                <span id="spanAdministrativeUnits" class="text-danger field-validation-error"></span>
+            </div>
+            <label for="Sections" class="control-label col-md-1">Divisão</label>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.Sections, (SelectList)ViewBag.Sections, new { @class = "form-control selectpicker comboSection" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-7"></div>
+            <div class="col-md-1">
+                <button id="buttonAdd" type="button" onclick="usuarioPerfil.adicionaPerfilDoUsuario()" data-toggle="tooltip" data-placement="right" data-original-title="Clique para relacionar usuário ao perfil!" class="btn btn-success pull-right" formnovalidate>
+                    <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 50px;">
+            <div class="control-label col-md-1"></div>
+            <div class="col-md-7" style="padding-left: 0; padding-right: 0">
+                <div class="form-control divGrid" style="height:360px; overflow: auto;">
+                    <table id="tabPerfilRelUsu" class="table">
+                        <thead>
+                            <tr>
+                                <td colspan="9">
+                                    <h4 style="margin-top:10px; text-align: center" class="cor-azul">Perfis relacionados ao Usuário</h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width: 30%">Perfil</th>
+                                <th class="centraliza" style="width: 8%;">Órgão</th>
+                                <th class="centraliza" style="width: 8%;">UO</th>
+                                <th class="centraliza" style="width: 8%;">UGE</th>
+                                <th class="centraliza" style="width: 8%;">UA</th>
+                                <th class="centraliza" style="width: 8%;">Divisão</th>
+                                <th class="centraliza" style="width: 10%;"></th>
+                                <th class="centraliza" style="width: 10%;">Padrão</th>
+                                <th class="centraliza" style="width: 10%;">Excluir</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 90px;">
+            @Html.Partial("_SaveButtons")
+        </div>
+    </div>
+}
+
+
+<style>
+    .centraliza {
+        text-align: center;
+    }
+</style>
+@Scripts.Render("~/Layout_1/js")
+<script type="text/javascript">
+    $(document).ready(function () {
+        usuarioPerfil.Init();
+        // Metodos criados para contornar o autocomplete dos navegadores
+        $('#Email_fake').val($('#Email').val());
+        $('#Email').change(function () { $('#Email_fake').val($('#Email').val()) })
+    });
+</script>

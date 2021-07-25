@@ -1,0 +1,44 @@
+﻿@{ViewBag.Title = "Unidades Administrativas Cadastradas";}
+
+@{Html.RenderPartial("_DataTableReferenciaCss");
+    bool temPermissao = ViewBag.TemPermissao;}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formAdministrativeUnits" }))
+{
+    @Html.Partial("_GridNewButtons")
+    @Html.Hidden("temPermissao", temPermissao? "1":"")
+    
+    <table id="tableAdministrativeUnits"  class="table">
+        <thead>
+            <tr>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Código UGE</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Descrição UGE</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Código</th>
+                <th class="text-info text-datatable-label-size" data-sortable="false">Descrição</th>
+                <th class="text-info text-datatable-label-size border-table-tr actionButton col-xs-1" data-sortable="false">Ações</th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-administrativeUnits-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+        sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+
+        $(document).ready(function () {
+            let administrativeUnitsDataTable = new AdministrativeUnitsDataTable();
+            administrativeUnitsDataTable.Load('#formAdministrativeUnits');
+        });
+    </script>
+}

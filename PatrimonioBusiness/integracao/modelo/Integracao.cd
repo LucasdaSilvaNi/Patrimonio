@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="PatrimonioBusiness.integracao.entidades.MovimentoIntegracao">
+    <Position X="5.75" Y="2" Width="2" />
+    <TypeIdentifier>
+      <HashCode>BAYCAAAAAAAKAAAAQCkBQAEAAACEIIAAACMCJAAAIAA=</HashCode>
+      <FileName>integracao\entidades\MovimentoIntegracao.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Object" Collapsed="true">
+    <Position X="6" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="PatrimonioBusiness.integracao.maps.MovimentoIntegracaoMap">
+    <Position X="10.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>integracao\maps\MovimentoIntegracaoMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PatrimonioBusiness.integracao.contexto.IntegracaoContexto">
+    <Position X="12.5" Y="5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAACAAAAAAAAAAAAAAEAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>integracao\contexto\IntegracaoContexto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PatrimonioBusiness.integracao.business.MovimentoIntegracaoBusiness">
+    <Position X="8.75" Y="4.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAABAABgAAAAAAAAAAAAAAAAAAAABACAQAA=</HashCode>
+      <FileName>integracao\business\MovimentoIntegracaoBusiness.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PatrimonioBusiness.integracao.abstracts.MovimentoIntegracaoAbstract" Collapsed="true">
+    <Position X="9.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAQAABACBAAAAAAAACAAAAAAAAAGBAAACAQAA=</HashCode>
+      <FileName>integracao\abstracts\MovimentoIntegracaoAbstract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PatrimonioBusiness.integracao.repositorio.MovimentoIntegracaoRepositorio">
+    <Position X="12.5" Y="1.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAABABABAAAAAAAAAAAAAAAAAAAAoBAAACAA=</HashCode>
+      <FileName>integracao\repositorio\MovimentoIntegracaoRepositorio.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="PatrimonioBusiness.integracao.interfaces.IMovimentoIntegracao">
+    <Position X="2.5" Y="1.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>BAICAAAAAAAKAAAAQCkBQAEAAACEIIgAACMCIAAAIAA=</HashCode>
+      <FileName>integracao\interfaces\IMovimentoIntegracao.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,129 @@
+﻿@model SAM.Web.ViewModels.ReportResumoInventarioViewModel
+
+@{ViewBag.Title = "Resumo do Inventário de Bens Móveis";}
+
+<h3 class="text-primary">@ViewBag.Title</h3>
+<hr />
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formResumoInventarioBP" }))
+{
+    @Html.HiddenFor(model => model.Excel)
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @Html.LabelFor(model => model.InstitutionId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.InstitutionId, (SelectList)ViewBag.Institutions, new { @class = "form-control comboinstitution" })
+                @Html.ValidationMessageFor(model => model.InstitutionId, "", new { @class = "text-danger" })
+            </div>
+
+            @*UO*@
+            @Html.LabelFor(model => model.BudgetUnitId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.BudgetUnitId, (SelectList)ViewBag.BudgetUnits, new { @class = "form-control comboBudgetUnit" })
+                @Html.ValidationMessageFor(model => model.BudgetUnitId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*UGE*@
+            @Html.LabelFor(model => model.ManagerUnitId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ManagerUnitId, (SelectList)ViewBag.ManagerUnits, new { @class = "form-control comboManagerUnit" })
+                @Html.ValidationMessageFor(model => model.ManagerUnitId, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.MesRef, "Mês Referência", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.MesRef, (SelectList)ViewBag.MesRef, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MesRef, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+            <div class="form-group"></div>
+
+            <div class="form-group">
+                @*Resumo de Contas Contabeis*@
+                <label class="col-md-2"></label>
+                <div class="col-md-4">
+                        <div class="col-md-1">
+                            @Html.EditorFor(model => model.ResumoConsolidado, new { @class = "icheckbox_square-blue" })
+                        </div>
+                        @Html.LabelFor(model => model.ResumoConsolidado)
+                </div>
+                @*Aquisicoes Mes-Ref Corrente*@
+                <div class="col-md-4">
+                    <div class="col-md-1">
+                        @Html.EditorFor(model => model.AquisicoesCorrentes, new { @class = "icheckbox_square-blue" })
+                    </div>
+                    @Html.LabelFor(model => model.AquisicoesCorrentes)
+                </div>
+            </div>
+
+            <div class="form-group center-block">
+                <label class="col-md-2"></label>
+                @*Bens Tipo Terceiros*@
+                <div class="col-md-4">
+                    <div class="col-md-1">
+                        @Html.EditorFor(model => model.Terceiros, new { @class = "icheckbox_square-blue" })
+                    </div>
+                    @Html.LabelFor(model => model.Terceiros)
+                </div>
+                @*Baixas Mes-Ref Corrente*@
+                <div class="col-md-4">
+                    <div class="col-md-1">
+                        @Html.EditorFor(model => model.BaixasCorrentes, new { @class = "icheckbox_square-blue" })
+                    </div>
+                    @Html.LabelFor(model => model.BaixasCorrentes)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2"></label>
+                @*Bens Tipo Acervo*@
+                <div class="col-md-4">
+                    <div class="col-md-1">
+                        @Html.EditorFor(model => model.Acervos, new { @class = "icheckbox_square-blue" })
+                    </div>
+                    @Html.LabelFor(model => model.Acervos)
+                </div>
+                @*Bens Totalmente Depreciados*@
+                <div class="col-md-4">
+                    <div class="col-md-1">
+                        @Html.EditorFor(model => model.BPTotalDepreciados, new { @class = "icheckbox_square-blue" })
+                    </div>
+                    @Html.LabelFor(model => model.BPTotalDepreciados)
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2"></label>
+                @Html.ValidationMessageFor(model => model.ResumoConsolidado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-8">
+
+            </div>
+            <div class="col-md-2">
+                <form method="post" target="_blank">
+                    <button type="submit" class="btn btn-info btnPDF" style="height: 33px"> Gerar PDF</button>
+                    <button type="submit" class="btn btn-success btnExcel" style="height: 33px"> Gerar Excel</button>
+                </form>
+            </div>
+        </div>
+}
+
+<script>
+    $(document).ready(function () {
+        sam.commun.EventoComboPeriodoPorUGE();
+        $(".btnExcel").click(function () {
+            $("#Excel").val(true);
+        });
+
+        $(".btnPDF").click(function () {
+            $("#Excel").val(false);
+        });
+    });
+</script>

@@ -1,0 +1,131 @@
+﻿@model SAM.Web.ViewModels.RepairViewModel
+
+@{
+    ViewBag.Title = "Conserto - Saída";
+}
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formConcert",@class="submit" }))
+{
+        @Html.HiddenFor(model => model.AssetSelecionados, htmlAttributes: new { @class = "control-checkSelecionados" })
+        @Html.AntiForgeryToken()
+        
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group cor-azul">
+                <div class="col-md-12">
+                    <div class="col-sm-1">
+                        <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                    </div>
+                    <div class="col-md-11">
+                        <h4>Identificação</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-control" style="position:static;height:60%">
+                    <div class="col-md-11">
+                        <input type="text" class="form-control asset-consuta" id="consulta" maxlength="100" />
+                    </div>
+
+                    <button type="button" id="buttonConsultar" data-toggle="tooltip" data-placement="top" data-original-title="Click para executar a consultar o(s) bem material" class="btn btn-default btnConsulta-assets">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                    <div class="col-md-12">
+                        @Html.ValidationMessage("selecaoPatrimonio", new { @class = "text-danger" })
+                    </div>
+                    <hr />
+                    <div class="divAsset pre-scrollable" style="position:static;max-height:350px;height:50%">
+                        <table class="table table-asset" id="result-tables">
+                            <tr class="active">
+                                <th>Selecione</th>
+                                <th>@Html.DisplayNameFor(model => model.Assets.FirstOrDefault().NumberIdentification)</th>
+                                <th>@Html.DisplayNameFor(model => model.Assets.FirstOrDefault().MaterialItemDescription)</th>
+                                <th>@Html.DisplayNameFor(model => model.Assets.FirstOrDefault().AdministrativeUnitId)</th>
+                                <th>@Html.DisplayNameFor(model => model.Assets.FirstOrDefault().ValueUpdate)</th>
+                                <th></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @*<div class="form-group">
+                @Html.LabelFor(model => model.InitialId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.DropDownListFor(model => model.InitialId, new SelectList(Model.Initials, "Id", "Name"), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.InitialId, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.NumberIdentification, htmlAttributes: new { @class = "control-label col-md-1" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.NumberIdentification, new { htmlAttributes = new { @class = "form-control limpar-numero somenteNumeros",@min = "1", @max = "2147483647", @maxlength = "10" } })
+                    @Html.ValidationMessageFor(model => model.NumberIdentification, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.PartNumberIdentification, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.EditorFor(model => model.PartNumberIdentification, new { htmlAttributes = new { @class = "form-control limpar-numero somenteNumeros", @min = "1", @max = "2147483647", @maxlength = "10" } })
+                    @Html.ValidationMessageFor(model => model.PartNumberIdentification, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+            <div class="form-group cor-azul">
+                <div class="col-md-12">
+                    <div class="col-sm-1">
+                        <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                    </div>
+                    <div class="col-md-11">
+                        <h4>Item de Material</h4>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.DateOut, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.DateOut, new { htmlAttributes = new { @class = "form-control input-datetime" } })
+                    @Html.ValidationMessageFor(model => model.DateOut, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.Destination, htmlAttributes: new { @class = "control-label col-md-1" })
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.Destination, new { htmlAttributes = new { @class = "form-control", @maxlength = "20" } })
+                    @Html.ValidationMessageFor(model => model.Destination, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DateExpectedReturn, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.DateExpectedReturn, new { htmlAttributes = new { @class = "form-control input-datetime" } })
+                    @Html.ValidationMessageFor(model => model.DateExpectedReturn, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.EstimatedCost, htmlAttributes: new { @class = "control-label col-md-1" })
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.EstimatedCost, new { htmlAttributes = new { @class = "form-control limpar-numero sam-moeda", @maxlength = "18" } })
+                    @Html.ValidationMessageFor(model => model.EstimatedCost, "", new { @class = "text-danger" })
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.Reaseon, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Reaseon, new { htmlAttributes = new { @class = "form-control", @maxlength = "30" } })
+                    @Html.ValidationMessageFor(model => model.Reaseon, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            
+    
+            <div class="form-group">
+                @Html.Partial("_SaveButtons")
+            </div>
+        </div>
+    }
+    
+
+@section Scripts {
+    <script>
+        sam.repair.init();
+        sam.repair.load();
+        sam.repair.limparDatas();
+    </script>
+}
+

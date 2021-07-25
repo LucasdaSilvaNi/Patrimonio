@@ -1,0 +1,47 @@
+﻿@model SAM.Web.Models.Mobile
+
+@{ViewBag.Title = "Exclusão do Módulo";}
+
+<h2>@ViewBag.Title @Model.Name</h2>
+
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.InstitutionId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedInstitutions.Description)</dd>
+        <dt>@Html.DisplayNameFor(model => model.BudgetUnitId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedBudgetUnits.Description)</dd>
+        <dt>@Html.DisplayNameFor(model => model.ManagerUnitId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedManagerUnits.Description)</dd>
+        <dt>@Html.DisplayNameFor(model => model.AdministrativeUnitId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAdministrativeUnits.Description)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Brand)</dt>
+        <dd>@Html.DisplayFor(model => model.Brand)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Model)</dt>
+        <dd>@Html.DisplayFor(model => model.Model)</dd>
+        <dt>@Html.DisplayNameFor(model => model.MacAddress)</dt>
+        <dd>@Html.DisplayFor(model => model.MacAddress)</dd>
+        <dd>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="acao-editar">
+                    <button type="submit" class="btn btn-default" value="Delete" title="Excluir">
+                        <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>
+                    </button>
+
+                    <a href="@Url.Action("Index")" title="Cancelar" class="btn btn-default">
+                        <i class="glyphicon glyphicon-floppy-remove"></i>
+                        <span class="sr-only">Cancelar</span>
+                    </a>
+                </div>
+            }
+        </dd>
+
+    </dl>
+
+</div>

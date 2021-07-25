@@ -1,0 +1,8 @@
+﻿.note-view button[data-original-title="Help"] {
+    display: none;
+}
+
+.note-editor.note-frame .note-editing-area .note-codable {
+    background-color: #FFF !important;
+    color: #4e4d4d;
+}

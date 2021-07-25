@@ -1,0 +1,70 @@
+﻿@model SAM.Web.ViewModels.MovimentoViewModel
+
+
+<div class="jumbotron">
+    <div class="form-group">
+        <label for="lblAvisoTipoBaixa" class="control-label col-md-1"></label>
+        <div class="col-md-7">
+            <label for="lblAvisoTipoBaixa" style="color:green">Não gera "Baixa" do(s) BP(s)</label>
+        </div>
+    </div>
+    <br /> 
+    <div class="form-group" style="margin-top: -20px; color: #4f85db; font-size: 20px;">
+        <label class="control-label col-md-1">Destino: </label>
+    </div>
+    <div class="form-group">
+        <label for="Institutions" class="control-label col-md-1">Orgão</label>
+        <div class="col-md-7">
+            @Html.DropDownListFor(model => model.InstituationIdDestino, (SelectList)ViewBag.InstitutionsDestino, new { @class = "form-control comboinstitution2" })
+            <span id="spanInstitution" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="BudgetUnits" class="control-label col-md-1">UO</label>
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.BudgetUnitIdDestino, (SelectList)ViewBag.BudgetUnitsDestino, new { @class = "form-control comboBudgetUnit2" })
+            <span id="spanBudgetUnits" class="text-danger field-validation-error"></span>
+        </div>
+        <div id="omite_div_por_uo">
+            <label for="ManagerUnits" class="control-label col-md-1">UGE</label>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ManagerUnitIdDestino, (SelectList)ViewBag.ManagerUnitsDestino, new { @class = "form-control comboManagerUnit2" })
+                <span id="spanManagerUnits" class="text-danger field-validation-error"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="AdministrativeUnits" class="control-label col-md-1">UA</label>
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.AdministrativeUnitIdDestino, (SelectList)ViewBag.AdministrativeUnitsDestino, new { @class = "form-control selectpicker comboAdministrativeUnit2" })
+            <span id="spanAdministrativeUnits" class="text-danger field-validation-error"></span>
+        </div>
+        <label for="Sections" class="control-label col-md-1">Divisão</label>
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.SectionIdDestino, (SelectList)ViewBag.SectionsDestino, new { @class = "form-control selectpicker comboSection2" })
+            <span id="spanSection" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+    <div class="form-group" style="margin-bottom: 0px;">
+        @Html.LabelFor(model => model.ResponsibleId, "Usuário Responsável", htmlAttributes: new { @class = "control-label col-md-1" })
+        <div class="col-md-3">
+            @Html.DropDownListFor(model => model.ResponsibleId, (SelectList)ViewBag.User, "Selecione o Responsavel", new { @class = "form-control comboResponsible2" })
+            <span id="spanResponsible" class="text-danger field-validation-error"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        sam.commun.CancelaPostPartialView();
+    });
+    $('.selectpicker.comboSection2').selectpicker({
+        liveSearch: true,
+        showSubtext: true
+    });
+    $('.selectpicker.comboAdministrativeUnit2').selectpicker({
+        liveSearch: true,
+        showSubtext: true
+    });
+    sam.transferencia.bind();
+</script>

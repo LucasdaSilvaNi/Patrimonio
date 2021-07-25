@@ -1,0 +1,26 @@
+﻿@model SAM.Web.Models.RelationshipAuxiliaryAccountItemGroup
+
+@{ViewBag.Title = "Exclusão do Relacionamento Grupo Material - Conta Contábil";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayName("Grupo material")</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedMaterialGroup.Description)</dd>
+
+        <br />
+        <dt>@Html.DisplayName("Conta Contábil")</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAuxiliaryAccount.Description)</dd>
+
+        <dt></dt>
+        <dd>
+            <div class="form-group">
+                @Html.Partial("_DeleteButtons")
+            </div>
+        </dd>
+
+    </dl>
+</div>

@@ -1,0 +1,116 @@
+﻿@model SAM.Web.Models.AuxiliaryAccount
+
+@{ViewBag.Title = "Nova Conta Contábil";}
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formAuxiliaryAccount", @class = "formSubmit" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.HiddenFor(model => model.RelacionadoBP)
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @maxlength = "60" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BookAccount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.BookAccount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BookAccount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContaContabilApresentacao, htmlAttributes: new { @class = "control-label col-md-2" })
+            <a class="info" data-toggle="tooltip" data-original-title="Caso campo Conta Contábil precisa ser alfanúmerico, preencha a parte restante aqui">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.ContaContabilApresentacao, new { htmlAttributes = new { @class = "form-control", @maxlength = "50" } })
+                @Html.ValidationMessageFor(model => model.ContaContabilApresentacao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DepreciationAccountId, "Conta de Depreciação", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(m => m.DepreciationAccountId, (SelectList)ViewBag.DepreciationAccounts, " -- Selecione -- ", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DepreciationAccountId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Acervo</label>
+            <div class="col-md-1">
+                <div class="icheckbox_square-blue" style="position: relative;">
+                        <input class="check-box" data-val-required="O campo checkFlagAcervo é obrigatório." id="Acervo" name="Acervo" type="checkbox" style="position: absolute; opacity: 0;">
+                    </div>
+            </div>
+            <label class="control-label col-md-1">Terceiro</label>
+            <div class="col-md-1">
+                <div class="icheckbox_square-blue" style="position: relative;">
+                    <input class="check-box" data-val-required="O campo checkFlagAcervo é obrigatório." id="Terceiro" name="Terceiro" type="checkbox" style="position: absolute; opacity: 0;">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <span class="text-danger">@ViewBag.auxiliaryAccountExiste</span>
+            </div>
+        </div>
+
+        <div class="form-group cor-azul">
+            <div class="col-md-12">
+                <div class="col-sm-1">
+                    <h4><i class="glyphicon glyphicon-th-list"></i></h4>
+                </div>
+                <div class="col-md-11">
+                    <h4>Dados para Contabiliza-SP</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ControleEspecificoResumido, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.ControleEspecificoResumido, new { htmlAttributes = new { @class = "form-control col-md-2", @maxlength = "15" } })
+                @Html.ValidationMessageFor(model => model.ControleEspecificoResumido, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.TipoMovimentacaoContabilizaSP, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.TipoMovimentacaoContabilizaSP, new { htmlAttributes = new { @class = "form-control col-md-2", @maxlength = "80" } })
+                @Html.ValidationMessageFor(model => model.TipoMovimentacaoContabilizaSP, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Partial("_SaveButtons")
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        sam.auxiliaryAccount.Load();
+        sam.auxiliaryAccount.InicializaCheckbox(@ViewBag.ValorRelacao);
+    </script>
+}

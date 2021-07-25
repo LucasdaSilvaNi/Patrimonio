@@ -1,0 +1,34 @@
+﻿@model PagedList.StaticPagedList<SAM.Web.ViewModels.RepairViewModel>
+@using PagedList.Mvc;
+
+<table class="table" id="result-tables">
+    <tr>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().RelatedInitials.Description).ToString()), "Index", new { sortOrder = ViewBag.CPFSortParm })</th>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().NumberIdentification).ToString()), "Index", new { sortOrder = ViewBag.NameSortParm })</th>
+        <th>@Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayNameFor(model => model.FirstOrDefault().DateOut).ToString()), "Index", new { sortOrder = ViewBag.EmailSortParm })</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in @Model)
+    {
+        var data = item.DateOut.ToString("dd/MM/yyyy");
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.RelatedInitials.Description)</td>
+            <td>@Html.DisplayFor(modelItem => item.NumberIdentification)</td>
+            <td>@Html.DisplayFor(modelItem => data)</td>
+            <td class="acoes">
+
+                <a href="@Url.Action("Return", new { repairId = item.Id })" title="Conserto retorno">
+                    <i class="glyphicon glyphicon-edit"></i>
+                    <span class="sr-only">Editar</span>
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+
+ Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+<div id="divPaginacao">
+    @Html.PagedListPager(Model, page => Url.Action("/Index",
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+</div>

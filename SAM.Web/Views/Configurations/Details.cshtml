@@ -1,0 +1,24 @@
+﻿@model SAM.Web.Models.Configuration
+
+@{ViewBag.Title = "Detalhes Configuração";}
+
+<h2>@ViewBag.Title </h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>@Html.DisplayNameFor(model => model.InitialYearMonthAsset)</dt>
+        <dd>@Html.DisplayFor(model => model.InitialYearMonthAsset)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.ReferenceYearMonthAsset)</dt>
+        <dd>@Html.DisplayFor(model => model.ReferenceYearMonthAsset)</dd>
+
+        <dt></dt>
+        <dd>
+            <div class="form-group">
+                @Html.Partial("_EditButtons")
+            </div>
+        </dd>
+    </dl>
+</div>

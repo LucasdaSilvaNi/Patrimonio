@@ -1,0 +1,77 @@
+﻿@{ViewBag.Title = "Requisitar itens da Bolsa: " + @ViewBag.NomeOrgao;}
+
+<div class="col-sm-12" style="margin-top: 25px">
+    <div class="col-sm-12">
+        <h3 class="text-primary">@ViewBag.Title</h3>
+        <hr style="margin-top: 0px" />
+    </div>
+</div>
+
+@{Html.RenderPartial("_DataTableReferenciaCss");
+    string institution = ViewBag.InstitutionId;
+    string budgetUnit = ViewBag.BudgetUnitId;
+    string managerUnit = ViewBag.ManagerUnitId;}
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formBolsaOrgaoRequisitar" }))
+{
+    @Html.Hidden("searchString")
+    @Html.Hidden("institution", institution)
+    @Html.Hidden("budgetUnit", budgetUnit)
+    @Html.Hidden("managerUnit", managerUnit)
+    <button type="submit" id="filtroOculto" style="display: none"> </button>
+
+    <div class="col-sm-12" style="margin-bottom: 30px;">
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" id="search-tables" name="search-tables" value="@ViewBag.CurrentFilter" placeholder="Busca" class="form-control text-box input-sm single-line" onKeyPress="return sam.search.clickEnter(this,event)" />
+                <span class="input-group-addon" id="spanPesquisa" style="cursor: pointer;"><i class="glyphicon glyphicon-search"> </i></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="pull-right">
+                <a class="btnListar btn btn-info" style="background-color: #597EB7 !important; border-color: #597EB7 !important;" href="@Url.Action("BolsaOrgao", "Exchange")">
+                    <i class="glyphicon glyphicon-arrow-down fa-lg listarclass"></i> Itens da Bolsa Disponibilizados
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table" id="tableBolsaOrgaoRequisitar">
+        <thead>
+            <tr>
+                <td class="text-info" data-sortable="false">Sigla</td>
+                <td class="text-info" data-sortable="false">Chapa</td>
+                <td class="text-info" data-sortable="false">Item</td>
+                <td class="text-info" data-sortable="false">Descrição Item</td>
+                <td class="text-info" data-sortable="false">Orgão</td>
+                <td class="text-info" data-sortable="false">Gestor</td>
+                <td class="text-info" data-sortable="false">UO</td>
+                <td class="text-info" data-sortable="false">UGE</td>
+                <td class="text-info" data-sortable="false">Descrição UGE</td>
+                <td class="text-info border-table-tr actionButton" data-sortable="false"></td>
+            </tr>
+        </thead>
+    </table>
+}
+
+<div class="modal-loading" id="modal-loading" style="display:none;">
+    <div>
+        <div>
+            <img src="~/Content/images/preloader03.gif" class="modal-img" />
+            <span>Carregando...</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableReferenciaJS");}
+    <script src="~/Scripts/datatables/sam-bolsaOrgaoRequisitar-datatable.js?v=@ViewContext.Controller.GetType().Assembly.GetName().Version"></script>
+    <script>
+            $(document).ready(function(){
+                sam.transaction.controleTransacaoIndexPadrao('@HttpContext.Current.User.Identity.Name', '@HttpContext.Current.Request.CurrentExecutionFilePath');
+                let bolsaOrgaoRequisitarDataTable = new BolsaOrgaoRequisitarDataTable();
+                bolsaOrgaoRequisitarDataTable.Load('#formBolsaOrgaoRequisitar');
+            });
+    </script>
+}

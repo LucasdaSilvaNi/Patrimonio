@@ -1,0 +1,62 @@
+﻿@model SAM.Web.Models.OutSourced
+
+@{ViewBag.Title = "Exclusão do Terceiro";}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Você tem certeza que deseja excluí-lo?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        
+        <dt></dt>
+        <dd><h4>Hierarquia</h4></dd>
+
+        <dt>@Html.DisplayNameFor(model => model.InstitutionId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedInstitution.Description)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.BudgetUnitId)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedBudgetUnit.Description)</dd>
+
+        <dt></dt>
+        <dd><h4>Dados Pessoais</h4></dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.CPFCNPJ)</dt>
+        <dd>@Html.DisplayFor(model => model.CPFCNPJ)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Telephone)</dt>
+        <dd>@Html.DisplayFor(model => model.Telephone)</dd>
+
+        <dt></dt>
+        <dd><h4>Endereço Terceiro</h4></dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.PostalCode)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.PostalCode)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.Street)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.Street)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.Number)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.Number)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.ComplementAddress)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.ComplementAddress)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.District)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.District)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.City)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.City)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.RelatedAddress.State)</dt>
+        <dd>@Html.DisplayFor(model => model.RelatedAddress.State)</dd>
+
+        <dt></dt>
+        <dd>
+            @Html.Partial("_DeleteButtons")
+        </dd>
+    </dl>
+</div>
